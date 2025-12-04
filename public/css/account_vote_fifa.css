@@ -1,0 +1,115 @@
+/* Reset et style de base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Conteneur principal (la carte blanche) */
+.card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 700px;
+    padding: 50px;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e4e8;
+}
+
+/* Titre */
+h1 {
+    color: #001A41;
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+/* Texte explicatif */
+p.description {
+    color: #000000;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 40px;
+}
+
+/* Groupes de champs */
+.input-group {
+    margin-bottom: 35px;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    color: #001A41;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Style des inputs */
+.input-group input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 18px;
+    color: #333;
+    border: none;
+    border-bottom: 1px solid #8e9aa8;
+    outline: none;
+    background-color: transparent;
+}
+
+.input-group input:focus {
+    border-bottom: 2px solid #0e72bd;
+}
+
+/* Zone des boutons */
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+/* Styles communs aux boutons */
+button {
+    padding: 15px 32px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+/* Bouton GAUCHE (RETOUR) */
+.btn-cancel {
+    background-color: transparent;
+    border: 1px solid #001A41;
+    color: #001A41;
+}
+
+.btn-cancel:hover {
+    background-color: #f0f4f8;
+}
+
+/* Bouton DROITE (VALIDER) */
+.btn-send {
+    background-color: #0e72bd;
+    border: none;
+    color: white;
+}
+
+.btn-send:hover {
+    background-color: #0b5fa0;
+    box-shadow: 0 2px 8px rgba(14, 114, 189, 0.4);
+}

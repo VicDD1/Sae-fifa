@@ -1,0 +1,203 @@
+:root {
+    --main-bg: #1a1a1a;
+    --card-bg: #2d2d2d;
+    --accent-color:rgb(32, 154, 255); 
+    --text-color: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif; 
+    background-color: var(--main-bg);
+    color: var(--text-color);
+}
+#body{
+    --main-bg: #ffffff;
+    --card-bg: #2d2d2d;
+    --accent-color:rgb(32, 154, 255); 
+    --text-color: #ffffff;
+}
+
+header {
+    background-color: #000;
+    padding: 20px;
+    border-bottom: 3px solid var(--accent-color);
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    margin-right:0px;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.nav-link:hover {
+    background-color: var(--accent-color);
+    color: black;
+    border-color: var(--accent-color);
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto; 
+    padding: 40px 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.product-grid {
+    display: grid;
+    /* Cela crée 3 colonnes de largeur égale */
+    grid-template-columns: repeat(3, 1fr); 
+    /* Espace entre les cartes */
+    gap: 30px; 
+    margin-top: 20px;
+}
+
+.card {
+    background: linear-gradient(145deg, #353535, #2b2b2b);
+    border: 1px solid #444;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent-color);
+    box-shadow: 0 12px 22px rgba(0,0,0,0.4);
+}
+
+.card-img img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    filter: brightness(0.95);
+    transition: filter 0.25s ease;
+}
+
+.card:hover .card-img img {
+    filter: brightness(1.05);
+}
+
+.card-body {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-title {
+    margin: 0 0 12px 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.card-price {
+    font-size: 1.45rem;
+    color: var(--accent-color);
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.btn {
+    margin-top: auto;
+    background-color: var(--accent-color);
+    color: #000;
+    padding: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    text-align: center;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+}
+
+.btn:hover {
+    background-color: #fff;
+    transform: scale(1.02);
+}
+
+
+.alert {
+    grid-column: 1 / -1; 
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 8px;
+}
+
+
+.filter-bar {
+    background: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+.filter-group { display: flex; flex-direction: column; }
+.filter-label { font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color:#555;}
+.filter-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.btn-filter {
+    background-color: #333;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 38px;
+    align-self: flex-end; /* Aligne le bouton avec les inputs */
+}
+.btn-reset { text-decoration: none; color: #666; font-size: 0.9rem; align-self: flex-end; margin-bottom: 8px;}
+
+.account_creation img{
+    height: 58px;
+    width: 58px;
+    border-radius: 50%;
+    background-color: whitesmoke;
+}
+.btn-login {
+    background-color: #1967b2; 
+    color: white;
+    border: none;
+    border-radius: 25px; 
+    padding: 14px 35px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+

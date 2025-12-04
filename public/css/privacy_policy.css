@@ -1,0 +1,65 @@
+/* Privacy Policy - Full CSS
+Clean, responsive styles inspired by corporate policy pages.
+*/
+:root{
+--max-width:1100px;
+--accent:#0b63c9;
+--muted:#6b7280;
+--bg:#ffffff;
+--text:#111827;
+--card:#f8fafc;
+--border:#e6e9ee;
+--radius:10px;
+--gap:20px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.site-wrap{max-width:var(--max-width);margin:40px auto;padding:32px}
+.header{display:flex;align-items:center;gap:18px;margin-bottom:24px}
+.header .logo{width:64px;height:64px;border-radius:8px;background:linear-gradient(135deg,#e9f2ff,#ffffff);display:inline-block;border:1px solid var(--border)}
+.header h1{font-size:28px;margin:0}
+.header .lead{color:var(--muted);margin-top:6px}
+.meta{display:flex;gap:12px;color:var(--muted);font-size:14px;margin-top:8px}
+
+
+/* Table of contents */
+.toc{background:var(--card);border:1px solid var(--border);padding:18px;border-radius:12px;margin-bottom:28px}
+.toc h3{margin:0 0 10px}
+.toc ol{margin:0;padding-left:20px;color:var(--muted)}
+.toc ol li{margin:6px 0}
+
+
+/* Sections */
+.section{display:flex;gap:18px;margin:28px 0;padding-bottom:18px;border-bottom:1px solid #f1f3f6}
+.section:last-of-type{border-bottom:0}
+.section-number{font-weight:700;color:var(--accent);min-width:56px;font-size:20px}
+.section-body{flex:1}
+.section-body h2{margin:0 0 8px;font-size:18px}
+.section-body p{margin:8px 0;color:#263238;line-height:1.6}
+.section-body ul{margin:8px 0 8px 22px}
+.section-body li{margin:6px 0}
+.subnote{font-size:14px;color:var(--muted)}
+
+
+/* Callout */
+.callout{background:#f1fbff;border-left:4px solid var(--accent);padding:12px 16px;border-radius:8px;margin:12px 0;color:#0b4f8a}
+
+
+/* Footer */
+footer{margin-top:40px;color:var(--muted);font-size:14px;border-top:1px solid var(--border);padding-top:18px}
+
+
+/* Responsive */
+@media (max-width:900px){
+.header{flex-direction:column;align-items:flex-start}
+.site-wrap{padding:18px;margin:20px}
+.section{flex-direction:column}
+.section-number{min-width:40px}
+}
+
+
+/* Utility */
+.btn{display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid var(--accent);color:var(--accent);font-weight:600}
+.small{font-size:13px;color:var(--muted)}
