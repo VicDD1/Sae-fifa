@@ -96,5 +96,59 @@
         </div>
     @endif
 
+    <div id="cookieBanner" class="cookie-banner" role="region" aria-label="Bannière cookies">
+    <div class="cookie-banner__logo">BF</div>
+
+    <div class="cookie-banner__text">
+      <strong>Nous utilisons des cookies</strong><br>
+      Nous et nos partenaires utilisons des traceurs pour personnaliser le contenu, mesurer les performances et vous proposer des publicités personnalisées.
+      <a id="openPrefsLink" class="cookie-banner__link" href="#" role="button">Gérer mes préférences</a>
+    </div>
+
+    <div class="cookie-banner__actions">
+      <button id="rejectAllBtn" class="btn btn-ghost">Refuser</button>
+      <button id="acceptAllBtn" class="btn btn-primary">Accepter</button>
+    </div>
+  </div>
+
+  <!-- MODAL PREFERENCES -->
+  <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="prefs">
+      <h2>Préférences des cookies</h2>
+      <p>Choisissez les types de cookies que vous acceptez. Vous pouvez modifier ce choix à tout moment.</p>
+
+      <div class="prefs__row">
+        <div class="prefs__desc">
+          <strong>Cookies nécessaires</strong>
+          <div class="small">Indispensables au fonctionnement du site.</div>
+        </div>
+        <div class="prefs__toggle small">Toujours activés</div>
+      </div>
+
+      <div class="prefs__row">
+        <div class="prefs__desc">
+          <strong>Statistiques</strong>
+          <div class="small">Permettent d'améliorer l'expérience utilisateur.</div>
+        </div>
+        <button class="toggle" data-key="analytics"><span class="knob"></span></button>
+      </div>
+
+      <div class="prefs__row">
+        <div class="prefs__desc">
+          <strong>Marketing</strong>
+          <div class="small">Publicités personnalisées.</div>
+        </div>
+        <button class="toggle" data-key="marketing"><span class="knob"></span></button>
+      </div>
+
+      <div class="prefs__footer">
+        <button id="savePrefsBtn" class="btn btn-primary">Enregistrer</button>
+        <button id="closePrefsBtn" class="btn btn-ghost">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script src="js/script.js"></script>
 </body>
 </html>
