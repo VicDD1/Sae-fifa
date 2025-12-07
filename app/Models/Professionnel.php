@@ -11,6 +11,8 @@ class Professionnel extends Model
     protected $table = 'professionnel';
     protected $primaryKey = 'id_professionnel';
     public $timestamps = false; 
+    public $incrementing = true;
+    protected $keyType = 'int';
     protected $fillable = [
     'nom_societe',
     'numero_TVA',

@@ -29,7 +29,7 @@ class RegisterProfessionalController extends Controller
        
         $request->validate([
             'nom_societe' => 'required|min:2|max:50',
-            'numero_TVA' => 'required|integer',
+            'numero_TVA' => 'required|unique:professionnel,numero_tva|regex:/^[A-Z]{2}[0-9A-Za-z]{8,12}$/',
             'activite_professionnel'=>'required|max:50',
             'email_professionnel' => 'required|email|unique:professionnel,email_professionnel|max:50',
             'nom_professionnel' => 'required|string|max:50',
@@ -40,9 +40,11 @@ class RegisterProfessionalController extends Controller
             'ville_professionnel' => 'required|max:70',
             'telephone_professionnel' => ['required','regex:/^(?:\+33|0)[1-9](?:[\s.-]?\d{2}){4}$/'],
         ],[
+            'numero_TVA.regex'=>"ce format n'est pas valide",
             'nom_societe.max'=>"le nom ne peut pas depasser 50 caracteres",
             'numero_TVA.integer'=>"le numero TVA doit etre un nombre",
             'numero_TVA.max'=>"le numero TVA ne peut pas depasser 50 caracteres",
+            'numero_TVA.unique'=>"ce numero TVA est deja utilisé",
             'activite_professionnel.max'=>"l'activité professionnel ne peut pas depasser 50 caracteres",
             'email_professionnel.email'=>"l'adresse email n'est pas valide",
             'email_professionnel.max'=>"l'adresse email ne peut pas depasser 50 caracteres",

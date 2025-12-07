@@ -11,4 +11,6 @@ class Publication extends Model
     protected $table = 'publication ';
     protected $primaryKey = 'id_publication ';
     public $timestamps = false; 
+    public $incrementing = true;
+    protected $keyType = 'int';
 }

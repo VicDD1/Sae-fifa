@@ -12,7 +12,8 @@ class Produit extends Model
     protected $table = 'produit';
     protected $primaryKey = 'id_produit';
     public $timestamps = false;
-
+    public $incrementing = true;
+    protected $keyType = 'int';
     public function variantes()
     {
         return $this->hasMany(Variante_produit::class, 'id_produit', 'id_produit');

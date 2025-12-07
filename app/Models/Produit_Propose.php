@@ -11,6 +11,8 @@ class Produit_Propose extends Model
     protected $table = 'demande_produits';
     protected $primaryKey = 'id_demande';
     public $timestamps = false; 
+    public $incrementing = true;
+    protected $keyType = 'int';
     protected $fillable = [
         'id_professionnel',
         'id_user_connecte',

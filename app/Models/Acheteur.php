@@ -11,6 +11,7 @@ class Acheteur extends Model
 
     public $timestamps = false;
     public $incrementing = false;
+    
 
     protected $fillable = [
         'id_acheteur',
