@@ -57,23 +57,23 @@ class ProfileController extends Controller
             'email.unique' => 'Cet email est déjà utilisé par un autre compte.'
         ]);
 
-        // B. Mise à jour des champs
+        
         $user->prenom_user_connecte = $request->prenom;
         $user->surnom_user_connecte = $request->surnom;
         $user->courriel_user_connecte = $request->email;
         $user->date_de_naissance_user_connecte = $request->date_naissance;
 
-        // On utilise les noms longs ici aussi
+      
         $user->pays_de_naissance_user_connecte = $request->pays_de_naissance_user_connecte;
         $user->langue_user_connecte = $request->langue_user_connecte;
         $user->favori_user_connecte = $request->favori_user_connecte;
 
-        // C. Cas spécial du Mot de Passe
+        
         if ($request->filled('password')) {
             $user->password_user_connecte = Hash::make($request->password);
         }
 
-        // D. Sauvegarde
+       
         $user->save();
 
         return redirect('/')->with('success', 'Votre profil a bien été mis à jour !');
