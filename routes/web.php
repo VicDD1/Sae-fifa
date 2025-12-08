@@ -11,6 +11,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProduitProposeController; 
 use App\Http\Controllers\CommandeController;
+use Illuminate\Support\Facades\DB;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -120,3 +122,9 @@ Route::post('/commande/valider', [CommandeController::class, 'valider'])
 
 Route::get('/commande/confirmation', [CommandeController::class, 'confirmation'])
     ->name('commande.confirmation');
+
+    Route::get('/debug-tables', function () {
+        $tables = DB::select("SELECT tablename FROM pg_tables WHERE schemaname = 'public'");
+        return $tables;
+    });
+    
