@@ -25,33 +25,31 @@ class ProfileController extends Controller
     // 3. Traite la sauvegarde des modifications
     public function update(Request $request)
     {
-        $user = Auth::user(); // L'utilisateur à modifier
+        $user = Auth::user(); 
 
-        // A. Validation des données (AVEC TES CONDITIONS)
+        
         $request->validate([
             'prenom' => 'required|string|max:50',
             'surnom' => 'nullable|string|max:50',
             
-            // CONDITION 1 : Email valide avec vérification DNS (gmail, hotmail, etc.)
+            
             'email'  => [
                 'required',
-                'email:rfc,dns', // Vérifie le format ET l'existence du domaine
-                // Vérifie que l'email est unique (sauf pour cet utilisateur)
+                'email:rfc,dns', 
                 'unique:user_connecte,courriel_user_connecte,'.$user->id_user_connecte.',id_user_connecte'
             ],
             
-            // CONDITION 2 : Âge minimum de 15 ans
-            // 'before:-15 years' signifie : la date doit être avant "aujourd'hui - 15 ans"
+            
             'date_naissance' => 'nullable|date|before:-15 years', 
             
-            // CORRECTION IMPORTANTE : Utilisation des noms exacts du formulaire HTML
+           
             'pays_de_naissance_user_connecte' => 'nullable|string',
             'langue_user_connecte' => 'nullable|string',
             'favori_user_connecte' => 'nullable|string',
             
-            'password' => 'nullable|min:12', // Mot de passe optionnel
+            'password' => 'nullable|min:12', 
         ], [
-            // Messages d'erreur personnalisés pour l'utilisateur
+            
             'date_naissance.before' => 'Vous devez avoir au moins 15 ans.',
             'email.email' => 'Veuillez entrer une adresse email réelle et valide.',
             'email.unique' => 'Cet email est déjà utilisé par un autre compte.'
