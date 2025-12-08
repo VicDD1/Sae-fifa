@@ -54,6 +54,11 @@
                             <label class="input-label">Date de naissance</label>
                             <input type="date" name="date_naissance" class="custom-input" 
                                 value="{{ old('date_naissance', $user->date_de_naissance_user_connecte) }}">
+                                @error('date_naissance')
+                            <div style="color: #d7003a; font-size: 12px; margin-top: 5px; font-weight: 600;">
+                                <i class="fa-solid fa-circle-exclamation"></i> {{ $message }}
+                            </div>
+                                @enderror
                         </div>
                         
                         <div class="form-group" style="flex: 1;">
