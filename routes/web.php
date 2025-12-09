@@ -11,7 +11,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProduitProposeController; 
 use App\Http\Controllers\CommandeController;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\VoteController;
+
 
 
 /*
@@ -20,10 +21,17 @@ use Illuminate\Support\Facades\DB;
 |--------------------------------------------------------------------------
 */
 
+
+
+
+
 // --- PAGES STATIQUES & VUES SIMPLES ---
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
 
 Route::get('/parametre_compte', function () {
     return view('account_modification');
@@ -33,9 +41,6 @@ Route::get('/se_connecter', function () {
     return view('account_connection');
 });
 
-Route::get('/vote', function () {
-    return view('vote_fifa');
-});
 
 Route::get('/privacy_policy', function () {
     return view('privacy_policy');
@@ -122,9 +127,25 @@ Route::post('/commande/valider', [CommandeController::class, 'valider'])
 
 Route::get('/commande/confirmation', [CommandeController::class, 'confirmation'])
     ->name('commande.confirmation');
+   
 
-    Route::get('/debug-tables', function () {
-        $tables = DB::select("SELECT tablename FROM pg_tables WHERE schemaname = 'public'");
-        return $tables;
-    });
+
+
+
+
+
+
+Route::get('/vote', [VoteController::class, 'votePage'])->name('vote.page');
+
+
+// Route::get('/vote', [VoteController::class, 'index'])->name('vote.index');
+
+
+ Route::get('/vote/{system}', [VoteController::class, 'show'])->name('vote.show');
+    
+    // Page du formulaire (vote_fifa.blade.php)
+  Route::get('/vote/fifa', [VoteController::class, 'votePage'])->name('vote.page');
+    
+    // Soumission du vote
+ Route::post('/vote/submit', [VoteController::class, 'submit'])->name('vote.submit');
     

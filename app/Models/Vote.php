@@ -5,13 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class VoteSystem extends Model
+class Vote extends Model
 {
-    protected $fillable = ['name', 'description'];
+    use HasFactory;
 
-    public function players()
-    {
-        return $this->belongsToMany(Player::class, 'player_vote_system');
-    }
+    // Table correspondant à ton modèle
+    protected $table = "theme_vote";
+
+    // Clé primaire de la table
+    protected $primaryKey = "id_theme";
+
+    // Pas de timestamps dans ta table
+    public $timestamps = false;
+
+    // Colonnes modifiables
+    protected $fillable = [
+        'nom_theme'
+    ];
 }
-
