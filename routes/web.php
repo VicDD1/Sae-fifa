@@ -11,7 +11,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProduitProposeController; 
 use App\Http\Controllers\CommandeController;
-
+use App\Http\Controllers\SalesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,11 +22,11 @@ use App\Http\Controllers\CommandeController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+/*
 Route::get('/parametre_compte', function () {
     return view('account_modification');
 });
-
+*/
 Route::get('/se_connecter', function () {
     return view('account_connection');
 });
@@ -92,11 +92,15 @@ Route::get('/panier/update/{id_ligne}/{action}', [PanierController::class, 'upda
 Route::get('/mon-profil', [ProfileController::class, 'show'])->middleware('auth')->name('profile.show');
 // Modification (Affichage du formulaire)
 Route::get('/parametre_compte', [ProfileController::class, 'edit'])->middleware('auth')->name('profile.edit');
-
+Route::put('/parametre_compte', [ProfileController::class, 'update'])->name('profile.update');
 // Modification (Traitement du formulaire)
-Route::post('/parametre_compte', [ProfileController::class, 'update'])->middleware('auth')->name('profile.update');
+/*Route::post('/parametre_compte', [ProfileController::class, 'update'])->middleware('auth')->name('profile.update');*/
 
-
+Route::get('/statistiques_de_ventes', function(){
+    return view('statistique');
+});
+    
+Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
 
 Route::get('/proposer_un_produit', function (){
     return view('product_demand');
