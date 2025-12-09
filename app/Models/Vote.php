@@ -2,23 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Vote extends Model
 {
-    use HasFactory;
+    protected $table = 'theme_vote';     // ta table exacte
+    protected $primaryKey = 'id_theme';  // ta clé primaire exacte
+    public $timestamps = false;          // si ta table n’a pas created_at / updated_at
 
-    // Table correspondant à ton modèle
-    protected $table = "theme_vote";
-
-    // Clé primaire de la table
-    protected $primaryKey = "id_theme";
-
-    // Pas de timestamps dans ta table
-    public $timestamps = false;
-
-    // Colonnes modifiables
     protected $fillable = [
         'nom_theme'
     ];

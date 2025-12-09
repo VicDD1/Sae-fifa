@@ -27,7 +27,7 @@
     <header>
     <nav>
             <a href="/produits">Fifa Store</a>
-            <a href="/vote">Vote</a>
+            <a href="/vote/fifa ">Vote</a>
             <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
 
