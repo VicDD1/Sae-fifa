@@ -119,3 +119,32 @@ body {
 .total-price {
     color: #b12727;
 }
+
+
+.input-group {
+    position: relative; /* indispensable pour éviter le décalage */
+}
+
+/* Zone suggestions : invisible par défaut */
+.suggestions {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 900;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #eee;
+}
