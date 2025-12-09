@@ -163,4 +163,17 @@ class CommandeController extends Controller
 
         return redirect()->route('commande.succes');
     }
+    public function liste()
+    {
+        if (!Auth::check()) {
+            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+        }
+
+        $commandes = Commande::where('id_user_connecte', Auth::id())
+            ->orderBy('date_commande', 'desc')
+            ->get();
+
+        return view('mes_commandes', compact('commandes'));
+    }
+
 }

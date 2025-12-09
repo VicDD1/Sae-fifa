@@ -85,7 +85,11 @@
                 @endif
                 
             @endauth
-            
+            @auth
+                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
+                    Mes commandes
+                </a>
+            @endauth
 
         </nav>
     </header>
