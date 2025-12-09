@@ -105,6 +105,9 @@ class PanierController extends Controller
         } elseif ($action === 'minus' && $ligne->quantitee > 1) {
             $ligne->decrement('quantitee');
         }
+        if ($action === 'minus'&& $ligne->quantitee == 1){
+            $ligne->delete();
+        }
 
         return redirect()->back();
     }
