@@ -48,7 +48,7 @@
         </ul>
 
         <!-- FORMULAIRE FINAL : POST vers confirmation() -->
-        <form action="{{ route('commande.confirmation') }}" method="GET" class="payment-form">
+        <form action="{{ route('commande.succes') }}" method="POST" class="payment-form">
             @csrf
 
             <!-- Données personnelles -->

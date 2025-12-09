@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Theme_vote extends Model
 {
     use HasFactory;
-    protected $table = 'theme_vote     ';
-    protected $primaryKey = 'id_theme_vote     ';
+    protected $table = 'theme_vote';
+    protected $primaryKey = 'id_theme_vote';
     public $timestamps = false;
 }

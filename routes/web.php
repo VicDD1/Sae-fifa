@@ -112,14 +112,21 @@ Route::get('/commande', [CommandeController::class, 'afficher'])
     ->name('commande.page');
 
 // Traitement du formulaire -> redirection vers confirmation
-Route::post('/succes_commande', [CommandeController::class, 'valider'])
+Route::post('/confirmation_commande', [CommandeController::class, 'valider'])
     ->middleware('auth')
     ->name('commande.valider');
 
 // Page affichée après validation
-Route::get('/confirmation_commande', [CommandeController::class, 'confirmation'])
+Route::get('/succes_commande', function () {
+    return view('succes_commande');
+})->middleware('auth')->name('commande.succes');
+
+Route::post('/succes_commande', [CommandeController::class, 'confirmation'])
     ->middleware('auth')
-    ->name('commande.confirmation');
+    ->name('commande.succes');
+
+
+
 
 /*
 |--------------------------------------------------------------------------

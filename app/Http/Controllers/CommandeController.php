@@ -170,7 +170,6 @@ class CommandeController extends Controller
             ]);
         }
 
-
         /*
         |--------------------------------------------------
         | 6 - Vider le panier
@@ -179,6 +178,6 @@ class CommandeController extends Controller
         Ligne_panier::where('id_panier', $panier->id_panier)->delete();
 
 
-        return redirect('/commande/success')->with('success', 'Votre commande a été confirmée.');
+        return redirect()->route('commande.succes');
     }
 }
