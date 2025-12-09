@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LigneCommande extends Model
+class Ligne_commande extends Model
 {
     protected $table = 'ligne_commande';  
     public $timestamps = false;
