@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Panier;
 use App\Models\Ligne_panier;
 use App\Models\Commande;
-use App\Models\LigneCommande;
+use App\Models\Ligne_commande;
 use App\Models\Adresse;
 
 class CommandeController extends Controller
@@ -75,14 +75,14 @@ class CommandeController extends Controller
             'id_mode_livraison'=> 1, // par défaut
             'date_commande'    => now(),
             'montant_total'    => $total,
-            'date_paiement'    => null,
+            'date_paiement'    => now(),
             'mode_paiement'    => $request->paiement,
-            'statut_paiement'  => 'en_attente',
+            'statut_paiement'  => 'En attente',
         ]);
 
         // 3. CREATION DES LIGNES DE COMMANDE
         foreach ($lignesPanier as $ligne) {
-            LigneCommande::create([
+            Ligne_commande::create([
                 'id_commande' => $commande->id_commande,
                 'id_produit'  => $ligne->id_produit,
                 'id_colori'   => $ligne->id_colori,
