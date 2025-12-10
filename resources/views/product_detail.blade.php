@@ -121,6 +121,10 @@
 
 
                 </div>
+                <h3>Stock</h3>
+                <p>
+
+                </p>
 
                 <h3>Description</h3>
                 <p class="desc">
