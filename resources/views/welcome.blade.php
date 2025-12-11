@@ -70,7 +70,7 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
             </a>
             @endguest
-            @auth
+@auth
 
 @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
     <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
@@ -99,9 +99,11 @@
             {{ session('success') }}
         </div>
     @endif
+    @auth
+    @if (Auth::user()->id_user_connecte === 12)
     <a href="/creer_un_produit"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> creation de produit</div></a>
-
-
+    @endif
+    @endauth
     <div id="cookieBanner" class="cookie-banner" role="region" aria-label="Bannière cookies">
     <div class="cookie-banner__logo">BF</div>
 
