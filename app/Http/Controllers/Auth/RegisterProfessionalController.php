@@ -42,7 +42,7 @@ class RegisterProfessionalController extends Controller
         ],[
             'numero_TVA.regex'=>"ce format n'est pas valide",
             'nom_societe.max'=>"le nom ne peut pas depasser 50 caracteres",
-            'numero_TVA.integer'=>"le numero TVA doit etre un nombre",
+            'numero_TVA.regex'=>"le numero TVA doit etre valide",
             'numero_TVA.max'=>"le numero TVA ne peut pas depasser 50 caracteres",
             'numero_TVA.unique'=>"ce numero TVA est deja utilisé",
             'activite_professionnel.max'=>"l'activité professionnel ne peut pas depasser 50 caracteres",
