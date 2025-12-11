@@ -31,7 +31,7 @@ class RegisterProfessionalController extends Controller
             'nom_societe' => 'required|min:2|max:50',
             'numero_TVA' => 'required|unique:professionnel,numero_tva|regex:/^[A-Z]{2}[0-9A-Za-z]{8,12}$/',
             'activite_professionnel'=>'required|max:50',
-            'email_professionnel' => 'required|email|unique:professionnel,email_professionnel|max:50',
+            'email_professionnel' => 'required|email:dns|unique:professionnel,email_professionnel|max:50',
             'nom_professionnel' => 'required|string|max:50',
             'prenom_professionnel' => 'required|string|max:50',
             'adresse_professionnel' => 'required|max:50',
@@ -42,7 +42,7 @@ class RegisterProfessionalController extends Controller
         ],[
             'numero_TVA.regex'=>"ce format n'est pas valide",
             'nom_societe.max'=>"le nom ne peut pas depasser 50 caracteres",
-            'numero_TVA.integer'=>"le numero TVA doit etre un nombre",
+            'numero_TVA.regex'=>"le numero TVA doit etre valide",
             'numero_TVA.max'=>"le numero TVA ne peut pas depasser 50 caracteres",
             'numero_TVA.unique'=>"ce numero TVA est deja utilisé",
             'activite_professionnel.max'=>"l'activité professionnel ne peut pas depasser 50 caracteres",
@@ -98,10 +98,11 @@ class RegisterProfessionalController extends Controller
             try
             {
             $request->validate([
-                'password_professionnel' => 'required|min:6|confirmed',
+                'password_professionnel' => 'required|min:12|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
                 
                 
-            ],['password_professionnel.min'=>"Le mot de passe doit contenir au moins 6 caracteres",
+            ],['password_professionnel.min'=>"Le mot de passe doit contenir au moins 12 caracteres",
+            'password_professionnel.regex'=> "le mot de passe doit contenir une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial",
             'password_professionnel.confirmed'=>"Les mots de passe ne correspondent pas"]);
             }   
             catch(exception )

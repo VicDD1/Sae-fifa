@@ -128,10 +128,13 @@ class CommandeController extends Controller
         // ---- Carte bancaire ----
         $carte = Carte_Bancaire::create([
             'id_user_connecte' => Auth::id(),
-            'numero_carte'     => $request->card_number,
-            'date_expiration'  => $request->expiry,
-            'cryptogramme'     => $request->cvv,
-            'nom_titulaire'    => $request->card_name,
+            'id_acheteur'      => Auth::id(),
+            'id_mode_livraison'=> 1, // par défaut
+            'date_commande'    => now(),
+            'montant_total'    => $total,
+            'date_paiement'    => now(),
+            'mode_paiement'    => $request->paiement,
+            'statut_paiement'  => 'En attente',
         ]);
 
         // ---- Commande ----
