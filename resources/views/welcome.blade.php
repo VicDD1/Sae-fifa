@@ -76,20 +76,15 @@
     <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
 @endif
 
-@if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 12 && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13))
-    <a href="/creer_un_compte_professionnel_1" class="account_creation" title="Se connecter">
-        <p>Compte professionnel</p>
-    </a>
-@endif
-
-@if (Auth::user()->professionnel && (Auth::user()->id_user_connecte !== 12 && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13) )
-    <a href="/proposer_un_produit" class="account_creation">
-        <p>faire une demande de produit</p>
-    </a>
-@endif
-
-@endauth
-            
+                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
+                @endif
+                
+            @endauth
+            @auth
+                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
+                    Mes commandes
+                </a>
+            @endauth
 
         </nav>
     </header>

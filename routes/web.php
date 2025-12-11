@@ -145,6 +145,9 @@ Route::post('/succes_commande', [CommandeController::class, 'confirmation'])
     ->middleware('auth')
     ->name('commande.succes');
 
+Route::get('/mes_commandes', [CommandeController::class, 'liste'])
+    ->middleware('auth')
+    ->name('commande.liste');
 
 
 
