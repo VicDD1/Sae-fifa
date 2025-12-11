@@ -26,7 +26,7 @@ Route::get('/vote', fn() => view('vote_fifa'));
 Route::get('/privacy_policy', fn() => view('privacy_policy'));
 Route::get('/players', fn() => view('players'));
 
-
+Route::get('/produit/stock', [ProductController::class, 'getStock']);
 /*
 |--------------------------------------------------------------------------
 | PRODUITS

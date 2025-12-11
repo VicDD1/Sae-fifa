@@ -122,8 +122,12 @@
 
                 </div>
                 <h3>Stock</h3>
-                <p>
-
+                <p id="stockValue">
+                    @if(!is_null($stock))
+                        {{ $stock }} en stock
+                    @else
+                        Stock indisponible
+                    @endif
                 </p>
 
                 <h3>Description</h3>
@@ -199,7 +203,36 @@
 
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    function updateStock() {
+        let idProduit = {{ $product->id_produit }};
+        let idTaille = $('input[name="id_taille"]:checked').val();
+        let idColori = $('input[name="id_colori"]:checked').val();
 
+        $.ajax({
+            url: '/produit/stock',
+            type: 'GET',
+            data: {
+                id_produit: idProduit,
+                id_taille: idTaille,
+                id_colori: idColori
+            },
+            success: function(response) {
+                if(response.stock !== null) {
+                    $('#stockValue').text(response.stock + ' en stock');
+                } else {
+                    $('#stockValue').text('Stock indisponible');
+                }
+            }
+        });
+    }
+
+    // Mettre à jour le stock quand on change la taille ou la couleur
+    $('input[name="id_taille"], input[name="id_colori"]').on('change', updateStock);
+});
+</script>
 
 </body>
 </html>
