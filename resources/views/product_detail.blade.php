@@ -80,7 +80,6 @@
             @auth
             <form action="{{ route('panier.ajouter', $product->id_produit) }}" method="GET" style="margin-top:20px;">
 
-                <!-- ID PRODUIT -->
                 <input type="hidden" name="id_produit" value="{{ $product->id_produit }}">
 
                 <div class="choice">

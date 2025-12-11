@@ -10,11 +10,9 @@ class Acheteur extends Model
     protected $primaryKey = 'id_acheteur';
 
     public $timestamps = false;
-    public $incrementing = false;
-    
 
     protected $fillable = [
-        'id_acheteur',
+        'id_user_connecte',
         'prenom_user_connecte',
         'courriel_user_connecte',
         'date_de_naissance_user_connecte',
@@ -25,4 +23,9 @@ class Acheteur extends Model
         'telephone_acheteur',
         'adresse_livraison',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user_connecte', 'id_user_connecte');
+    }
 }

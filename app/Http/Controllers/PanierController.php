@@ -21,10 +21,14 @@ class PanierController extends Controller
         $panier = Panier::where('id_user_connecte', Auth::id())->first();
 
         if (!$panier) {
-            return view('panier', ['lignes' => [], 'total' => 0]);
+            return view('panier', [
+                'lignes' => collect([]),
+                'total' => 0
+            ]);
+            
         }
 
-        $lignes = $panier->lignes;
+        $lignes = collect($panier->lignes);
 
         $total = $lignes->sum(function($l) {
             return $l->quantitee * $l->produit->prix_base;

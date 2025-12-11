@@ -31,7 +31,7 @@
         @endif
 
 
-        @if($lignes->count() > 0)
+        @if($lignes->count() >= 0)
 
             @foreach($lignes as $ligne)
                 <div class="cart-item">

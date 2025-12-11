@@ -7,13 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 class ProfileController extends Controller
 {
-    // Affiche la page de profil de l'utilisateur connecté
+    // 1. Affiche la page de profil (Lecture seule)
     public function show()
     {
-        // On récupère SEULEMENT l'utilisateur connecté
         $user = Auth::user();
-
-        // On envoie ses infos à la vue 'account_profile'
         return view('account_profile', compact('user'));
     }
 
@@ -21,7 +18,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('account_edit', compact('user')); // On crée cette vue juste après
+        return view('account_edit', compact('user'));
     }
 
     // 3. Traite la sauvegarde des modifications
@@ -30,7 +27,7 @@ class ProfileController extends Controller
         $eighteenYearsAgo = Carbon::now()->subYears(18)->toDateString();
         $user = Auth::user(); // L'utilisateur à modifier
 
-        // A. Validation des données
+        
         $request->validate([
             'prenom_user_connecte'   => 'nullable|string|max:50',
             'surnom_user_connecte'   => 'nullable|string|max:50',
@@ -66,9 +63,9 @@ class ProfileController extends Controller
             $user->password_user_connecte = \Illuminate\Support\Facades\Hash::make($request->password_user_connecte);
         }
 
-        // D. Sauvegarde
+       
         $user->save();
 
-        return redirect('/')->with('success', 'Votre profil a bien été mis à jour!');
+        return redirect('/')->with('success', 'Votre profil a bien été mis à jour !');
     }
 }

@@ -10,3 +10,6 @@ class AcheteurController extends Controller
     	return view ("acheteur-list", ['acheteurs'=>Acheteur::all() ]);
     }
 }
+
+
+
