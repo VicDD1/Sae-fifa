@@ -22,6 +22,9 @@ use App\Http\Controllers\SalesController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/creer_un_produit', function () {
+    return view('product_creation');
+});
 /*
 Route::get('/parametre_compte', function () {
     return view('account_modification');
@@ -124,3 +127,13 @@ Route::post('/commande/valider', [CommandeController::class, 'valider'])
 
 Route::get('/commande/confirmation', [CommandeController::class, 'confirmation'])
     ->name('commande.confirmation');
+
+    use App\Http\Controllers\MakeProductController;
+
+// Afficher le formulaire de création de produit
+Route::get('/produit/creer', [MakeProductController::class, 'create'])
+    ->name('make_product.create');
+
+// Traiter le formulaire (sauvegarde en base)
+Route::post('/produit/creer', [MakeProductController::class, 'store'])
+    ->name('make_product.store');
