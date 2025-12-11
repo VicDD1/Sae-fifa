@@ -27,6 +27,14 @@ Route::get('/privacy_policy', fn() => view('privacy_policy'));
 Route::get('/players', fn() => view('players'));
 
 Route::get('/produit/stock', [ProductController::class, 'getStock']);
+
+
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('/creer_un_produit', function () {
+    return view('product_creation');
+});
 /*
 |--------------------------------------------------------------------------
 | PRODUITS
@@ -116,6 +124,18 @@ Route::post('/confirmation_commande', [CommandeController::class, 'valider'])
     ->middleware('auth')
     ->name('commande.valider');
 
+Route::get('/commande/confirmation', [CommandeController::class, 'confirmation'])
+    ->name('commande.confirmation');
+
+    use App\Http\Controllers\MakeProductController;
+
+// Afficher le formulaire de création de produit
+Route::get('/produit/creer', [MakeProductController::class, 'create'])
+    ->name('make_product.create');
+
+// Traiter le formulaire (sauvegarde en base)
+Route::post('/produit/creer', [MakeProductController::class, 'store'])
+    ->name('make_product.store');
 // Page affichée après validation
 Route::get('/succes_commande', function () {
     return view('succes_commande');
