@@ -1,8 +1,6 @@
 :root {
-    --main-bg: #1a1a1a;
-    --card-bg: #2d2d2d;
     --accent-color: rgb(32, 154, 255);
-    --text-color: #ffffff;
+    --text-color: #eef2fb;
 }
 
 * {
@@ -10,31 +8,52 @@
 }
 
 body {
+    background-color: #eef2fb;
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
-    background-color: var(--main-bg);
+    font-family: Arial, sans-serif;
     color: var(--text-color);
 }
 
-#body {
-    --main-bg: #ffffff;
-    --card-bg: #2d2d2d;
-    --accent-color: rgb(32, 154, 255);
-    --text-color: #ffffff;
-}
 
 /* ---------------- HEADER ---------------- */
 
-header {
-    background-color: #000;
-    padding: 20px;
-    border-bottom: 3px solid var(--accent-color);
+header{
+    background-color: #045694;
+    padding: 0;
+    height: 90px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
+nav{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+}
 
+nav a{
+    color: #eef2fb;
+    text-decoration: none;
+    font-size: 20px;
+    margin-right: 20px;
+    padding: 6px 10px;
+}
+
+nav a:hover{
+    background-color: #02456f;
+    border-radius: 4px;
+}
+
+.account_creation{
+    margin-left: auto;
+}
+
+.account_creation img{
+    height: 58px;
+    width: 58px;
+    border-radius: 50%;
+}
 .logo {
     font-size: 24px;
     font-weight: bold;
@@ -42,11 +61,11 @@ header {
 }
 
 .nav-link {
-    color: white;
+    color: black;
     text-decoration: none;
     font-weight: bold;
     padding: 10px;
-    border: 1px solid white;
+    border: 1px solid black;
     border-radius: 5px;
 }
 
@@ -82,8 +101,9 @@ h1 {
 /* ---------------- CARDS ---------------- */
 
 .card {
-    background: linear-gradient(145deg, #353535, #2b2b2b);
-    border: 1px solid #444;
+    background: #424242;
+    color: #eef2fb;
+    border: 1px solid #000;
     border-radius: 12px;
     overflow: hidden;
     display: flex;
@@ -93,11 +113,12 @@ h1 {
 
 .card:hover {
     transform: translateY(-6px);
-    border-color: var(--accent-color);
+    border-color: black;
     box-shadow: 0 12px 22px rgba(0, 0, 0, 0.4);
 }
 
 .card-img img {
+    background-color: #eef2fb; 
     width: 100%;
     height: 250px;
     object-fit: cover;
@@ -127,7 +148,6 @@ h1 {
 /* DESCRIPTION ALIGNEE ENTRE TOUTES LES CARTES */
 .card-desc {
     flex-grow: 1;    /* Pousse le prix vers le bas */
-    color: #ccc;
     margin-bottom: 15px;
     font-size: 0.95rem;
     line-height: 1.3rem;
@@ -143,15 +163,13 @@ h1 {
 
 .card-price {
     font-size: 1.45rem;
-    color: var(--accent-color);
     font-weight: bold;
 }
 
 /* BOUTON TJRS EN BAS DE LA CARD */
 .btn {
     margin-top: auto;
-    background-color: var(--accent-color);
-    color: #000;
+    background-color:eef2fb;
     padding: 12px;
     text-decoration: none;
     font-weight: bold;

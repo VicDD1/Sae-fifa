@@ -10,8 +10,12 @@
     <body>
 
         <header>
-            <div class="logo">FIFA Store</div>
-            
+             <nav>
+            <a href="/">Aceuil</a>
+            <a href="/vote">Vote</a>
+            <a href="/players">Les joueurs</a>
+            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+
             @auth
                 @php
                     $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
@@ -23,36 +27,56 @@
                 @php $totalQuantite = 0; @endphp
             @endguest
 
-            @guest
-                <a href="/connexion" class="account_creation">
-                    <img src="{{ asset('assets/icone.png') }}" alt="Compte">
-                </a>
-            @endguest
+            <a href="{{ route('panier.index') }}" style="margin-left: 15px; font-weight: bold;">
+                <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
+            </a>
 
             @auth
+
                 <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
                     
-                    <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
-                        <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
-                            {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
-                        </span>
-                    </a>
+                <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
+                    <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
+                        {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
+                    </span>
+                </a>
 
                     <form action="/logout" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" title="Se déconnecter"
-                                style="background: none; border: none; cursor: pointer; color: #ffcccc;">
+                        <button type="submit" title="Se déconnecter" style="background: none; border: none; cursor: pointer; color: #ffcccc;">
                             <i class="fa-solid fa-power-off"></i>
                         </button>
                     </form>
                 </div>
             @endauth
 
-            <a href="/panier" class="nav-link" style="font-weight: bold;">
-                <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
+            @guest
+                <a href="/connexion" class="account_creation" title="Se connecter">
+                    <img src="{{ asset('assets/icone.png') }}" alt="Compte">
             </a>
-  
+            @endguest
+            @auth
 
+            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+            @endif
+
+            @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 12 && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13))
+                <a href="/creer_un_compte_professionnel_1" class="account_creation" title="Se connecter">
+                    <p>Compte professionnel</p>
+                </a>
+            @endif
+
+            @if (Auth::user()->professionnel && (Auth::user()->id_user_connecte !== 12 && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13) )
+                <a href="/proposer_un_produit" class="account_creation">
+                    <p>faire une demande de produit</p>
+                </a>
+            @endif
+
+@endauth
+            
+
+        </nav>
         </header>
 
         @if(session('success'))

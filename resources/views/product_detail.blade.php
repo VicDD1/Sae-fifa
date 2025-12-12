@@ -4,60 +4,81 @@
     <meta charset="utf-8">
     <title>{{ $product->label_produit }} - FIFA Store</title>
 
-    <link rel="stylesheet" href="{{ asset('css/product.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/product_detail.css') }}">
 
-    <style>
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .product-detail { display: flex; gap: 40px; margin-top: 30px; }
-        .img-box img { width: 100%; max-width: 500px; border-radius: 10px; }
-        .info-box { flex: 1; }
-        .price { font-size: 24px; color: #b12727; font-weight: bold; margin: 20px 0; }
-        .desc { line-height: 1.6; color: #555; font-size: 18px; }
-        .btn-back { display: inline-block; margin-bottom: 20px; color: #333; text-decoration: underline; }
-        .choice label { display:block; margin-top:5px; }
-    </style>
 </head>
 
 <body>
 
 <header>
-    <div class="logo">FIFA Store</div>  
-        @auth
-            @php
-                $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
-                $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
-            @endphp
-        @endauth
+             <nav>
+            <a href="/">Aceuil</a>
+            <a href="/vote">Vote</a>
+            <a href="/players">Les joueurs</a>
+            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
 
-        @guest
-            @php $totalQuantite = 0; @endphp
-        @endguest
+            @auth
+                @php
+                    $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
+                    $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
+                @endphp
+            @endauth
 
             @guest
-                <a href="/connexion" class="account_creation">
-                <img src="{{ asset('assets/icone.png') }}" alt="Compte">
-             </a>
-        @endguest
-        @auth
-            <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">        
+                @php $totalQuantite = 0; @endphp
+            @endguest
+
+            <a href="{{ route('panier.index') }}" style="margin-left: 15px; font-weight: bold;">
+                <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
+            </a>
+
+            @auth
+
+                <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
+                    
                 <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
                     <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
                         {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
                     </span>
                 </a>
-                <form action="/logout" method="POST" style="display:inline;">
-                    @csrf
-                    <button type="submit" title="Se déconnecter"
-                            style="background: none; border: none; cursor: pointer; color: #ffcccc;">
-                        <i class="fa-solid fa-power-off"></i>
-                    </button>
-                </form>
-            </div>
+
+                    <form action="/logout" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" title="Se déconnecter" style="background: none; border: none; cursor: pointer; color: #ffcccc;">
+                            <i class="fa-solid fa-power-off"></i>
+                        </button>
+                    </form>
+                </div>
+            @endauth
+
+            @guest
+                <a href="/connexion" class="account_creation" title="Se connecter">
+                    <img src="{{ asset('assets/icone.png') }}" alt="Compte">
+            </a>
+            @endguest
+            @auth
+
+            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+            @endif
+
+            @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 12 && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13))
+                <a href="/creer_un_compte_professionnel_1" class="account_creation" title="Se connecter">
+                    <p>Compte professionnel</p>
+                </a>
+            @endif
+
+            @if (Auth::user()->professionnel && (Auth::user()->id_user_connecte !== 12 && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13) )
+                <a href="/proposer_un_produit" class="account_creation">
+                    <p>faire une demande de produit</p>
+                </a>
+            @endif
+
         @endauth
-    <a href="/panier" class="nav-link" style="font-weight: bold;">
-        <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
-    </a>
-</header>
+            
+
+        </nav>
+        </header>
 
 <div class="container">
 
@@ -170,7 +191,6 @@
         </div>
     </div>
 </div>
-<hr style="margin:50px 0;">
 
 <div class="container">
     <h2 style="margin-bottom:20px;">Articles similaires</h2>
@@ -178,7 +198,7 @@
     <div style="display:flex; gap:20px; overflow-x:auto; padding-bottom:10px;">
 
         @forelse($similarProducts as $sim)
-            <div style="min-width:200px; border:1px solid #ddd; border-radius:8px; padding:10px;">
+            <div style="min-width:200px; border:1px solid black; border-radius:8px; padding:10px;">
 
                 <a href="{{ route('product.detail', $sim->id_produit) }}"
                    style="text-decoration:none; color:inherit;">
