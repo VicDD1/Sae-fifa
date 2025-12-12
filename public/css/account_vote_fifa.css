@@ -1,115 +1,137 @@
-/* Reset et style de base */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+accont_vote_fifa.css
+
+
+/* ------------------------------ */
+/*   FORMULAIRE DE VOTE FIFA      */
+/* ------------------------------ */
 
 body {
-    background-color: #f4f6f9;
+    background: #f3f6fb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    margin: 0;
 }
 
-/* Conteneur principal (la carte blanche) */
+/* CARD PRINCIPALE */
 .card {
-    background-color: #ffffff;
-    width: 100%;
-    max-width: 700px;
-    padding: 50px;
-    border-radius: 4px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e1e4e8;
+    background: #fff;
+    width: 85%;
+    max-width: 900px;
+    padding: 45px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    animation: fadeIn 0.4s ease-out;
 }
 
-/* Titre */
-h1 {
-    color: #001A41;
-    font-size: 36px;
-    font-weight: 600;
+/* TITRE */
+.card h1 {
+    font-size: 38px;
+    color: #0a2a66;
+    margin-bottom: 8px;
+}
+
+/* TEXTE DESCRIPTION */
+.card .description {
+    font-size: 18px;
     margin-bottom: 25px;
-}
-
-/* Texte explicatif */
-p.description {
-    color: #000000;
-    font-size: 18px;
-    line-height: 1.5;
-    margin-bottom: 40px;
-}
-
-/* Groupes de champs */
-.input-group {
-    margin-bottom: 35px;
-    position: relative;
-}
-
-.input-group label {
-    display: block;
-    font-weight: 600;
-    color: #001A41;
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-/* Style des inputs */
-.input-group input {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 18px;
     color: #333;
-    border: none;
-    border-bottom: 1px solid #8e9aa8;
+}
+
+/* MESSAGE D'ERREUR (STYLE PRO & ANIMÉ) */
+.error-message {
+    font-weight: bold;
+    color: #c81919;
+    font-size: 18px;
+    margin-bottom: 20px;
+    padding: 12px 18px;
+    background: #ffe5e5;
+    border-left: 5px solid #ff3b3b;
+    border-radius: 6px;
+    animation: slideDown 0.4s ease-out;
+}
+
+/* Champs & labels */
+label {
+    font-weight: 600;
+    color: #0a2a66;
+    margin-bottom: 6px;
+    display: block;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cad3df;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 15px;
+    transition: border 0.2s ease;
+}
+
+select:focus {
+    border-color: #0b5fd3;
     outline: none;
-    background-color: transparent;
+    box-shadow: 0 0 0 3px rgba(11, 95, 211, 0.2);
 }
 
-.input-group input:focus {
-    border-bottom: 2px solid #0e72bd;
+/* GRID POUR LES 4 BLOCS */
+.row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: 20px;
 }
 
-/* Zone des boutons */
+/* BOUTONS */
 .actions {
+    margin-top: 35px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-top: 50px;
 }
 
-/* Styles communs aux boutons */
-button {
-    padding: 15px 32px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-}
-
-/* Bouton GAUCHE (RETOUR) */
 .btn-cancel {
-    background-color: transparent;
-    border: 1px solid #001A41;
-    color: #001A41;
+    padding: 12px 25px;
+    background: #ffffff;
+    border: 2px solid #0a2a66;
+    color: #0a2a66;
+    border-radius: 50px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.25s;
 }
 
 .btn-cancel:hover {
-    background-color: #f0f4f8;
+    background: #e7eef9;
 }
 
-/* Bouton DROITE (VALIDER) */
 .btn-send {
-    background-color: #0e72bd;
+    padding: 14px 35px;
+    background: #0b5fd3;
     border: none;
     color: white;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: 0.25s;
 }
 
 .btn-send:hover {
-    background-color: #0b5fa0;
-    box-shadow: 0 2px 8px rgba(14, 114, 189, 0.4);
+    background: #0849a6;
+    box-shadow: 0px 4px 12px rgba(11, 95, 211, 0.4);
+}
+
+/* Animations propres */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
