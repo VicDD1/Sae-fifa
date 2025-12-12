@@ -120,7 +120,7 @@
                 </div>
 
 
-            <button type="submit" class="btn-pay">Confirmer et payer</button>
+            <button type="submit" class="btn-pay" href="{{ url('/mes_commandes') }}">Confirmer et payer</button>
         </form>
 
             <a href="{{ url('/produits') }}" class="return">Retour à la boutique</a>
