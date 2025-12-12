@@ -1,20 +1,40 @@
-<link rel="stylesheet" href="{{ asset('css/account_vote_fifa.css') }}">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Récapitulatif de votre vote</title>
+    <link rel="stylesheet" href="{{ asset('css/account_vote_fifa.css') }}">
+</head>
+
+<body>
 
 <div class="card">
+
     <h1>Récapitulatif de votre vote</h1>
     <p class="description">Merci pour votre vote.</p>
 
     <h2>Thème :</h2>
-    <p>{{ $recap['theme']->nom_theme }}</p>
+    <p>{{ $recap['theme'] ?? 'Thème inconnu' }}</p>
 
     <h2>Classement des joueurs :</h2>
+
+    @php
+        $votes = $recap['votes'] ?? [];
+        usort($votes, fn($a, $b) => $a['rank'] <=> $b['rank']);
+    @endphp
+
     <ol>
-        @foreach($recap['votes'] as $vote)
-            <li>{{ $vote['classement'] }}ᵉ : {{ $vote['joueur']->nom }}</li>
+        @foreach($votes as $v)
+            <li>
+                {{ $v['rank'] }}ᵉ :
+                {{ $v['joueur']->prenom }} {{ $v['joueur']->nom }}
+            </li>
         @endforeach
     </ol>
 
-    <div class="actions">
-        <a href="{{ url('/') }}" class="btn-cancel">Retour à l'accueil</a>
-    </div>
+   <a href="{{ url('/') }}" class="btn-cancel">Retour à l'accueil</a>
+
 </div>
+
+</body>
+</html>

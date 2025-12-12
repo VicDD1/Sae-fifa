@@ -131,7 +131,7 @@ Route::post('/proposer_un_produit', [ProduitProposeController::class, 'step1Post
 ------------------------------ */
 Route::post('/commande/valider', [CommandeController::class, 'valider'])->name('commande.valider');
 
-Route::get('/commande', [CommandeController::class, 'afficher'])
+Route::get('/commande', [CommandeController::class, 'afficher']);
 /*
 |--------------------------------------------------------------------------
 | PROPOSITION PRODUIT

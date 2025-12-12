@@ -71,7 +71,7 @@
         </ul>
 
         <!-- FORMULAIRE DE PAIEMENT -->
-        <form action="{{ route('commande.succes') }}" method="POST" class="payment-form">
+        <form action="{{ route('commande.valider') }}" method="POST" class="payment-form">
             @csrf
 
             <!-- Données personnelles -->

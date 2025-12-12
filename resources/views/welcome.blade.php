@@ -75,12 +75,12 @@
             @endguest
 @auth
 
-@if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-    <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-@endif
+            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+
 
                 <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
-                @endif
+            @endif
                 
             @endauth
             @auth
