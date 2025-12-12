@@ -12,4 +12,3 @@ class Vote extends Model
 
     protected $fillable = ['id_vote', 'id_theme'];
 }
-

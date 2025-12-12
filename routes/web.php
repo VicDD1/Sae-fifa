@@ -15,11 +15,22 @@ use App\Http\Controllers\ProduitProposeController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\VoteController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/', fn() => view('welcome'));
+Route::get('/se_connecter', fn() => view('account_connection'));
+Route::get('/vote', fn() => view('vote_fifa'));
+Route::get('/privacy_policy', fn() => view('privacy_policy'));
+Route::get('/players', fn() => view('players'));
+
+/* ------------------------------
+   Pages statiques & simples
+------------------------------ */
+Route::get('/produit/stock', [ProductController::class, 'getStock']);
 
 /* ------------------------------
    Pages statiques & simples
@@ -43,6 +54,21 @@ Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 /* ------------------------------
    Produits
 ------------------------------ */
+Route::get('/produits', [ProductController::class, 'index']);
+Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
+
+/* ------------------------------
+   Authentification — Inscription
+------------------------------ */
+// Particulier
+Route::get('/creer_un_produit', function () {
+    return view('product_creation');
+});
+/*
+|--------------------------------------------------------------------------
+| PRODUITS
+|--------------------------------------------------------------------------
+*/
 Route::get('/produits', [ProductController::class, 'index']);
 Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
@@ -106,6 +132,33 @@ Route::post('/proposer_un_produit', [ProduitProposeController::class, 'step1Post
 Route::post('/commande/valider', [CommandeController::class, 'valider'])->name('commande.valider');
 
 Route::get('/commande', [CommandeController::class, 'afficher'])
+/*
+|--------------------------------------------------------------------------
+| PROPOSITION PRODUIT
+|--------------------------------------------------------------------------
+*/
+Route::get('/proposer_un_produit', [ProduitProposeController::class, 'step1'])->name('registerProduct.step1');
+Route::post('/proposer_un_produit', [ProduitProposeController::class, 'step1Post'])->name('registerProduct.step1.post');
+
+Route::post('/parametre_compte', [ProfileController::class, 'update'])
+    ->middleware('auth')
+    ->name('profile.update');
+
+/* ------------------------------
+   Proposer un produit
+------------------------------ */
+Route::get('/proposer_un_produit', [ProduitProposeController::class, 'step1'])
+    ->name('registerProduct.step1');
+
+Route::post('/proposer_un_produit', [ProduitProposeController::class, 'step1Post'])
+    ->name('registerProduct.step1.post');
+
+/* ------------------------------
+   Commandes
+------------------------------ */
+Route::post('/commande/valider', [CommandeController::class, 'valider'])->name('commande.valider');
+
+Route::get('/commande', [CommandeController::class, 'afficher'])
     ->middleware('auth')
     ->name('commande.page');
 
@@ -122,6 +175,26 @@ Route::get('/vote/fifa', [VoteController::class, 'votePage'])
     ->name('vote.page');
 
 // Soumission du vote (POST uniquement)
+Route::post('/vote/submit', [VoteController::class, 'submit'])
+    ->middleware('auth')
+    ->name('commande.succes');
+
+Route::get('/mes_commandes', [CommandeController::class, 'liste'])
+    ->middleware('auth')
+    ->name('commande.liste');
+
+Route::get('/commande/confirmation', [CommandeController::class, 'confirmation'])
+    ->name('commande.confirmation');
+
+/* ------------------------------
+   VOTE FIFA (FINAL, PROPRE)
+------------------------------ */
+
+// Affichage du formulaire de vote
+Route::get('/vote/fifa', [VoteController::class, 'votePage'])
+    ->name('vote.page');
+
+// Soumission du vote (doit être connecté)
 Route::post('/vote/submit', [VoteController::class, 'submit'])
     ->middleware('auth')
     ->name('vote.submit');

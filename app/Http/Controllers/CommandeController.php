@@ -12,6 +12,7 @@ use App\Models\Ligne_commande;
 use App\Models\Adresse;
 use App\Models\Acheteur;
 use App\Models\Carte_Bancaire;
+use App\Models\Mode_livraison;
 
 class CommandeController extends Controller
 {
@@ -33,7 +34,9 @@ class CommandeController extends Controller
         $lignes = $panier->lignes;
         $total = $lignes->sum(fn($l) => $l->quantitee * $l->produit->prix_base);
 
-        return view('vue_commande', compact('lignes', 'total'));
+        $modes = Mode_livraison::all();
+
+        return view('vue_commande', compact('lignes', 'total', 'modes'));
     }
 
 
@@ -53,16 +56,21 @@ class CommandeController extends Controller
             'cp'        => 'required|string|max:20',
             'telephone' => 'required|string|max:20',
             'paiement'  => 'required|string',
+            'mode_livraison' => 'required|integer|exists:mode_livraison,id_mode_livraison',
         ]);
 
         $panier = Panier::where('id_user_connecte', Auth::id())->firstOrFail();
         $lignes = $panier->lignes;
         $total  = $lignes->sum(fn($l) => $l->quantitee * $l->produit->prix_base);
 
+        $mode = Mode_livraison::find($request->mode_livraison);
+
         return view('confirmation_commande', [
             'lignes' => $lignes,
-            'total'  => $total,
+            'total'  => $total + $mode->prix_mode_livraison,
             'data'   => $request->all(),
+            'mode'   => $mode
+,
         ]);
     }
 
@@ -83,6 +91,8 @@ class CommandeController extends Controller
             'cp'        => 'required|string|max:20',
             'telephone' => 'required|string|max:20',
             'paiement'  => 'required|string',
+            'mode_livraison' => 'required|integer|exists:mode_livraison,id_mode_livraison',
+
             'card_name'   => 'required|string|max:255',
             'card_number' => 'required|string|max:16',
             'expiry'      => 'required|string|max:5',
@@ -93,13 +103,11 @@ class CommandeController extends Controller
         $lignes = $panier->lignes;
         $total  = $lignes->sum(fn($l) => $l->quantitee * $l->produit->prix_base);
 
+        $mode = Mode_livraison::findOrFail($request->mode_livraison);
+        $total_final = $total + $mode->prix_mode_livraison;
 
-        /*
-        |--------------------------------------------------
-        | 1 - Récupération ou création de l’acheteur
-        |--------------------------------------------------
-        */
 
+        // ---- Acheteur ----
         $acheteur = Acheteur::where('id_user_connecte', Auth::id())->first();
 
         if (!$acheteur) {
@@ -110,24 +118,14 @@ class CommandeController extends Controller
             ]);
         }
 
-
-        /*
-        |--------------------------------------------------
-        | 2 - Création adresse
-        |--------------------------------------------------
-        */
+        // ---- Adresse ----
         $adresse = Adresse::create([
             'pays_adresse'  => $request->pays ?? 'France',
             'code_postal'   => $request->cp,
             'ville_adresse' => $request->ville,
         ]);
 
-
-        /*
-        |--------------------------------------------------
-        | 3 - Enregistrement carte bancaire
-        |--------------------------------------------------
-        */
+        // ---- Carte bancaire ----
         $carte = Carte_Bancaire::create([
             'id_user_connecte' => Auth::id(),
             'id_acheteur'      => Auth::id(),
@@ -139,8 +137,21 @@ class CommandeController extends Controller
             'statut_paiement'  => 'En attente',
         ]);
 
-        // 3. CREATION DES LIGNES DE COMMANDE
-        foreach ($lignesPanier as $ligne) {
+        // ---- Commande ----
+        $commande = Commande::create([
+            'id_adresse'        => $adresse->id_adresse,
+            'id_user_connecte'  => Auth::id(),
+            'id_acheteur'       => $acheteur->id_acheteur,
+            'id_mode_livraison' => $mode->id_mode_livraison,
+            'date_commande'     => now(),
+            'montant_total'     => $total_final,
+            'date_paiement'     => now(),
+            'mode_paiement'     => $request->paiement,
+            'statut_paiement'   => 'En attente',
+        ]);
+
+        // ---- Lignes commandes ----
+        foreach ($lignes as $ligne) {
             Ligne_commande::create([
                 'id_commande' => $commande->id_commande,
                 'id_produit'  => $ligne->id_produit,
@@ -150,14 +161,22 @@ class CommandeController extends Controller
             ]);
         }
 
-        /*
-        |--------------------------------------------------
-        | 6 - Vider le panier
-        |--------------------------------------------------
-        */
+        // ---- Vider panier ----
         Ligne_panier::where('id_panier', $panier->id_panier)->delete();
-
 
         return redirect()->route('commande.succes');
     }
+    public function liste()
+    {
+        if (!Auth::check()) {
+            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+        }
+
+        $commandes = Commande::where('id_user_connecte', Auth::id())
+            ->orderBy('date_commande', 'desc')
+            ->get();
+
+        return view('mes_commandes', compact('commandes'));
+    }
+
 }

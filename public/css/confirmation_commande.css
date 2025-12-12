@@ -1,30 +1,31 @@
 body {
     margin: 0;
     padding: 0;
-    background: #f0f2f5;
-    font-family: Arial, sans-serif;
+    background: #eef1f5;
+    font-family: "Roboto", Arial, sans-serif;
 }
 
 .container {
-    min-height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    padding: 50px 0;
 }
 
 .card {
     background: #fff;
-    padding: 40px;
-    width: 450px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.12);
+    padding: 35px 40px;
+    width: 600px;
+    border-radius: 16px;
+    box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
-    margin-bottom: 15px;
-    font-size: 24px;
-    color: #333;
+    margin-bottom: 10px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #2c3e50;
 }
 
 .intro {
@@ -33,11 +34,68 @@ h1 {
     color: #555;
 }
 
-.success {
-    color: #2ecc71;
-    text-align: center;
-    font-weight: bold;
+.section-title {
+    margin-top: 25px;
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #34495e;
+    border-left: 4px solid #2c7df0;
+    padding-left: 10px;
+}
+
+.info-box {
+    background: #f8f9fc;
+    padding: 15px 18px;
+    border-radius: 10px;
     margin-bottom: 20px;
+    border: 1px solid #dfe3e8;
+}
+
+.info-box p {
+    margin: 6px 0;
+    color: #333;
+}
+
+ul {
+    background: #f8f9fc;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1px solid #dfe3e8;
+    list-style: none;
+}
+
+ul li {
+    margin: 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ececec;
+}
+
+.total-block {
+    background: #f1f6ff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #c9daf7;
+    margin-bottom: 25px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.total-row strong {
+    color: #2c3e50;
+}
+
+.total-final {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c7df0;
+    text-align: right;
+    margin-top: 10px;
 }
 
 .payment-form label {
@@ -71,23 +129,14 @@ h1 {
     background: #2c7df0;
     border: none;
     color: white;
-    font-size: 16px;
+    font-size: 17px;
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .btn-pay:hover {
     background: #1f5ec1;
-}
-
-.return {
-    display: block;
-    margin-top: 25px;
-    text-align: center;
-    text-decoration: none;
-    color: #3498db;
-    font-weight: bold;
 }
