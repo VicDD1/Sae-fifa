@@ -100,7 +100,7 @@ ul li {
 
 .payment-form label {
     font-weight: bold;
-    display: block;
+    display: inline-block;
     margin-bottom: 5px;
     color: #333;
 }
@@ -111,6 +111,7 @@ ul li {
     border: 1px solid #ccc;
     border-radius: 8px;
     margin-bottom: 20px;
+    display: inline;
     font-size: 15px;
 }
 

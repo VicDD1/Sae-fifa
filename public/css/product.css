@@ -20,59 +20,50 @@ body {
 
 header{
     background-color: #045694;
-    padding: 0;
-    height: 90px;
+    height: 85px;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
+
 nav{
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 30px;
+    gap: 20px;
 }
 
 nav a{
     color: #eef2fb;
     text-decoration: none;
-    font-size: 20px;
-    margin-right: 20px;
-    padding: 6px 10px;
+    font-size: 18px;
+    padding: 6px 14px;
+    border-radius: 5px;
+    transition: 0.2s;
 }
 
 nav a:hover{
     background-color: #02456f;
-    border-radius: 4px;
 }
-
+.btn-primary{
+    background: #00aaff;
+    color: white;
+}
+.btn-primary:hover{
+    background: #0088cc;
+}
+/* Alignement droite */
 .account_creation{
     margin-left: auto;
+    display: flex;
+    align-items: center;
 }
 
 .account_creation img{
-    height: 58px;
-    width: 58px;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
-}
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.nav-link {
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-.nav-link:hover {
-    background-color: var(--accent-color);
-    color: black;
-    border-color: var(--accent-color);
 }
 
 /* ---------------- GLOBAL CONTAINER ---------------- */
