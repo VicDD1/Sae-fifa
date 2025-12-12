@@ -25,9 +25,12 @@
     <script src="https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js"></script>
 
     <header>
-    <nav>
+        <nav>
             <a href="/produits">Fifa Store</a>
-            <a href="/vote/fifa ">Vote</a>
+
+            <!-- CORRECTION : lien Vote propre -->
+            <a href="{{ route('vote.page') }}">Vote</a>
+
             <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
 
@@ -47,14 +50,13 @@
             </a>
 
             @auth
-
                 <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
                     
-                <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
-                    <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
-                        {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
-                    </span>
-                </a>
+                    <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
+                        <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
+                            {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
+                        </span>
+                    </a>
 
                     <form action="/logout" method="POST" style="display:inline;">
                         @csrf
@@ -62,13 +64,14 @@
                             <i class="fa-solid fa-power-off"></i>
                         </button>
                     </form>
+
                 </div>
             @endauth
 
             @guest
                 <a href="/connexion" class="account_creation" title="Se connecter">
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
-            </a>
+                </a>
             @endguest
 @auth
 
@@ -86,6 +89,19 @@
                 </a>
             @endauth
 
+            @auth
+                @if (!Auth::user()->professionnel)
+                    <a href="/creer_un_compte_professionnel_1" class="account_creation">
+                        <p>Compte professionnel</p>
+                    </a>
+                @endif
+
+                @if (Auth::user()->professionnel)
+                    <a href="/proposer_un_produit" class="account_creation">
+                        <p>faire une demande de produit</p>
+                    </a>
+                @endif
+            @endauth
         </nav>
     </header>
 
@@ -94,64 +110,61 @@
             {{ session('success') }}
         </div>
     @endif
-    @auth
-    @if (Auth::user()->id_user_connecte === 12)
-    <a href="/creer_un_produit"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> creation de produit</div></a>
-    @endif
-    @endauth
+
+
+    <!-- BANNIÈRE COOKIES + MODAL (inchangé) -->
     <div id="cookieBanner" class="cookie-banner" role="region" aria-label="Bannière cookies">
-    <div class="cookie-banner__logo">BF</div>
+        <div class="cookie-banner__logo">BF</div>
 
-    <div class="cookie-banner__text">
-      <strong>Nous utilisons des cookies</strong><br>
-      Nous et nos partenaires utilisons des traceurs pour personnaliser le contenu, mesurer les performances et vous proposer des publicités personnalisées.
-      <a id="openPrefsLink" class="cookie-banner__link" href="#" role="button">Gérer mes préférences</a>
+        <div class="cookie-banner__text">
+        <strong>Nous utilisons des cookies</strong><br>
+        Nous et nos partenaires utilisons des traceurs pour personnaliser le contenu, mesurer les performances et vous proposer des publicités personnalisées.
+        <a id="openPrefsLink" class="cookie-banner__link" href="#" role="button">Gérer mes préférences</a>
+        </div>
+
+        <div class="cookie-banner__actions">
+        <button id="rejectAllBtn" class="btn btn-ghost">Refuser</button>
+        <button id="acceptAllBtn" class="btn btn-primary">Accepter</button>
+        </div>
     </div>
 
-    <div class="cookie-banner__actions">
-      <button id="rejectAllBtn" class="btn btn-ghost">Refuser</button>
-      <button id="acceptAllBtn" class="btn btn-primary">Accepter</button>
+    <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="prefs">
+        <h2>Préférences des cookies</h2>
+        <p>Choisissez les types de cookies que vous acceptez. Vous pouvez modifier ce choix à tout moment.</p>
+
+        <div class="prefs__row">
+            <div class="prefs__desc">
+            <strong>Cookies nécessaires</strong>
+            <div class="small">Indispensables au fonctionnement du site.</div>
+            </div>
+            <div class="prefs__toggle small">Toujours activés</div>
+        </div>
+
+        <div class="prefs__row">
+            <div class="prefs__desc">
+            <strong>Statistiques</strong>
+            <div class="small">Permettent d'améliorer l'expérience utilisateur.</div>
+            </div>
+            <button class="toggle" data-key="analytics"><span class="knob"></span></button>
+        </div>
+
+        <div class="prefs__row">
+            <div class="prefs__desc">
+            <strong>Marketing</strong>
+            <div class="small">Publicités personnalisées.</div>
+            </div>
+            <button class="toggle" data-key="marketing"><span class="knob"></span></button>
+        </div>
+
+        <div class="prefs__footer">
+            <button id="savePrefsBtn" class="btn btn-primary">Enregistrer</button>
+            <button id="closePrefsBtn" class="btn btn-ghost">Annuler</button>
+        </div>
+        </div>
     </div>
-  </div>
 
-  <!-- MODAL PREFERENCES -->
-  <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="prefs">
-      <h2>Préférences des cookies</h2>
-      <p>Choisissez les types de cookies que vous acceptez. Vous pouvez modifier ce choix à tout moment.</p>
+    <script src="{{ asset('js/script.js') }}"></script>
 
-      <div class="prefs__row">
-        <div class="prefs__desc">
-          <strong>Cookies nécessaires</strong>
-          <div class="small">Indispensables au fonctionnement du site.</div>
-        </div>
-        <div class="prefs__toggle small">Toujours activés</div>
-      </div>
-
-      <div class="prefs__row">
-        <div class="prefs__desc">
-          <strong>Statistiques</strong>
-          <div class="small">Permettent d'améliorer l'expérience utilisateur.</div>
-        </div>
-        <button class="toggle" data-key="analytics"><span class="knob"></span></button>
-      </div>
-
-      <div class="prefs__row">
-        <div class="prefs__desc">
-          <strong>Marketing</strong>
-          <div class="small">Publicités personnalisées.</div>
-        </div>
-        <button class="toggle" data-key="marketing"><span class="knob"></span></button>
-      </div>
-
-      <div class="prefs__footer">
-        <button id="savePrefsBtn" class="btn btn-primary">Enregistrer</button>
-        <button id="closePrefsBtn" class="btn btn-ghost">Annuler</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- JAVASCRIPT -->
-  <script src="js/script.js"></script>
 </body>
 </html>
