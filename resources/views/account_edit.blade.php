@@ -30,30 +30,36 @@
 
                 <form action="{{ route('profile.update') }}" method="POST">
                     @csrf 
+                    @method('put')
 
                     <div style="display: flex; gap: 20px;">
                         <div class="form-group" style="flex: 1;">
                             <label class="input-label">Prénom</label>
-                            <input type="text" name="prenom" class="custom-input" value="{{ old('prenom', $user->prenom_user_connecte) }}" required>
+                            <input type="text" name="prenom_user_connecte" class="custom-input" value="{{ old('prenom_user_connecte', $user->prenom_user_connecte) }}" required>
                         </div>
                         <div class="form-group" style="flex: 1;">
                             <label class="input-label">Surnom</label>
-                            <input type="text" name="surnom" class="custom-input" value="{{ old('surnom', $user->surnom_user_connecte) }}">
+                            <input type="text" name="surnom_user_connecte" class="custom-input" value="{{ old('surnom_user_connecte', $user->surnom_user_connecte) }}" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="input-label">Adresse électronique</label>
-                        <input type="email" name="email" class="custom-input" value="{{ old('email', $user->courriel_user_connecte) }}" required>
-                        @error('email') <span style="color:red; font-size:12px">{{ $message }}</span> @enderror
+                        <input type="email" name="courriel_user_connecte" class="custom-input" value="{{ old('courriel_user_connecte', $user->courriel_user_connecte) }}" required>
+                        @error('courriel_user_connecte')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
                     </div>
 
                     <div style="display: flex; gap: 20px;">
                         
                         <div class="form-group" style="flex: 1;">
                             <label class="input-label">Date de naissance</label>
-                            <input type="date" name="date_naissance" class="custom-input" 
-                                value="{{ old('date_naissance', $user->date_de_naissance_user_connecte) }}">
+                            <input type="date" name="date_de_naissance_user_connecte" class="custom-input" 
+                                value="{{ old('date_de_naissance_user_connecte', $user->date_de_naissance_user_connecte) }}">
+                                @error('date_de_naissance_user_connecte')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
                         </div>
                         
                         <div class="form-group" style="flex: 1;">
@@ -68,6 +74,7 @@
                                 <option value="Espagne" @selected($pays == 'Espagne')>Espagne</option>
                                 <option value="Portugal" @selected($pays == 'Portugal')>Portugal</option>
                             </select>
+
                         </div>
                     </div>
 
@@ -106,10 +113,21 @@
                         <label class="input-label" style="color: #d7003a;">Nouveau mot de passe (Optionnel)</label>
                         <p style="font-size: 12px; color: #666; margin-bottom: 5px;">Laissez vide si vous ne voulez pas le changer.</p>
                         <div style="position: relative;">
-                            <input type="password" name="password" class="custom-input" placeholder="••••••••">
+                            <input type="password" name="password_user_connecte" class="custom-input" placeholder="••••••••">
                             <i class="fa-solid fa-key password-icon"></i>
                         </div>
-                        @error('password') <span style="color:red; font-size:12px">{{ $message }}</span> @enderror
+                        @error('password_user_connecte')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
+                    <label class="input-label" style="color: #d7003a;">confirmer le nouveau mot de passe </label>
+                        
+                        <div style="position: relative;">
+                        <input type="password" name="password_user_connecte_confirmation" class="custom-input" placeholder="••••••••">
+                            <i class="fa-solid fa-key password-icon"></i>
+                        </div>
+                        @error('password_user_connecte_confirmation')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
                     </div>
 
                     <button type="submit" class="btn-login" style="background-color: #00ff87; color: #001638;">

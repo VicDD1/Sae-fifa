@@ -1,3 +1,4 @@
+
 body{
     background-color: #eef2fb;
     margin: 0;
@@ -5,43 +6,94 @@ body{
     font-family: Arial, sans-serif;
 }
 
+
 header{
     background-color: #045694;
-    padding: 0;
-    height: 90px;
+    height: 85px;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 nav{
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 30px;
+    gap: 20px;
 }
 
 nav a{
     color: #eef2fb;
     text-decoration: none;
-    font-size: 20px;
-    margin-right: 20px;
-    padding: 6px 10px;
+    font-size: 18px;
+    padding: 6px 14px;
+    border-radius: 5px;
+    transition: 0.2s;
 }
 
 nav a:hover{
     background-color: #02456f;
-    border-radius: 4px;
 }
 
+/* Alignement droite */
 .account_creation{
     margin-left: auto;
+    display: flex;
+    align-items: center;
 }
 
 .account_creation img{
-    height: 58px;
-    width: 58px;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
 }
+
+/* User info */
+.user-info,
+header div[style*="display: inline-flex"] {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.user-info span,
+header div[style*="display: inline-flex"] span {
+    font-weight: bold;
+    border-bottom: 2px solid #00ff87;
+    color: white;
+    padding-bottom: 2px;
+}
+
+header div[style*="display: inline-flex"] button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ffcccc;
+    font-size: 18px;
+}
+
+nav a.cart-link,
+nav a[style*="font-weight: bold;"] {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+.btn-primary{
+    background: #00aaff;
+    color: white;
+}
+.btn-primary:hover{
+    background: #0088cc;
+}
+
 .cookie-banner{
     color: whitesmoke;
     position: fixed;
@@ -49,66 +101,60 @@ nav a:hover{
     right: 16px;
     bottom: 16px;
     background: linear-gradient(90deg, rgba(11,38,64,0.98), rgba(7,30,50,0.98));
-    color: var(--muted);
     padding: 18px;
     border-radius: 14px;
     display:flex;
-    gap:16px;
+    gap:20px;
     align-items:center;
-    box-shadow: var(--shadow);
-    z-index:9999;
     flex-wrap:wrap;
-  }
-  
-  .cookie-banner__logo{
+    z-index:9999;
+    box-shadow: 0 0 10px rgba(0,0,0,0.35);
+}
+
+.cookie-banner__logo{
     min-width:44px;
     min-height:44px;
     border-radius:8px;
-    background:linear-gradient(135deg,var(--accent),#006c9e);
+    background:#006c9e;
     display:flex;
     align-items:center;
     justify-content:center;
-    color:white;
     font-weight:700;
-    font-size:18px;
-  }
-  
-  .cookie-banner__text{
-    flex:1 1 420px;
-    font-size:14px;
-  }
-  
-  .cookie-banner__link{
+}
+
+.cookie-banner__text{
+    flex:1 1 400px;
+    font-size:15px;
+    line-height:1.4;
+}
+
+.cookie-banner__link{
     display:block;
     margin-top:6px;
     font-size:13px;
-    color:var(--muted);
     text-decoration:underline;
-  }
-  
-  /* --- BOUTONS --- */
-  .btn{
+    color:#bcdcff;
+}
+
+.btn{
     padding:10px 14px;
     border-radius:10px;
     border:0;
     cursor:pointer;
     font-weight:600;
     font-size:14px;
-  }
-  
-  .btn-primary{
-    background:var(--accent);
+}
+.btn-primary{
+    background:#00aaff;
     color:white;
-  }
-  
-  .btn-ghost{
+}
+.btn-ghost{
     background:transparent;
-    color:var(--muted);
+    color:#d7e3ef;
     border:1px solid rgba(255,255,255,0.15);
-  }
-  
-  /* --- MODAL --- */
-  .overlay{
+}
+
+.overlay{
     position:fixed;
     inset:0;
     background:rgba(3,18,33,0.6);
@@ -116,60 +162,59 @@ nav a:hover{
     align-items:center;
     justify-content:center;
     z-index:10000;
-  }
-  
-  .overlay.open{display:flex;}
-  
-  .prefs{
-    width:min(900px,95%);
-    background:var(--card);
+}
+.overlay.open{display:flex;}
+
+.prefs{
+    width:min(700px,95%);
+    background:white;
     border-radius:16px;
-    box-shadow:var(--shadow);
-    padding:22px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.2);
+    padding:26px;
     color:#082034;
-  }
-  
-  .prefs__row{
+}
+
+.prefs__row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:12px 0;
+    padding:14px 0;
     border-top:1px solid #eef3f6;
-  }
-  
-  .prefs__desc{
-    max-width:70%;
-  }
-  
-  .small{
+}
+
+.prefs__desc{
+    max-width:65%;
+}
+
+.small{
     font-size:13px;
     color:#5b6e78;
-  }
-  
-  /* --- TOGGLES --- */
-  .toggle{
+}
+
+.toggle{
     width:52px;
-    height:30px;
+    height:27px;
     border-radius:999px;
-    background:#e6eef3;
+    background:#d8e3e9;
     padding:3px;
     cursor:pointer;
     display:flex;
     align-items:center;
-  }
-  
-  .knob{
+    transition:background 0.2s;
+}
+
+.knob{
     width:22px;
     height:22px;
     background:white;
     border-radius:50%;
     transition:transform .2s ease;
-  }
-  
-  .toggle.on{
-    background:var(--accent);
-  }
-  
-  .toggle.on .knob{
+}
+
+.toggle.on{
+    background:#00aaff;
+}
+
+.toggle.on .knob{
     transform:translateX(22px);
-  }
+}

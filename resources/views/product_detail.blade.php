@@ -61,31 +61,31 @@
 
 <div class="container">
 
+    <a href="javascript:history.back()" class="btn-back">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        Retour
+    </a>
     <div class="product-detail">
 
-        <!-- IMAGE PRODUIT -->
         <div class="img-box">
             <img src="../assets/photo_produit/{{$product->id_produit}}.webp" alt="Image produit">
         </div>
 
         <div class="info-box">
 
-            <!-- NOM PRODUIT -->
             <h1>{{ $product->label_produit }}</h1>
 
-            <!-- PRIX -->
             <div class="price">{{ number_format($product->prix_base, 2) }} €</div>
 
-            <!-- FORMULAIRE AJOUT PANIER -->
             @auth
             <form action="{{ route('panier.ajouter', $product->id_produit) }}" method="GET" style="margin-top:20px;">
 
-                <!-- ID PRODUIT -->
                 <input type="hidden" name="id_produit" value="{{ $product->id_produit }}">
 
                 <div class="choice">
 
-                    <!-- COULEURS -->
                     <div style="margin-bottom:15px;">
                         <strong>Couleur :</strong><br>
 
@@ -93,9 +93,9 @@
                             @foreach($product->couleurs as $index => $couleur)
                                 <label>
                                     <input type="radio" 
-                                        name="id_colori" 
-                                        value="{{ $couleur->id_colori }}" 
-                                        {{ $index === 0 ? 'checked' : '' }}>
+                                           name="id_colori" 
+                                           value="{{ $couleur->id_colori }}" 
+                                           {{ $index === 0 ? 'checked' : '' }}>
                                     {{ $couleur->label_colori }}
                                 </label>
                             @endforeach
@@ -105,14 +105,13 @@
 
                     </div>
 
-                    <!-- TAILLES -->
                     @if($product->tailles && $product->tailles->count() > 0)
                         @foreach($product->tailles as $index => $taille)
                             <label>
                                 <input type="radio" 
-                                    name="id_taille" 
-                                    value="{{ $taille->id_taille }}" 
-                                    {{ $index === 0 ? 'checked' : '' }}>
+                                       name="id_taille" 
+                                       value="{{ $taille->id_taille }}" 
+                                       {{ $index === 0 ? 'checked' : '' }}>
                                 {{ $taille->label_taille }}
                             </label>
                         @endforeach
@@ -122,8 +121,15 @@
 
 
                 </div>
+                <h3>Stock</h3>
+                <p id="stockValue">
+                    @if(!is_null($stock))
+                        {{ $stock }} en stock
+                    @else
+                        Stock indisponible
+                    @endif
+                </p>
 
-                <!-- DESCRIPTION -->
                 <h3>Description</h3>
                 <p class="desc">
                     {{ $product->description_produit }}
@@ -132,7 +138,6 @@
                 <br>
                 <input type="hidden" name="image" value="../assets/photo_produit/{{ $product->id_produit }}.webp">
 
-                <!-- BOUTON AJOUT PANIER -->
                 <button type="submit" 
                 style="background:#333; color:white; padding:15px 30px;
                     border:none; border-radius:5px; cursor:pointer; margin-right:10px;">
@@ -160,7 +165,7 @@
                     style="width: 100%; cursor: pointer; background:#aaa;">
                     Se connecter pour acheter
                 </a>
-            @endguest                                                        
+            @endguest                                                               
             
         </div>
     </div>
@@ -198,7 +203,36 @@
 
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    function updateStock() {
+        let idProduit = {{ $product->id_produit }};
+        let idTaille = $('input[name="id_taille"]:checked').val();
+        let idColori = $('input[name="id_colori"]:checked').val();
 
+        $.ajax({
+            url: '/produit/stock',
+            type: 'GET',
+            data: {
+                id_produit: idProduit,
+                id_taille: idTaille,
+                id_colori: idColori
+            },
+            success: function(response) {
+                if(response.stock !== null) {
+                    $('#stockValue').text(response.stock + ' en stock');
+                } else {
+                    $('#stockValue').text('Stock indisponible');
+                }
+            }
+        });
+    }
+
+    // Mettre à jour le stock quand on change la taille ou la couleur
+    $('input[name="id_taille"], input[name="id_colori"]').on('change', updateStock);
+});
+</script>
 
 </body>
 </html>

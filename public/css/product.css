@@ -1,7 +1,7 @@
 :root {
     --main-bg: #1a1a1a;
     --card-bg: #2d2d2d;
-    --accent-color:rgb(32, 154, 255); 
+    --accent-color: rgb(32, 154, 255);
     --text-color: #ffffff;
 }
 
@@ -12,23 +12,26 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif; 
+    font-family: sans-serif;
     background-color: var(--main-bg);
     color: var(--text-color);
 }
-#body{
+
+#body {
     --main-bg: #ffffff;
     --card-bg: #2d2d2d;
-    --accent-color:rgb(32, 154, 255); 
+    --accent-color: rgb(32, 154, 255);
     --text-color: #ffffff;
 }
+
+/* ---------------- HEADER ---------------- */
 
 header {
     background-color: #000;
     padding: 20px;
     border-bottom: 3px solid var(--accent-color);
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -43,7 +46,6 @@ header {
     text-decoration: none;
     font-weight: bold;
     padding: 10px;
-    margin-right:0px;
     border: 1px solid white;
     border-radius: 5px;
 }
@@ -54,9 +56,11 @@ header {
     border-color: var(--accent-color);
 }
 
+/* ---------------- GLOBAL CONTAINER ---------------- */
+
 .container {
     max-width: 1100px;
-    margin: 0 auto; 
+    margin: 0 auto;
     padding: 40px 20px;
 }
 
@@ -66,14 +70,16 @@ h1 {
     text-transform: uppercase;
 }
 
+/* ---------------- GRID PRODUITS ---------------- */
+
 .product-grid {
     display: grid;
-    /* Cela crée 3 colonnes de largeur égale */
-    grid-template-columns: repeat(3, 1fr); 
-    /* Espace entre les cartes */
-    gap: 30px; 
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
     margin-top: 20px;
 }
+
+/* ---------------- CARDS ---------------- */
 
 .card {
     background: linear-gradient(145deg, #353535, #2b2b2b);
@@ -88,7 +94,7 @@ h1 {
 .card:hover {
     transform: translateY(-6px);
     border-color: var(--accent-color);
-    box-shadow: 0 12px 22px rgba(0,0,0,0.4);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.4);
 }
 
 .card-img img {
@@ -103,26 +109,45 @@ h1 {
     filter: brightness(1.05);
 }
 
+/* ---------------- CARD BODY ---------------- */
+
 .card-body {
     padding: 18px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    height: 100%;
 }
 
 .card-title {
     margin: 0 0 12px 0;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 600;
+}
+
+/* DESCRIPTION ALIGNEE ENTRE TOUTES LES CARTES */
+.card-desc {
+    flex-grow: 1;    /* Pousse le prix vers le bas */
+    color: #ccc;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    line-height: 1.3rem;
+}
+
+/* BLOC INFO PRIX (ALIGNE PARTOUT) */
+.card-info {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
 .card-price {
     font-size: 1.45rem;
     color: var(--accent-color);
     font-weight: bold;
-    margin-bottom: 18px;
 }
 
+/* BOUTON TJRS EN BAS DE LA CARD */
 .btn {
     margin-top: auto;
     background-color: var(--accent-color);
@@ -140,15 +165,17 @@ h1 {
     transform: scale(1.02);
 }
 
+/* ---------------- ALERT ---------------- */
 
 .alert {
-    grid-column: 1 / -1; 
+    grid-column: 1 / -1;
     text-align: center;
     padding: 20px;
     background-color: #333;
     border-radius: 8px;
 }
 
+/* ---------------- FILTRES ---------------- */
 
 .filter-bar {
     background: #f8f9fa;
@@ -161,13 +188,25 @@ h1 {
     gap: 15px;
     align-items: center;
 }
-.filter-group { display: flex; flex-direction: column; }
-.filter-label { font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color:#555;}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
 .filter-input {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 .btn-filter {
     background-color: #333;
     color: white;
@@ -176,21 +215,31 @@ h1 {
     border-radius: 4px;
     cursor: pointer;
     height: 38px;
-    align-self: flex-end; /* Aligne le bouton avec les inputs */
+    align-self: flex-end;
 }
-.btn-reset { text-decoration: none; color: #666; font-size: 0.9rem; align-self: flex-end; margin-bottom: 8px;}
 
-.account_creation img{
+.btn-reset {
+    text-decoration: none;
+    color: #666;
+    font-size: 0.9rem;
+    align-self: flex-end;
+    margin-bottom: 8px;
+}
+
+/* ---------------- ACCOUNT ---------------- */
+
+.account_creation img {
     height: 58px;
     width: 58px;
     border-radius: 50%;
     background-color: whitesmoke;
 }
+
 .btn-login {
-    background-color: #1967b2; 
+    background-color: #1967b2;
     color: white;
     border: none;
-    border-radius: 25px; 
+    border-radius: 25px;
     padding: 14px 35px;
     font-size: 13px;
     font-weight: 800;
@@ -200,4 +249,3 @@ h1 {
     margin-top: 10px;
     transition: background 0.2s;
 }
-
