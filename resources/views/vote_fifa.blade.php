@@ -1,44 +1,64 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interface de Vote</title>
-    
-    <link rel="stylesheet" href="/css/account_vote_fifa.css">
-    
-</head>
-<body>
+<link rel="stylesheet" href="{{ asset('css/account_vote_fifa.css') }}">
+
+@if(session('erreur_vote'))
+    <div style="color: red; font-weight:bold; margin-bottom:20px;">
+        {{ session('erreur_vote') }}
+    </div>
+@endif
+
+<form action="{{ route('vote.submit') }}" method="POST">
+    @csrf
 
     <div class="card">
-        <h1>Session de Vote</h1>
-        
-        <p class="description">
-            Veuillez confirmer les informations du joueur ci-dessous avant de valider votre vote pour cette session.
-        </p>
+        <h1>Vote FIFA</h1>
+        <p class="description">Veuillez sélectionner un thème, les joueurs et leur classement.</p>
 
-        <form>
-            <div class="input-group">
-                <label for="theme">Thème</label>
-                <input type="text" id="theme" name="theme" value="Culture Générale" readonly>
-            </div>
+        <!-- Thème -->
+        <div class="theme-group">
+            <label for="theme">Thème</label>
+            <select name="theme" id="theme">
+                <option value="">-- Sélectionnez un thème --</option>
+                @foreach($themes as $theme)
+                    <option value="{{ $theme->id_theme }}">{{ $theme->nom_theme }}</option>
+                @endforeach
+            </select>
+        </div>
 
-            <div class="input-group">
-                <label for="player">Joueur</label>
-                <input type="text" id="player" name="player" value="Abdelk" readonly>
-            </div>
+        <!-- JOUEURS + CLASSEMENTS -->
+        <div class="row">
 
-            <div class="input-group">
-                <label for="ranking">Classement Actuel</label>
-                <input type="text" id="ranking" name="ranking" value="#1 - Expert" readonly>
-            </div>
+            @for($i = 1; $i <= 4; $i++)
+                <div class="col-md-3">
+                    <label for="joueur{{ $i }}">Joueur {{ $i }}</label>
+                    <select name="joueur{{ $i }}" id="joueur{{ $i }}">
+                        <option value="">-- Sélectionnez un joueur --</option>
+                        @foreach($joueurs as $joueur)
+                            <option value="{{ $joueur->id_joueur }}">{{ $joueur->nom }}</option>
+                        @endforeach
+                    </select>
 
-            <div class="actions">
-                <button type="button" class="btn-cancel">RETOUR</button>
-                <button type="submit" class="btn-send">VALIDER LE VOTE</button>
-            </div>
-        </form>
+                    <label class="classement-label" for="classement{{ $i }}">
+                        Classement Joueur {{ $i }}
+                    </label>
+                    <select name="classement{{ $i }}" id="classement{{ $i }}">
+                        <option value="">-- Sélectionnez un classement --</option>
+                        <option value="1">1er</option>
+                        <option value="2">2ème</option>
+                        <option value="3">3ème</option>
+                        <option value="4">4ème</option>
+                    </select>
+                </div>
+            @endfor
+
+        </div>
+
+        <!-- Boutons -->
+        <div class="actions">
+            <a href="{{ url('/') }}" class="btn-cancel">Retour</a>
+            <button type="submit" class="btn-send">Valider</button>
+        </div>
     </div>
 
-</body>
-</html>
+</form>
+
+<script src="{{ asset('js/vote.js') }}"></script>

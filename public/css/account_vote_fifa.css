@@ -113,3 +113,83 @@ button {
     background-color: #0b5fa0;
     box-shadow: 0 2px 8px rgba(14, 114, 189, 0.4);
 }
+
+/* ================================ */
+/* STYLE DU THÈME (NOUVEAU) */
+/* ================================ */
+
+.theme-group {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.theme-group label {
+    font-weight: 600;
+    color: #001A41;
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.theme-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #8e9aa8;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: #333;
+}
+
+/* ================================ */
+/* ALIGNEMENT DES JOUEURS */
+/* ================================ */
+
+/* Conteneur des 4 colonnes */
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Chaque colonne */
+.col-md-3 {
+    flex: 1;
+}
+
+/* Style du label */
+.col-md-3 label {
+    font-weight: 600;
+    color: #001A41;
+    font-size: 15px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Style du select */
+.col-md-3 select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #8e9aa8;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: #333;
+}
+.classement-label {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #001A41;
+}
+
+.classement-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #8e9aa8;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
