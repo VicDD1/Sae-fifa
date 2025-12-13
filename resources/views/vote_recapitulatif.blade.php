@@ -7,7 +7,7 @@
 </head>
 
 <body>
-
+<div id="vote_div">
 <div class="card">
 
     <h1>Récapitulatif de votre vote</h1>
@@ -34,6 +34,7 @@
 
    <a href="{{ url('/') }}" class="btn-cancel">Retour à l'accueil</a>
 
+</div>
 </div>
 
 </body>
