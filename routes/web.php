@@ -13,7 +13,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProduitProposeController;
 use App\Http\Controllers\CommandeController;
-
+use App\Http\Controllers\MakeProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,8 +39,17 @@ Route::get('/creer_un_produit', function () {
 | PRODUITS
 |--------------------------------------------------------------------------
 */
+// Afficher le formulaire de création de produit
+Route::get('/produit/creer', [MakeProductController::class, 'create'])
+    ->name('make_product.create');
+
+// Traiter le formulaire (sauvegarde en base)
+Route::post('/produit/creer', [MakeProductController::class, 'store'])
+    ->name('make_product.store');
 Route::get('/produits', [ProductController::class, 'index']);
-Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
+Route::get('/produit/{id}', [ProductController::class, 'detail'])
+->whereNumber('id')
+->name('product.detail');
 
 
 /*
@@ -126,15 +135,9 @@ Route::post('/confirmation_commande', [CommandeController::class, 'valider'])
 Route::get('/commande/confirmation', [CommandeController::class, 'confirmation'])
     ->name('commande.confirmation');
 
-    use App\Http\Controllers\MakeProductController;
+ 
 
-// Afficher le formulaire de création de produit
-Route::get('/produit/creer', [MakeProductController::class, 'create'])
-    ->name('make_product.create');
 
-// Traiter le formulaire (sauvegarde en base)
-Route::post('/produit/creer', [MakeProductController::class, 'store'])
-    ->name('make_product.store');
 // Page affichée après validation
 Route::get('/succes_commande', function () {
     return view('succes_commande');

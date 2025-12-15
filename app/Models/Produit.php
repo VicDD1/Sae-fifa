@@ -30,4 +30,9 @@ class Produit extends Model
         return $this->belongsToMany(Taille::class, 'variante_produit', 'id_produit', 'id_taille')
                     ->distinct();
     }
+    protected $fillable = [
+        'description_produit','label_produit','prix_base',
+
+
+    ];
 }

@@ -100,7 +100,7 @@
         </div>
     @endif
     @auth
-    @if (Auth::user()->id_user_connecte === 12)
+    @if (Auth::user()->id_user_connecte === 13)
     <a href="/creer_un_produit"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> creation de produit</div></a>
     @endif
     @endauth
