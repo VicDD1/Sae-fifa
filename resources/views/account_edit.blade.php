@@ -30,7 +30,7 @@
 
                 <form action="{{ route('profile.update') }}" method="POST">
                     @csrf 
-                    @method('put')
+            
 
                     <div style="display: flex; gap: 20px;">
                         <div class="form-group" style="flex: 1;">

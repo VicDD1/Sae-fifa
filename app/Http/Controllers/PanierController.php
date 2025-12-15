@@ -7,6 +7,7 @@ use App\Models\Produit;
 use App\Models\Panier;
 use App\Models\Ligne_panier;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Variante_produit;
 
 class PanierController extends Controller
 {
@@ -25,7 +26,6 @@ class PanierController extends Controller
                 'lignes' => collect([]),
                 'total' => 0
             ]);
-            
         }
 
         $lignes = collect($panier->lignes);
@@ -36,7 +36,6 @@ class PanierController extends Controller
 
         return view('panier', compact('lignes', 'total'));
     }
-
 
     // ♦ 2. AJOUTER AU PANIER
     public function ajouter(Request $request, $id_produit)
@@ -56,8 +55,6 @@ class PanierController extends Controller
                 'id_acheteur' => Auth::id()
             ]
         );
-        
-        
 
         // Récupération des variantes
         $taille = $request->input('id_taille');
@@ -70,21 +67,34 @@ class PanierController extends Controller
             ->where('id_colori', $couleur)
             ->first();
 
+        // Récupérer le stock pour cette variante
+        $stock = Variante_produit::where('id_produit', $id_produit)
+            ->where('id_taille', $taille)
+            ->where('id_colori', $couleur)
+            ->value('quantitee_stock');
+
         if ($ligne) {
-            $ligne->increment('quantitee');
+            if ($ligne->quantitee < $stock) {
+                $ligne->increment('quantitee');
+            } else {
+                return redirect()->back()->with('error', 'Impossible d’ajouter plus de ce produit, stock limité.');
+            }
         } else {
-            Ligne_panier::create([
-                'id_panier'   => $panier->id_panier,
-                'id_produit'  => $id_produit,
-                'id_colori'   => $couleur,
-                'id_taille'   => $taille,
-                'quantitee'   => 1,
-            ]);
+            if ($stock > 0) {
+                Ligne_panier::create([
+                    'id_panier'   => $panier->id_panier,
+                    'id_produit'  => $id_produit,
+                    'id_colori'   => $couleur,
+                    'id_taille'   => $taille,
+                    'quantitee'   => 1,
+                ]);
+            } else {
+                return redirect()->back()->with('error', 'Ce produit est en rupture de stock.');
+            }
         }
 
         return redirect()->back()->with('success', 'Produit ajouté au panier');
     }
-
 
     // ♦ 3. SUPPRIMER UNE LIGNE
     public function supprimer($id_ligne)
@@ -98,16 +108,30 @@ class PanierController extends Controller
         return redirect()->back()->with('success', 'Article supprimé du panier.');
     }
 
-
     // ♦ 4. MODIFIER QUANTITÉ
     public function updateQuantite($id_ligne, $action)
     {
         $ligne = Ligne_panier::findOrFail($id_ligne);
 
+        // Récupérer le stock actuel de la variante
+        $stock = Variante_produit::where('id_produit', $ligne->id_produit)
+            ->where('id_taille', $ligne->id_taille)
+            ->where('id_colori', $ligne->id_colori)
+            ->value('quantitee_stock');
+
         if ($action === 'plus') {
-            $ligne->increment('quantitee');
-        } elseif ($action === 'minus' && $ligne->quantitee > 1) {
-            $ligne->decrement('quantitee');
+            if ($ligne->quantitee < $stock) {
+                $ligne->increment('quantitee');
+            } else {
+                return redirect()->back()->with('error', 'Vous avez atteint la quantité maximale disponible en stock.');
+            }
+        } elseif ($action === 'minus') {
+            if ($ligne->quantitee > 1) {
+                $ligne->decrement('quantitee');
+            } else {
+                $ligne->delete();
+                return redirect()->back()->with('success', 'Article supprimé du panier.');
+            }
         }
 
         return redirect()->back();
