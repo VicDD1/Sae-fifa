@@ -14,7 +14,7 @@
             <p class="success-message">
                 Merci pour votre confiance. Votre commande a bien été enregistrée et est en cours de traitement.
             </p>
-            <a href="/products" class="btn-home">Retour à l’accueil</a>
+            <a href="/mes_commandes" class="btn-home">Retour à l’accueil</a>
         </div>
     </div>
 </body>
