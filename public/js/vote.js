@@ -1,77 +1,73 @@
-console.log("vote.js chargé !");
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("vote.js chargÃ©");
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    /* ============================
-       BLOQUAGE DES JOUEURS DUPLIQUÉS
-       ============================*/
-
-    const selectsJoueurs = [
+    const playerSelects = [
         document.getElementById("joueur1"),
         document.getElementById("joueur2"),
         document.getElementById("joueur3"),
         document.getElementById("joueur4")
     ];
 
-    function updateJoueurOptions() {
-        const selectedValues = selectsJoueurs
+    const rankSelects = document.querySelectorAll(".classement-select");
+
+    function updatePlayerOptions() {
+        const values = playerSelects
             .map(s => s.value)
             .filter(v => v !== "");
 
-        selectsJoueurs.forEach(select => {
-            const currentValue = select.value;
+        playerSelects.forEach(select => {
+            Array.from(select.options).forEach(option => {
+                if (option.value === "") {
+                    option.disabled = false;
+                    return;
+                }
 
-            for (let option of select.options) {
-                if (option.value === "") continue;
-
-                if (selectedValues.includes(option.value) && option.value !== currentValue) {
+                if (values.includes(option.value) && option.value !== select.value) {
                     option.disabled = true;
                 } else {
                     option.disabled = false;
                 }
-            }
+            });
         });
     }
 
-    selectsJoueurs.forEach(select => {
-        select.addEventListener("change", updateJoueurOptions);
-    });
-
-
-    /* ============================
-       BLOQUAGE DES CLASSEMENTS DUPLIQUÉS
-       ============================*/
-
-    const selectsClassements = [
-        document.getElementById("classement1"),
-        document.getElementById("classement2"),
-        document.getElementById("classement3"),
-        document.getElementById("classement4")
-    ];
-
-    function updateClassementOptions() {
-        const selectedRanks = selectsClassements
+    function updateRankOptions() {
+        const values = Array.from(rankSelects)
             .map(s => s.value)
             .filter(v => v !== "");
 
-        selectsClassements.forEach(select => {
-            const currentValue = select.value;
+        rankSelects.forEach(select => {
+            Array.from(select.options).forEach(option => {
+                if (option.value === "") {
+                    option.disabled = false;
+                    return;
+                }
 
-            for (let option of select.options) {
-
-                if (option.value === "") continue;
-
-                if (selectedRanks.includes(option.value) && option.value !== currentValue) {
+                if (values.includes(option.value) && option.value !== select.value) {
                     option.disabled = true;
                 } else {
                     option.disabled = false;
                 }
-            }
+            });
         });
     }
 
-    selectsClassements.forEach(select => {
-        select.addEventListener("change", updateClassementOptions);
+    playerSelects.forEach(select => {
+        if (select) {
+            select.addEventListener("change", () => {
+                updatePlayerOptions();
+            });
+        }
     });
 
+    rankSelects.forEach(select => {
+        select.addEventListener("change", () => {
+            updateRankOptions();
+        });
+    });
+
+    // Initialisation
+    updatePlayerOptions();
+    updateRankOptions();
 });
+

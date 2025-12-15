@@ -6,11 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vote extends Model
 {
-    protected $table = 'theme_vote';     // ta table exacte
-    protected $primaryKey = 'id_theme';  // ta clé primaire exacte
-    public $timestamps = false;          // si ta table n’a pas created_at / updated_at
+    protected $table = 'vote';
+    protected $primaryKey = 'id_vote';
+    public $timestamps = false;
 
-    protected $fillable = [
-        'nom_theme'
-    ];
+    protected $fillable = ['id_vote', 'id_theme'];
 }

@@ -10,111 +10,100 @@ use App\Models\Joueur;
 class VoteController extends Controller
 {
     /**
-     * Affiche le formulaire de vote
+     * Page du formulaire
      */
     public function votePage()
     {
-        // Vérifier si l'utilisateur a déjà voté
-        if (auth()->check()) {
-            $existe = DB::table('voter')
-                ->where('id_user', auth()->id())
-                ->first();
-
-            if ($existe) {
-                return back()->with(
-                    'erreur_vote',
-                    "T’as déjà un vote le sang, casse-toi à l’alim me chercher un flashon 😭"
-                );
-            }
-        }
-
-        $themes = Vote::all();
-        $joueurs = Joueur::all();
+        $themes = DB::table('theme_vote')->get();
+        $joueurs = DB::table('joueur')->get();
 
         return view('vote_fifa', compact('themes', 'joueurs'));
     }
 
+
     /**
-     * Soumission du vote
+     * Traitement du vote
      */
-    public function submit(Request $request)
-    {
-        // Empêcher un 2ᵉ vote
-        $existe = DB::table('voter')
-            ->where('id_user', auth()->id())
-            ->first();
+   public function submit(Request $request)
+{
+    // Validation des champs
+    $request->validate([
+        'theme' => 'required',
 
-        if ($existe) {
-            return redirect()->route('vote.page')->with(
-                'erreur_vote',
-                "T’as déjà un vote le sang, casse-toi à l’alim me chercher un flashon 😭"
-            );
-        }
+        'joueur1' => 'required|different:joueur2,joueur3,joueur4',
+        'joueur2' => 'required|different:joueur1,joueur3,joueur4',
+        'joueur3' => 'required|different:joueur1,joueur2,joueur4',
+        'joueur4' => 'required|different:joueur1,joueur2,joueur3',
 
-        // Validation
-        $request->validate([
-            'theme'       => 'required',
+        'classement1' => 'required|different:classement2,classement3,classement4',
+        'classement2' => 'required|different:classement1,classement3,classement4',
+        'classement3' => 'required|different:classement1,classement2,classement4',
+        'classement4' => 'required|different:classement1,classement2,classement3',
+    ]);
 
-            'joueur1'     => 'required|different:joueur2,joueur3,joueur4',
-            'joueur2'     => 'required|different:joueur1,joueur3,joueur4',
-            'joueur3'     => 'required|different:joueur1,joueur2,joueur4',
-            'joueur4'     => 'required|different:joueur1,joueur2,joueur3',
+    /* ---------------------------------------------------------
+        ✔ 1. Vérifier si l’utilisateur a déjà voté POUR CE THEME
+    --------------------------------------------------------- */
 
-            'classement1' => 'required|different:classement2,classement3,classement4',
-            'classement2' => 'required|different:classement1,classement3,classement4',
-            'classement3' => 'required|different:classement1,classement2,classement4',
-            'classement4' => 'required|different:classement1,classement2,classement3',
-        ]);
+    $aDejaVote = DB::table('voter')
+        ->join('vote', 'vote.id_vote', '=', 'voter.id_vote')
+        ->where('voter.id_user_connecte', auth()->id())
+        ->where('vote.id_theme', $request->theme)
+        ->exists();
 
-        // 1️⃣ Créer un vote dans table vote
-        $idVote = DB::table('vote')->insertGetId([
-            'id_theme' => $request->theme,
-            'created_at' => now()
-        ]);
-
-        // 2️⃣ Enregistrer les joueurs + classement
-        DB::table('joueur_vote')->insert([
-            [
-                'id_vote' => $idVote,
-                'id_joueur' => $request->joueur1,
-                'classement' => $request->classement1,
-            ],
-            [
-                'id_vote' => $idVote,
-                'id_joueur' => $request->joueur2,
-                'classement' => $request->classement2,
-            ],
-            [
-                'id_vote' => $idVote,
-                'id_joueur' => $request->joueur3,
-                'classement' => $request->classement3,
-            ],
-            [
-                'id_vote' => $idVote,
-                'id_joueur' => $request->joueur4,
-                'classement' => $request->classement4,
-            ],
-        ]);
-
-        // 3️⃣ Associer le vote à l'utilisateur connecté
-        DB::table('voter')->insert([
-            'id_user' => auth()->id(),
-            'id_vote' => $idVote
-        ]);
-
-        // Préparer le récap
-        $theme = Vote::where('id_theme', $request->theme)->first();
-
-        $recap = [
-            'theme' => $theme,
-            'votes' => [
-                ['joueur' => Joueur::find($request->joueur1), 'classement' => $request->classement1],
-                ['joueur' => Joueur::find($request->joueur2), 'classement' => $request->classement2],
-                ['joueur' => Joueur::find($request->joueur3), 'classement' => $request->classement3],
-                ['joueur' => Joueur::find($request->joueur4), 'classement' => $request->classement4],
-            ]
-        ];
-
-        return view('vote_recapitulatif', compact('recap'));
+    if ($aDejaVote) {
+        return redirect()->route('vote.page')->with(
+            'erreur_vote',
+            "Casse-toi à l'alim me chercher un flashon digne des plus grands 🤣 (t'as déjà voté pour cette catégorie !)"
+        );
     }
+
+    /* ---------------------------------------------------------
+        ✔ 2. Créer un nouvel ID_VOTE manuellement
+    --------------------------------------------------------- */
+    $newIdVote = DB::table('vote')->max('id_vote') + 1;
+
+    DB::table('vote')->insert([
+        'id_vote'  => $newIdVote,
+        'id_theme' => $request->theme
+    ]);
+
+    /* ---------------------------------------------------------
+        ✔ 3. Enregistrer les choix joueur + classement
+    --------------------------------------------------------- */
+    DB::table('joueur_vote')->insert([
+        ['id_vote' => $newIdVote, 'id_joueur' => $request->joueur1, 'rank' => $request->classement1],
+        ['id_vote' => $newIdVote, 'id_joueur' => $request->joueur2, 'rank' => $request->classement2],
+        ['id_vote' => $newIdVote, 'id_joueur' => $request->joueur3, 'rank' => $request->classement3],
+        ['id_vote' => $newIdVote, 'id_joueur' => $request->joueur4, 'rank' => $request->classement4],
+    ]);
+
+    /* ---------------------------------------------------------
+        ✔ 4. Associer vote + utilisateur
+    --------------------------------------------------------- */
+    DB::table('voter')->insert([
+        'id_user_connecte' => auth()->id(),
+        'id_vote' => $newIdVote
+    ]);
+
+    /* ---------------------------------------------------------
+        ✔ 5. Charger les données pour le récapitulatif
+    --------------------------------------------------------- */
+
+    $theme = DB::table('theme_vote')->where('id_theme', $request->theme)->first();
+
+    $recap = [
+        'theme' => $theme->nom_theme,
+        'votes' => [
+            ['joueur' => Joueur::find($request->joueur1), 'rank' => $request->classement1],
+            ['joueur' => Joueur::find($request->joueur2), 'rank' => $request->classement2],
+            ['joueur' => Joueur::find($request->joueur3), 'rank' => $request->classement3],
+            ['joueur' => Joueur::find($request->joueur4), 'rank' => $request->classement4],
+        ]
+    ];
+
+    return view('vote_recapitulatif', compact('recap'));
 }
+
+}
+
