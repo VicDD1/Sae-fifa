@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mes commandes</title>
 
-        <title>FIFA</title>
+    <link rel="stylesheet" href="{{ asset('css/mes_commandes.css') }}">
+</head>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="css/players.css">
-    </head>
-        
-     <header>
+<body>
+    <header>
         <nav>
             <a href="/">Aceuil</a>
             <a href="/produits">Fifa Store</a>
@@ -20,6 +16,7 @@
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
+            <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
 
             @auth
@@ -41,8 +38,7 @@
                 <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
                     
                     <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
-                
-    <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
+                        <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
                             {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
                         </span>
                     </a>
@@ -62,7 +58,7 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
-@auth
+            @auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
                 <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
@@ -71,11 +67,6 @@
                 <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
             @endif
                 
-            @endauth
-            @auth
-                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
-                    Mes commandes
-                </a>
             @endauth
 
             @auth
@@ -93,8 +84,38 @@
             @endauth
         </nav>
     </header>
+    <div class="commande-container">
 
-           Joueur Ici 
-    </body>
+        <h1 class="commande-title">Mes commandes</h1>
 
+        @if($commandes->isEmpty())
+            <p class="commande-empty">Vous n'avez encore passé aucune commande.</p>
+        @else
+            <div class="commande-liste">
+
+                @foreach($commandes as $commande)
+                    <div class="commande-card">
+
+                        <div class="commande-header">
+                            <h2>Commande #{{ $commande->id_commande }}</h2>
+                            <span class="commande-date">
+                                {{ $commande->date_commande }}
+                            </span>
+                        </div>
+
+                        <div class="commande-body">
+                            <p><strong>Montant total :</strong> {{ number_format($commande->montant_total, 2) }} €</p>
+                            <p><strong>Mode de paiement :</strong> {{ $commande->mode_paiement }}</p>
+                            <p><strong>Statut :</strong> {{ $commande->statut_paiement }}</p>
+                        </div>
+
+                    </div>
+                @endforeach
+
+            </div>
+        @endif
+
+    </div>
+
+</body>
 </html>
