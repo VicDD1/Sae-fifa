@@ -8,7 +8,7 @@ use App\Models\Nation;
 use App\Models\Taille;
 use App\Models\Colori;
 use App\Models\Categorie_Produit;
-
+use App\Models\Variante_produit;
 class ProductController extends Controller
 {
     public function index(Request $request)
@@ -32,8 +32,13 @@ class ProductController extends Controller
 
         // COULEURS (inchangé)
         $couleurs = Colori::orderBy('id_colori')->get();
+        
 
 
+        $idProduit = $request->id_produit;
+        $idTaille  = $request->id_taille;
+        $idColori  = $request->id_colori;
+        
         // On ne charge les sous-catégories que si une catégorie parent est sélectionnée
         $sous_categories = collect(); // On démarre avec une collection vide
 
@@ -113,6 +118,19 @@ class ProductController extends Controller
     {
         // Charger le produit demandé
         $product = Produit::with(['couleurs', 'tailles'])->findOrFail($id);
+        //stocks
+        $stock = null;
+
+        $idTaille = $request->id_taille ?? ($product->tailles->first()->id_taille ?? null);
+        $idColori = $request->id_colori ?? ($product->couleurs->first()->id_colori ?? null);
+
+
+        if ($idTaille && $idColori) {
+            $stock = Variante_produit::where('id_produit', $product->id_produit)
+                ->where('id_taille', $idTaille)
+                ->where('id_colori', $idColori)
+                ->value('quantitee_stock');
+            }       
 
         // Trouver des produits similaires :
         // même catégorie ou même sous-catégorie, mais exclure le produit lui-même
@@ -123,8 +141,29 @@ class ProductController extends Controller
             ->limit(10)
             ->get();
 
-        return view('product_detail', compact('product', 'similarProducts'));
+        return view('product_detail', compact('product', 'similarProducts','stock'));
     }
+    public function getStock(Request $request)
+    {
+        $idProduit = $request->id_produit;
+        $idTaille  = $request->id_taille;
+        $idColori  = $request->id_colori;
+    
+        // Vérifier que toutes les valeurs sont présentes
+        if(!$idProduit || !$idTaille || !$idColori) {
+            return response()->json(['stock' => null]);
+        }
+    
+        $stock = Variante_produit::where('id_produit', $idProduit)
+            ->where('id_taille', $idTaille)
+            ->where('id_colori', $idColori)
+            ->value('quantitee_stock');
+    
+        return response()->json([
+            'stock' => $stock ?? 0
+        ]);
+    }
+
 
 
 }

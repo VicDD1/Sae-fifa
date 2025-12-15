@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation de commande</title>
+    <title>Paiement de la commande</title>
 
     <link rel="stylesheet" href="{{ asset('css/confirmation_commande.css') }}">
 </head>
 
 <body>
 
-<div class="container">
-    <div class="card">
+    <div class="container">
+        <div class="card">
 
-        <h1>Confirmation de votre commande</h1>
-        <p class="intro">
-            Merci. Vérifiez les informations ci-dessous avant de finaliser votre paiement.
-        </p>
+            <h1>Paiement de votre commande</h1>
+            <p class="intro">
+                Merci pour votre commande.  
+                Veuillez renseigner vos informations bancaires pour finaliser l’achat.
+            </p>
 
         <!-- INFORMATIONS CLIENT -->
         <div class="section-title">Informations de livraison</div>
@@ -114,14 +115,14 @@
                         maxlength="3"
                         title="Le code CVV doit contenir 3 chiffres.">
                 </div>
-            </div>
 
 
             <button type="submit" class="btn-pay">Confirmer et payer</button>
         </form>
 
+            <a href="{{ url('/produits') }}" class="return">Retour à la boutique</a>
+        </div>
     </div>
-</div>
 
 </body>
 </html>
