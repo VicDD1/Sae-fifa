@@ -11,7 +11,6 @@ class Carte_Bancaire extends Model
 
     protected $table = 'carte_bancaire';         
     protected $primaryKey = 'id_carte';   
-
     public $timestamps = false;
 
     protected $fillable = [
