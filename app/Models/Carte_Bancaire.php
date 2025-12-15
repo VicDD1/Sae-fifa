@@ -8,9 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Carte_Bancaire extends Model
 {
     use HasFactory;
-    protected $table = 'carte_bancaire         ';
-    protected $primaryKey = 'id_carte_bancaire         ';
+
+    protected $table = 'carte_bancaire';         
+    protected $primaryKey = 'id_carte';   
+
     public $timestamps = false;
-        public $incrementing = true;
-    protected $keyType = 'int';
+
+    protected $fillable = [
+        'id_user_connecte',
+        'numero_carte',
+        'date_expiration',
+        'cryptogramme',
+        'nom_titulaire',
+    ];
 }

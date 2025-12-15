@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class VoteSystem extends Model
+class Vote extends Model
 {
-    protected $fillable = ['name', 'description'];
+    protected $table = 'vote';
+    protected $primaryKey = 'id_vote';
+    public $timestamps = false;
 
-    public function players()
-    {
-        return $this->belongsToMany(Player::class, 'player_vote_system');
-    }
+    protected $fillable = ['id_vote', 'id_theme'];
 }
-
