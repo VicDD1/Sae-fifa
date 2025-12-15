@@ -16,13 +16,7 @@
 
 <body class="antialiased">
     
-    <script>
-        var botmanWidget = {
-            aboutText: '',
-            introMessage: "Bienvenue chez FIFA. En quoi puis-je vous aider"
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js"></script>
+
 
     <header>
         <nav>
