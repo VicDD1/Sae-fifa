@@ -14,8 +14,7 @@ use App\Http\Controllers\ProduitProposeController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\BotManController;
-Route::match(['get', 'post'], '/botman',
-'App\Http\Controllers\BotManController@handle');
+Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
 
 /*
 |--------------------------------------------------------------------------

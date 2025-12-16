@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>FIFA</title>
@@ -15,14 +16,29 @@
 </head>
 
 <body class="antialiased">
-<script>
-var botmanWidget = {
-aboutText: '',
-introMessage: "Bienvenue dans notre site web"
-};
-</script>
-<script src='https://cdn.jsdelivr.net/npm/botman-web-
-widget@0/build/js/widget.js'></script>
+<style>
+    .bot-msg {
+        align-self: flex-start;
+        background: #f1f1f1;
+        color: #333;
+        padding: 10px;
+        border-radius: 15px;
+        max-width: 80%;
+        margin-bottom: 10px;
+        font-family: 'Figtree', sans-serif;
+    }
+</style>
+<div id="chat-container" style="position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; background: white; border: 1px solid #ccc; border-radius: 10px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+    <div style="background: #e61c23; color: white; padding: 15px; border-radius: 10px 10px 0 0; font-weight: bold;">
+        FIFA AI Assistant
+    </div>
+    <div id="chat-window" style="flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px;">
+        </div>
+    <div style="padding: 10px; border-top: 1px solid #eee; display: flex; gap: 5px;">
+        <input type="text" id="user-input" placeholder="Posez votre question..." style="flex: 1; border: 1px solid #ddd; border-radius: 5px; padding: 8px;">
+        <button onclick="sendMessage()" style="background: #e61c23; color: white; border: none; border-radius: 5px; padding: 8px 15px; cursor: pointer;">Envoyer</button>
+    </div>
+</div>
 
 
     <header>
@@ -166,6 +182,62 @@ widget@0/build/js/widget.js'></script>
     </div>
 
     <script src="{{ asset('js/script.js') }}"></script>
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const chatWindow = document.getElementById('chat-window');
+            const message = input.value;
+            if (!message) return;
+
+            // 1. Afficher le message de l'utilisateur
+            chatWindow.innerHTML += `
+                <div style="align-self: flex-end; background: #e61c23; color: white; padding: 10px; border-radius: 15px; max-width: 80%; margin-bottom: 10px;">
+                    ${message}
+                </div>`;
+            input.value = '';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            // 2. Afficher un indicateur de chargement
+            const typingId = 'typing-' + Date.now();
+            chatWindow.innerHTML += `<div id="${typingId}" style="align-self: flex-start; color: #777; font-style: italic;">L'assistant réfléchit...</div>`;
+
+            try {
+                // 3. Envoyer à Laravel
+                const response = await fetch('/botman', { 
+    method: 'POST',
+    headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content 
+    },
+    body: JSON.stringify({ message: message })
+});
+
+             
+                const data = await response.json();
+                document.getElementById(typingId).remove();
+// Si data.reply n'existe pas, JS affiche 'undefined'
+            chatWindow.innerHTML += `<div class="bot-msg">${data.reply || "Désolé, j'ai eu un bug."}</div>`;
+                
+                // Supprimer l'indicateur de chargement
+
+                // 4. Afficher la réponse de Gemini
+               
+                
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            } catch (error) {
+                document.getElementById(typingId).innerHTML = "Erreur de connexion au serveur.";
+                console.error("Erreur:", error);
+            }
+        }
+
+        // Permettre d'envoyer avec la touche "Entrée"
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
 
 </body>
 </html>
