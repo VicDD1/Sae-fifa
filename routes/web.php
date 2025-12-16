@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 // Controllers
-use App\Http\Controllers\BotManController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\NationController;
 use App\Http\Controllers\PanierController;
@@ -14,7 +13,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProduitProposeController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\VoteController;
-
+use App\Http\Controllers\BotManController;
+Route::match(['get', 'post'], '/botman',
+'App\Http\Controllers\BotManController@handle');
 
 /*
 |--------------------------------------------------------------------------
