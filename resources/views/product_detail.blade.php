@@ -12,7 +12,7 @@
 
 <header>
         <nav>
-            <a href="/">Aceuil</a>
+            <a href="/">Acceuil</a>
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
