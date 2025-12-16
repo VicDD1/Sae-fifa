@@ -150,11 +150,8 @@
             @endforeach
         </ul>
 
-        <!-- FORMULAIRE DE PAIEMENT -->
-        <form action="{{ route('commande.valider') }}" method="POST" class="payment-form">
+        <form action="{{ route('commande.succes') }}" method="POST" class="payment-form">
             @csrf
-
-            <!-- Données personnelles -->
             <input type="hidden" name="nom" value="{{ $data['nom'] }}">
             <input type="hidden" name="adresse" value="{{ $data['adresse'] }}">
             <input type="hidden" name="ville" value="{{ $data['ville'] }}">
