@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Incoming\Answer;
 use Illuminate\Http\Request;
-// Cet import doit correspondre exactement au package installé
-use Gemini\Laravel\Facades\Gemini; 
+use Gemini\Laravel\Facades\Gemini;
+use App\Models\Product; // <--- Vérifie que c'est bien le nom de ton Modèle
 
 class BotManController extends Controller
 {
@@ -13,28 +15,52 @@ class BotManController extends Controller
         try {
             $userMessage = $request->input('message');
             
-            // On initialise le client avec ta clé
-            $client = \Gemini::client(env('GEMINI_API_KEY'));
+            // --- 1. CARTE DE NAVIGATION (Tes routes exactes) ---
+            // On liste uniquement les pages principales du site
+            $siteMap = [
+                ['nom' => 'Accueil', 'url' => url('/')],
+                ['nom' => 'Boutique (Tous nos produits)', 'url' => url('/produits')], // Route ligne 57
+                ['nom' => 'Mon Panier', 'url' => route('panier.index')],              // Route ligne 101
+                ['nom' => 'Connexion / Se connecter', 'url' => route('login')],      // Route ligne 94
+                ['nom' => 'Créer un compte (Particulier)', 'url' => route('register.step1')], 
+                ['nom' => 'Créer un compte (Professionnel)', 'url' => route('registerPro.step1')],
+                ['nom' => 'Page de Vote FIFA', 'url' => route('vote.page')],          // Route ligne 161
+                ['nom' => 'Mes Commandes', 'url' => route('commande.liste')],        // Route ligne 168
+                ['nom' => 'Proposer ou créer un produit', 'url' => route('registerProduct.step1')],
+            ];
     
-            // On utilise EXACTEMENT l'un des noms de ta liste
-            // 'gemini-2.5-flash' est le meilleur choix ici
-            $result = $client->generativeModel(model: 'gemini-2.5-flash')->generateContent($userMessage);
+            $navigationText = "Voici les destinations disponibles sur le site :\n";
+            foreach ($siteMap as $link) {
+                $navigationText .= "- " . $link['nom'] . " : " . $link['url'] . "\n";
+            }
+    
+            // --- 2. INSTRUCTIONS STRICTES ---
+            $systemInstruction = "Tu es l'assistant de navigation du site SAEFIFA.
+            Ton seul rôle est de dire à l'utilisateur sur quel lien cliquer pour accéder à une page.
+            
+            RÈGLES :
+            1. NE RECOMMANDE PAS de produits spécifiques. 
+            2. Si l'utilisateur cherche des produits, envoie-le vers la page 'Boutique'.
+            3. Donne TOUJOURS l'URL complète et cliquable.
+            4. Si la demande ne concerne pas une page du site, réponds poliment que tu ne peux que l'aider à naviguer.
+            
+            $navigationText
+            
+            Demande de l'utilisateur : " . $userMessage;
+    
+            // --- 3. APPEL À GEMINI ---
+            $client = \Gemini::client(env('GEMINI_API_KEY'));
+            
+            // On utilise le modèle Gemini 2.5 Flash
+            $result = $client->generativeModel(model: 'gemini-2.5-flash')
+                             ->generateContent($systemInstruction);
     
             return response()->json([
                 'reply' => $result->text()
             ]);
     
         } catch (\Exception $e) {
-            // En cas de pépin, on tente la version 2.0 qui est très stable
-            try {
-                $client = \Gemini::client(env('GEMINI_API_KEY'));
-                $result = $client->generativeModel(model: 'gemini-2.0-flash')->generateContent($userMessage);
-                return response()->json(['reply' => $result->text()]);
-            } catch (\Exception $e2) {
-                return response()->json([
-                    'reply' => "Erreur avec Gemini 2.5 : " . $e2->getMessage()
-                ], 500);
-            }
+            return response()->json(['reply' => "Erreur : " . $e->getMessage()], 500);
         }
     }
 }
