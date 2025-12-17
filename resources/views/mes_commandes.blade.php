@@ -10,7 +10,7 @@
 <body>
     <header>
         <nav>
-            <a href="/">Aceuil</a>
+            <a href="/">Acceuil</a>
             <a href="/produits">Fifa Store</a>
 
             <!-- CORRECTION : lien Vote propre -->
