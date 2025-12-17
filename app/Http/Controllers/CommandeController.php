@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+
 
 use App\Models\Panier;
 use App\Models\Ligne_panier;
@@ -125,13 +127,13 @@ class CommandeController extends Controller
             'ville_adresse' => $request->ville,
         ]);
 
-        // ---- Carte bancaire ----
-        // ---- Carte bancaire ----
+        $pan = preg_replace('/\D+/', '', $request->card_number); // 16 digits
+        $last4 = substr($pan, -4);
+        
         $carte = Carte_Bancaire::create([
             'id_user_connecte' => Auth::id(),
-            'numero_carte'     => $request->card_number,
-            'date_expiration'  => $request->expiry,
-            'cryptogramme'     => $request->cvv,
+            'numero_carte'     => Crypt::encryptString($pan),
+            'date_expiration'  => Crypt::encryptString($request->expiry), // optionnel
             'nom_titulaire'    => $request->card_name,
         ]);
 
@@ -177,5 +179,14 @@ class CommandeController extends Controller
 
         return view('mes_commandes', compact('commandes'));
     }
+    public function succes()
+    {
+        if (!Auth::check()) {
+            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+        }
+
+        return view('succes_commande');
+    }
+
 
 }
