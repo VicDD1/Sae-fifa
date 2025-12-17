@@ -25,6 +25,11 @@
         <div class="right-panel">
         <div class="login-box">
                 <h2 class="login-title">Se connecter</h2>
+                @if(session('success'))
+                    <div style="background-color: #d1fae5; color: #065f46; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; border: 1px solid #a7f3d0; font-size: 14px;">
+                        ✅ {{ session('success') }}
+                    </div>
+                @endif
 
                 <form action="/connexion" method="POST">
                     
@@ -48,6 +53,11 @@
                     </div>
 
                     <button type="submit" class="btn-login">SE CONNECTER</button>
+                    <div style="margin-top: 15px; text-align: center;">
+                    <a href="{{ route('password.request') }}" style="color: #d9534f; text-decoration: underline;">
+                        Réinitialiser mon mot de passe 
+                    </a>
+</div>
                 </form>
 
                 <div class="signup-area">

@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProduitProposeController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\ResetPasswordController;
 
 
 /*
@@ -203,4 +204,10 @@ Route::post('/vote/submit', [VoteController::class, 'submit'])
 Route::get('/vote/recap', [VoteController::class, 'recap'])
     ->middleware('auth')
     ->name('vote.recap');
+
+// Routes pour la réinitialisation de mot de passe
+Route::get('/oubli-mdp', [ResetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/oubli-mdp', [ResetPasswordController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-mdp/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-mdp', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 
