@@ -2,65 +2,90 @@
 
 namespace App\Http\Controllers;
 
-use BotMan\BotMan\BotMan;
-use BotMan\BotMan\Messages\Incoming\Answer;
 use Illuminate\Http\Request;
 use Gemini\Laravel\Facades\Gemini;
-use App\Models\Product; // <--- Vérifie que c'est bien le nom de ton Modèle
+use Illuminate\Support\Facades\Log;
 
 class BotManController extends Controller
 {
+    /**
+     * Gère les messages du chatbot SAEFIFA.
+     * Utilise le modèle Gemini 2.5 Pro pour une navigation intelligente.
+     */
     public function handle(Request $request)
     {
         try {
+            // Récupération du message de l'utilisateur
             $userMessage = $request->input('message');
-            
-            // --- 1. CARTE DE NAVIGATION (Tes routes exactes) ---
-            // On liste uniquement les pages principales du site
+
+            if (empty($userMessage)) {
+                return response()->json(['reply' => "Bonjour ! Je suis l'assistant SAEFIFA. Comment puis-je vous aider ?"]);
+            }
+
+            // --- 1. CONFIGURATION DE LA NAVIGATION (Sitemap) ---
+            // On définit les routes pour que le bot puisse diriger l'utilisateur
             $siteMap = [
                 ['nom' => 'Accueil', 'url' => url('/')],
-                ['nom' => 'Boutique (Tous nos produits)', 'url' => url('/produits')], // Route ligne 57
-                ['nom' => 'Mon Panier', 'url' => route('panier.index')],              // Route ligne 101
-                ['nom' => 'Connexion / Se connecter', 'url' => route('login')],      // Route ligne 94
-                ['nom' => 'Créer un compte (Particulier)', 'url' => route('register.step1')], 
-                ['nom' => 'Créer un compte (Professionnel)', 'url' => route('registerPro.step1')],
-                ['nom' => 'Page de Vote FIFA', 'url' => route('vote.page')],          // Route ligne 161
-                ['nom' => 'Mes Commandes', 'url' => route('commande.liste')],        // Route ligne 168
-                ['nom' => 'Proposer ou créer un produit', 'url' => route('registerProduct.step1')],
+                ['nom' => 'Boutique / Produits', 'url' => url('/produits')],
+                ['nom' => 'Liste des Joueurs', 'url' => url('/players')],
+                ['nom' => 'Page de Vote FIFA', 'url' => route('vote.page')],
+                ['nom' => 'Mon Panier', 'url' => route('panier.index')],
+                ['nom' => 'Connexion', 'url' => route('login')],
+                ['nom' => 'Inscription Particulier', 'url' => route('register.step1')],
+                ['nom' => 'Inscription Professionnel', 'url' => route('registerPro.step1')],
+                ['nom' => 'Mes Commandes', 'url' => route('commande.liste')],
+                ['nom' => 'Vendre un produit', 'url' => route('registerProduct.step1')],
             ];
-    
-            $navigationText = "Voici les destinations disponibles sur le site :\n";
+
+            $navigationText = "Voici les liens de navigation du site :\n";
             foreach ($siteMap as $link) {
-                $navigationText .= "- " . $link['nom'] . " : " . $link['url'] . "\n";
+                $navigationText .= "- {$link['nom']} : {$link['url']}\n";
             }
-    
-            // --- 2. INSTRUCTIONS STRICTES ---
+
+            // --- 2. INSTRUCTIONS POUR L'IA (Prompt) ---
             $systemInstruction = "Tu es l'assistant de navigation du site SAEFIFA.
-            Ton seul rôle est de dire à l'utilisateur sur quel lien cliquer pour accéder à une page.
             
-            RÈGLES :
-            1. NE RECOMMANDE PAS de produits spécifiques. 
-            2. Si l'utilisateur cherche des produits, envoie-le vers la page 'Boutique'.
-            3. Donne TOUJOURS l'URL complète et cliquable.
-            4. Si la demande ne concerne pas une page du site, réponds poliment que tu ne peux que l'aider à naviguer.
+            TON RÔLE :
+            - Guider l'utilisateur vers la bonne page en utilisant les liens fournis.
+            - Toujours donner l'URL complète et exacte.
+            - Si l'utilisateur cherche des produits, propose la Boutique.
+            - Si l'utilisateur parle de joueurs ou de vote, propose les liens correspondants.
             
+            CONSIGNES :
+            - Sois très poli et concis.
+            - N'invente jamais d'URL qui n'est pas dans la liste.
+            
+            LISTE DES LIENS :
             $navigationText
             
-            Demande de l'utilisateur : " . $userMessage;
-    
-            // --- 3. APPEL À GEMINI ---
+            QUESTION : $userMessage";
+
+            // --- 3. APPEL À GEMINI 2.5 PRO ---
             $client = \Gemini::client(env('GEMINI_API_KEY'));
             
-            // On utilise le modèle Gemini 2.5 Flash
-            $result = $client->generativeModel(model: 'gemini-2.5-flash')
+            // On utilise le modèle 2.5 Pro pour plus de stabilité
+            $result = $client->generativeModel(model: 'gemini-2.5-pro')
                              ->generateContent($systemInstruction);
-    
+
             return response()->json([
                 'reply' => $result->text()
             ]);
-    
+
         } catch (\Exception $e) {
-            return response()->json(['reply' => "Erreur : " . $e->getMessage()], 500);
+            $error = $e->getMessage();
+            Log::error("Erreur BotMan : " . $error);
+
+            // Gestion personnalisée des erreurs de surcharge (Overloaded)
+            if (strpos($error, 'overloaded') !== false || strpos($error, '503') !== false) {
+                return response()->json([
+                    'reply' => "Je suis un peu fatigué, peux-tu répéter dans 5 secondes ?"
+                ]);
+            }
+
+            // Message générique pour les autres erreurs techniques
+            return response()->json([
+                'reply' => "Désolé, j'ai rencontré une petite erreur technique. Réessayez dans un instant."
+            ], 200); 
         }
     }
 }
