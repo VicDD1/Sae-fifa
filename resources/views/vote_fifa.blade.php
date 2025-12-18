@@ -9,7 +9,7 @@
 <header>
         <nav>
             <a href="/produits">Fifa Store</a>
-            <a href="/">Acceuil</a>
+            <a href="/">Accueil</a>
 
             <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
