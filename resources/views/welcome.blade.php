@@ -80,7 +80,6 @@
 
 
                 <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
-            @endif
                 
             @endauth
             @auth
@@ -165,6 +164,6 @@
     </div>
 
     <script src="{{ asset('js/script.js') }}"></script>
-
+    @endif
 </body>
 </html>

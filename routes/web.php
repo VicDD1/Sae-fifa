@@ -15,6 +15,7 @@ use App\Http\Controllers\ProduitProposeController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\MfaController;
 
 
 /*
@@ -157,36 +158,39 @@ Route::post('/proposer_un_produit', [ProduitProposeController::class, 'step1Post
 /* ------------------------------
    Commandes
 ------------------------------ */
-Route::post('/commande/valider', [CommandeController::class, 'valider'])->name('commande.valider');
+/* ------------------------------
+   Commandes
+------------------------------ */
 
+// Page commande (adresse + livraison)
 Route::get('/commande', [CommandeController::class, 'afficher'])
     ->middleware('auth')
     ->name('commande.page');
 
-Route::get('/commande/confirmation', [CommandeController::class, 'confirmation'])
-    ->name('commande.confirmation');
+// POST: validation -> affiche la page de confirmation (récap + formulaire CB)
+Route::post('/confirmation_commande', [CommandeController::class, 'valider'])
+    ->middleware('auth')
+    ->name('commande.valider');
 
-/* ------------------------------
-   VOTE FIFA (FINAL, PROPRE)
------------------------------- */
+// POST: action finale (paiement simulé + création commande)
+Route::post('/succes_commande', [CommandeController::class, 'confirmation'])
+    ->middleware('auth')
+    ->name('commande.payer');
+
+// GET: page succès (affichage)
+Route::get('/succes_commande', [CommandeController::class, 'succes'])
+    ->middleware('auth')
+    ->name('commande.succes');
+
+// Liste commandes
+Route::get('/mes_commandes', [CommandeController::class, 'liste'])
+    ->middleware('auth')
+    ->name('commande.liste');
 
 
 // Formulaire de vote
 Route::get('/vote/fifa', [VoteController::class, 'votePage'])
     ->name('vote.page');
-
-// Soumission du vote (POST uniquement)
-Route::post('/vote/submit', [VoteController::class, 'submit'])
-    ->middleware('auth')
-    ->name('commande.succes');
-
-Route::get('/mes_commandes', [CommandeController::class, 'liste'])
-    ->middleware('auth')
-    ->name('commande.liste');
-
-Route::get('/commande/confirmation', [CommandeController::class, 'confirmation'])
-    ->name('commande.confirmation');
-
 /* ------------------------------
    VOTE FIFA (FINAL, PROPRE)
 ------------------------------ */
@@ -211,3 +215,17 @@ Route::post('/oubli-mdp', [ResetPasswordController::class, 'sendResetLink'])->na
 Route::get('/reset-mdp/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-mdp', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 
+// --- Routes pour la Double Authentification (MFA) ---
+
+// 1. Pour activer l'option depuis le profil (il faut être connecté)
+Route::post('/profil/activer-mfa', [MfaController::class, 'enableMfa'])
+    ->name('mfa.enable')
+    ->middleware('auth');
+
+// 2. Pour afficher la page "Entrez le code" (lors de la connexion)
+Route::get('/login/mfa', [MfaController::class, 'showMfaForm'])
+    ->name('mfa.form');
+
+// 3. Pour valider le code et se connecter
+Route::post('/login/mfa', [MfaController::class, 'verifyMfa'])
+    ->name('mfa.verify');

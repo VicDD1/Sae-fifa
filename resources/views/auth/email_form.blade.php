@@ -80,7 +80,7 @@
             <button type="submit">Envoyer le lien de secours</button>
         </form>
 
-        <a href="{{ url('/') }}" class="back-link">Retour à la connexion</a>
+        <a href="/connexion" class="back-link">Retour à la connexion</a>
     </div>
 
 </body>
