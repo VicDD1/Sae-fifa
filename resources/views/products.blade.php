@@ -11,7 +11,9 @@
 
         <header>
         <nav>
-            <a href="/">Aceuil</a>
+            <a href="/">Accueil</a>
+            <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
@@ -89,6 +91,7 @@
             @endauth
         </nav>
     </header>
+
 
         @if(session('success'))
             <div style="background-color: #d4edda; color: #155724; padding: 15px; text-align: center; margin: 20px auto; max-width: 800px; border-radius: 5px;">

@@ -8,10 +8,11 @@
 </head>
 
 <body>
-    <header>
+<header>
         <nav>
-            <a href="/">Aceuil</a>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
@@ -58,7 +59,7 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
-            @auth
+@auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
                 <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
@@ -67,6 +68,11 @@
                 <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
             @endif
                 
+            @endauth
+            @auth
+                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
+                    Mes commandes
+                </a>
             @endauth
 
             @auth
@@ -84,6 +90,7 @@
             @endauth
         </nav>
     </header>
+
     <div class="commande-container">
 
         <h1 class="commande-title">Mes commandes</h1>

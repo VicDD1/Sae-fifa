@@ -1,35 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mon BotMan</title>
-    <style>
-        /* On s'assure juste que le widget ne crée pas de conflits visuels */
-        #botmanWidgetRoot {
-            position: fixed;
-            z-index: 9999;
-        }
-    </style>
 </head>
 <body>
-
     <script>
         var botmanWidget = {
-            frameEndpoint: '/botman/chat', // L'URL qui charge la logique de chat
-            chatServer: '/botman',      // L'URL de handle() dans votre contrôleur
-            title: 'Assistant',
-            mainColor: '#4080FF',
-            bubbleBackground: '#4080FF',
-            bubbleAvatarUrl: '',
-            aboutText: 'Service Client',
-            introMessage: "Bonjour ! Comment puis-je vous aider ? (Tapez 'aide' pour voir les options)",
-            placeholderText: 'Écrivez votre message...',
-            displayMessageTime: true,
+            frameEndpoint: '/botman/chat',
+            chatServer: '/botman',
+            title: 'Assistant Fifa',
+            mainColor: '#0056b3',
+            bubbleBackground: '#0056b3',
+            userId: '{{ Auth::id() ?? "guest" }}',
+            params: {
+                current_url: window.location.pathname 
+            },
+            introMessage: "{{ Auth::check() ? 'Bonjour ' . Auth::user()->name . ' ! Comment puis-je vous aider ?' : 'Bonjour ! Tapez aide pour voir les liens de navigation.' }}",
+            placeholderText: 'Posez votre question...'
         };
+
+        function fixLinks() {
+            var chatIframe = document.querySelector('#botmanWidgetRoot iframe');
+            if (chatIframe) {
+                var innerDoc = chatIframe.contentDocument || chatIframe.contentWindow.document;
+                var links = innerDoc.querySelectorAll('a');
+                links.forEach(function(link) {
+                    link.setAttribute('target', '_parent');
+                    link.style.color = "#0056b3";
+                    link.style.fontWeight = "bold";
+                    link.style.textDecoration = "underline";
+                });
+            }
+        }
+        setInterval(fixLinks, 400);
     </script>
-
     <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
-
 </body>
 </html>
