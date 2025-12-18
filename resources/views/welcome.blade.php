@@ -16,30 +16,6 @@
 </head>
 
 <body class="antialiased">
-<style>
-    .bot-msg {
-        align-self: flex-start;
-        background: #f1f1f1;
-        color: #333;
-        padding: 10px;
-        border-radius: 15px;
-        max-width: 80%;
-        margin-bottom: 10px;
-        font-family: 'Figtree', sans-serif;
-    }
-</style>
-<div id="chat-container" style="position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; background: white; border: 1px solid #ccc; border-radius: 10px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-    <div style="background: #e61c23; color: white; padding: 15px; border-radius: 10px 10px 0 0; font-weight: bold;">
-        FIFA AI Assistant
-    </div>
-    <div id="chat-window" style="flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px;">
-        </div>
-    <div style="padding: 10px; border-top: 1px solid #eee; display: flex; gap: 5px;">
-        <input type="text" id="user-input" placeholder="Posez votre question..." style="flex: 1; border: 1px solid #ddd; border-radius: 5px; padding: 8px;">
-        <button onclick="sendMessage()" style="background: #e61c23; color: white; border: none; border-radius: 5px; padding: 8px 15px; cursor: pointer;">Envoyer</button>
-    </div>
-</div>
-
 
     <header>
         <nav>
@@ -239,5 +215,6 @@
         });
     </script>
 
+    @include('botman')
 </body>
 </html>
