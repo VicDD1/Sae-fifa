@@ -150,7 +150,7 @@
             @endforeach
         </ul>
 
-        <form action="{{ route('commande.succes') }}" method="POST" class="payment-form">
+        <form action="{{ route('commande.succes') }}" method="GET" class="payment-form">
             @csrf
             <input type="hidden" name="nom" value="{{ $data['nom'] }}">
             <input type="hidden" name="adresse" value="{{ $data['adresse'] }}">
