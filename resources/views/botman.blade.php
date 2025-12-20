@@ -11,8 +11,14 @@
             title: 'Assistant Fifa',
             mainColor: '#0056b3',
             bubbleBackground: '#0056b3',
-            userId: '{{ Auth::id() ?? "guest" }}',
-            
+                
+            // On s'assure que window.location.pathname est bien lu
+            userId: '{{ Auth::id() ?? "guest" }}|' + window.location.pathname,
+                
+            params: {
+                current_url: window.location.pathname 
+            },
+        
             introMessage: "Bonjour ! Je suis l'assistant Fifa. Tapez aide pour voir ce que je peux faire sur cette page.",
             placeholderText: 'Posez votre question...',
             displayMessageTime: true,
