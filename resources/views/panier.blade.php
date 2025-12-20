@@ -189,6 +189,6 @@
     @endif
 
 </main>
-
+    @include('botman')
 </body>
 </html>

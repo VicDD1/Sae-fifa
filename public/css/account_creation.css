@@ -1,6 +1,94 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; font-family: 'Figtree', sans-serif; -webkit-font-smoothing: antialiased; }
 
+
+header{
+    background-color: #045694;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 30px;
+    gap: 20px;
+}
+
+nav a{
+    color: #eef2fb;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 6px 14px;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+nav a:hover{
+    background-color: #02456f;
+}
+
+/* Alignement droite */
+.account_creation{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.account_creation img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+/* User info */
+.user-info,
+header div[style*="display: inline-flex"] {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.user-info span,
+header div[style*="display: inline-flex"] span {
+    font-weight: bold;
+    border-bottom: 2px solid #00ff87;
+    color: white;
+    padding-bottom: 2px;
+}
+
+header div[style*="display: inline-flex"] button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ffcccc;
+    font-size: 18px;
+}
+
+nav a.cart-link,
+nav a[style*="font-weight: bold;"] {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+.btn-primary{
+    background: #00aaff;
+    color: white;
+}
+.btn-primary:hover{
+    background: #0088cc;
+}
        
         .container {
             display: flex;
@@ -14,13 +102,16 @@
             background-image: 
                 linear-gradient(to bottom, rgba(4, 29, 74, 0.7) 0%, rgba(4, 29, 74, 0.2) 100%),
                 url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2070&auto=format&fit=crop'); /* Mettre votre image de stade ici */
-            background-size: cover;
+            background-size: auto;
+
             background-position: center;
             color: white;
             padding: 60px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         .fifa-logo {
@@ -56,6 +147,8 @@
             align-items: center;
             justify-content: center;
             padding: 40px;
+            padding-top: 0;
+            margin-bottom: 0;
         }
 
         .login-box {
@@ -67,7 +160,7 @@
             font-size: 36px;
             font-weight: 700;
             color: #000c2d; 
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
 
        
