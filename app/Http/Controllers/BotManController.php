@@ -17,6 +17,37 @@ class BotManController extends Controller
 
         $currentUrl = $request->input('current_url');
 
+        // --- 1. FONCTION D'ACHAT (SÉCURISÉE ET NETTOYÉE) ---
+        $botman->hears('.*(acheter|chercher|trouver|vouloir|besoin|aimerais) (.*)', function (BotMan $bot, $action, $phraseSaisie) {
+            $phraseSaisie = mb_strtolower(trim($phraseSaisie));
+            $separateurs = [' pour ', ' car ', ' afin ', ' parce ', ' quand '];
+            foreach ($separateurs as $sep) {
+                if (str_contains($phraseSaisie, $sep)) {
+                    $parties = explode($sep, $phraseSaisie);
+                    $phraseSaisie = $parties[0]; 
+                }
+            }
+            $motsAIgnorer = ['un', 'une', 'le', 'la', 'les', 'des', 'du', 'de', 'l\'', 'd\'', 'mon', 'ma', 'mes', 'votre', 'vos'];
+            $mots = explode(' ', $phraseSaisie);
+            $motsUtiles = array_filter($mots, function($mot) use ($motsAIgnorer) {
+                return !in_array($mot, $motsAIgnorer) && strlen($mot) > 1;
+            });
+            $produitNettoye = !empty($motsUtiles) ? implode(' ', $motsUtiles) : $phraseSaisie;
+            
+            $bot->reply("C'est noté ! Pour trouver " . $produitNettoye . " sur notre boutique, voici la marche à suivre :");
+            $bot->reply("1. Rendez-vous dans le Fifa Store (2ème onglet).");
+            $bot->reply("2. Dans la barre de recherche en haut, tapez simplement : " . $produitNettoye . ".");
+            $bot->reply("3. Cliquez directement sur l'image ou le nom de l'article pour accéder à sa fiche.");
+            if (Auth::check()) {
+                $bot->reply("4. Sur la fiche produit, choisissez votre taille et votre couleur, puis cliquez sur Ajouter au panier.");
+            } else {
+                $bot->reply("4. Attention : Vous devez être connecté pour ajouter au panier. Une fois connecté, vous pourrez choisir la taille et la couleur.");
+                $bot->reply("👉 <a href='/se_connecter'>🔑 Se connecter ici</a>");
+            }
+            $bot->reply("👉 <a href='/produits'>🛍️ Aller au Fifa Store</a>");
+        });
+
+        // --- 2. NAVIGATION (TES VERSIONS LONGUES RESTAURÉES) ---
         $botman->hears('.*(accueil|home|début).*', function (BotMan $bot) use ($currentUrl) {
             if ($currentUrl == '/') {
                 $bot->reply("Vous êtes déjà sur la page d'Accueil (1er onglet à gauche).");
@@ -25,13 +56,12 @@ class BotManController extends Controller
             }
         });
 
-        $botman->hears('.*(fifa store|store|boutique|produit|acheter).*', function (BotMan $bot) use ($currentUrl) {
+        $botman->hears('.*(fifa store|store|boutique).*', function (BotMan $bot) use ($currentUrl) {
             if ($currentUrl == '/produits') {
                 $bot->reply("Vous parcourez actuellement le Fifa Store.");
             } else {
                 $bot->reply("Pour accéder au Fifa Store, veuillez soit cliquer sur le bouton Fifa Store en 2ème position ou cliquer sur ce lien :<br><a href='/produits'>🛍️ Aller au Store</a>");
             }
-            
             if (Auth::check() && Auth::user()->professionnel) {
                 $bot->reply("En tant que pro, vous pouvez proposer un produit via l'onglet Faire une demande de produit situé tout à droite.");
             }
@@ -94,15 +124,33 @@ class BotManController extends Controller
             }
         });
 
-        $botman->hears('.*aide.*', function (BotMan $bot) {
-            $bot->reply("Voici l'ordre de votre navigation :<br>1. Accueil<br>2. Fifa Store<br>3. Vote<br>4. Les joueurs<br>5. Les Articles<br>6. Mon Panier");
+        $botman->hears('.*(faire un vote|je veux voter|participer au vote).*', function (BotMan $bot) {
+            $bot->reply("C'est une excellente initiative ! Voici comment exprimer votre voix :");
+            $bot->reply("1. Cliquez sur l'onglet Vote (3ème position) ou ici : <br><a href='/vote/fifa'>⚽ Accéder au Vote</a>");
+            $bot->reply("2. Choisissez d'abord un Thème (ex: Ballon d'Or 2025 ou Trophée Yachine).");
+            $bot->reply("3. Pour chaque emplacement (Joueur 1 à 4), sélectionnez un nom et attribuez-lui un classement (1er, 2ème, etc.).");
             if (Auth::check()) {
-                $bot->reply("Options compte : Mes commandes, Modifier profil.");
+                $bot->reply("4. Une fois vos 4 choix faits, cliquez sur le bouton bleu **Valider** pour enregistrer votre vote.");
+            } else {
+                $bot->reply("⚠️ Attention : Vous devez être connecté pour valider votre vote.");
+                $bot->reply("👉 <a href='/se_connecter'>🔑 Connectez-vous ici</a> avant de remplir le formulaire.");
+            }
+        });
+        // --- 3. AIDE ÉTENDUE (PLUS DE CONTENU COMME DEMANDÉ) ---
+        $botman->hears('.*aide.*', function (BotMan $bot) {
+            $bot->reply("Bonjour ! Voici un guide complet pour vous aider :");
+            $bot->reply("🛍️ ACHATS : Pour trouver un produit, dites par exemple : j'aimerais acheter un ballon. Je vous expliquerai comment le trouver et le personnaliser.");
+            $bot->reply("📂 NAVIGATION : Voici l'ordre de vos onglets :");
+            $bot->reply("1. Accueil, 2. Fifa Store, 3. Vote, 4. Les joueurs, 5. Les Articles, 6. Mon Panier.");
+            $bot->reply("👤 COMPTE : Dites profil pour modifier vos infos ou commandes pour voir vos achats.");
+            $bot->reply("💡 INFOS : La connexion est obligatoire pour ajouter au panier et choisir taille/couleur.");
+            if (Auth::check()) {
+                $bot->reply("Vous êtes actuellement connecté sous le nom : " . Auth::user()->name);
             }
         });
 
         $botman->fallback(function ($bot) {
-            $bot->reply("Désolé, je n'ai pas compris. Tapez aide pour voir le guide.");
+            $bot->reply("Désolé, je n'ai pas compris. Tapez aide pour voir le guide complet.");
         });
 
         $botman->listen();

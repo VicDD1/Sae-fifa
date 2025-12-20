@@ -235,5 +235,7 @@
 </div>
 </div>
 <script src="{{ asset('js/vote.js') }}"></script>
+
+    @include('botman')
 </body>
 </html>

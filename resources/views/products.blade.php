@@ -232,6 +232,6 @@
 
             </div>
         </main>
-
+        @include('botman')
     </body>
 </html>

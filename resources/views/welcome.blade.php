@@ -160,62 +160,7 @@
     </div>
 
     <script src="{{ asset('js/script.js') }}"></script>
-    <script>
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const chatWindow = document.getElementById('chat-window');
-            const message = input.value;
-            if (!message) return;
-
-            // 1. Afficher le message de l'utilisateur
-            chatWindow.innerHTML += `
-                <div style="align-self: flex-end; background: #e61c23; color: white; padding: 10px; border-radius: 15px; max-width: 80%; margin-bottom: 10px;">
-                    ${message}
-                </div>`;
-            input.value = '';
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-
-            // 2. Afficher un indicateur de chargement
-            const typingId = 'typing-' + Date.now();
-            chatWindow.innerHTML += `<div id="${typingId}" style="align-self: flex-start; color: #777; font-style: italic;">L'assistant réfléchit...</div>`;
-
-            try {
-                // 3. Envoyer à Laravel
-                const response = await fetch('/botman', { 
-    method: 'POST',
-    headers: { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content 
-    },
-    body: JSON.stringify({ message: message })
-});
-
-             
-                const data = await response.json();
-                document.getElementById(typingId).remove();
-// Si data.reply n'existe pas, JS affiche 'undefined'
-            chatWindow.innerHTML += `<div class="bot-msg">${data.reply || "Désolé, j'ai eu un bug."}</div>`;
-                
-                // Supprimer l'indicateur de chargement
-
-                // 4. Afficher la réponse de Gemini
-               
-                
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-            } catch (error) {
-                document.getElementById(typingId).innerHTML = "Erreur de connexion au serveur.";
-                console.error("Erreur:", error);
-            }
-        }
-
-        // Permettre d'envoyer avec la touche "Entrée"
-        document.getElementById('user-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    </script>
+    
 
     @include('botman')
 </body>
