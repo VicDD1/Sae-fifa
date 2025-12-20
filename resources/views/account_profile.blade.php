@@ -84,6 +84,6 @@
             </div>
         </div>
     </div>
-
+    @include('botman')
 </body>
 </html>

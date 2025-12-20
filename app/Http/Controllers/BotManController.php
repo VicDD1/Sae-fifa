@@ -26,7 +26,7 @@ class BotManController extends Controller
         });
 
         // --- 1. FONCTION D'ACHAT (SÉCURISÉE ET NETTOYÉE) ---
-        $botman->hears('.*(acheter|chercher|trouver|vouloir|besoin|aimerais) (.*)', function (BotMan $bot, $action, $phraseSaisie) {
+        $botman->hears('.*(acheter|chercher|trouver|vouloir|besoin|aimerais) (.*)', function (BotMan $bot, $action, $phraseSaisie) use ($currentUrl){
             if ($currentUrl == '/produits'){
                 $phraseSaisie = mb_strtolower(trim($phraseSaisie));
                 $separateurs = [' pour ', ' car ', ' afin ', ' parce ', ' quand '];
@@ -78,9 +78,9 @@ class BotManController extends Controller
             }
         });
 
-        $botman->hears('.*(commande|achat|mes commandes).*', function (BotMan $bot) {
+        $botman->hears('.*(commande|achat|mes commandes).*', function (BotMan $bot) use ($currentUrl) {
             if (Auth::check()) {
-                if ($currentUrl == '/mes_commande')
+                if ($currentUrl == '/mes_commandes')
                 {
                     $bot->reply("Vous êtes déjà sur vos commandes");
                 }
@@ -92,13 +92,29 @@ class BotManController extends Controller
             }
         });
 
-        $botman->hears('.*(profil|compte|modifier|paramètre).*', function (BotMan $bot) {
+        $botman->hears('.*(profil|compte|modifier|paramètre|voir mon compte).*', function (BotMan $bot)use ($currentUrl) {
             if (Auth::check()) {
-                $bot->reply("Pour modifier vos informations, veuillez soit cliquer sur votre nom ( " . Auth::user()->name . " ) dans la barre bleue ou cliquer sur ce lien :<br><a href='/mon-profil'>👤 Modifier mon compte</a>");
+                if($currentUrl=='/mon-profil'){
+
+                    $bot->reply("Veuillez cliquer sur le bouton en bas à droite pour accéder à la modification ou cliquer sur ce lien :<br><a href='/parametre_compte'>👤 Modifier mon compte</a>");
+                }
+                elseif($currentUrl == "/parametre_compte"){
+                    $bot->reply("Vous êtes sur la page de modification de vos informations.");
+                    $bot->reply("- Champs modifiables : Vous pouvez changer votre Prénom, Surnom, Email, Date de naissance et Equipe favorite.");
+                    $bot->reply("- Sécurité : Pour protéger votre compte, changez votre mot de passe ou activez la Double Authentification par SMS via le bouton bleu ACTIVER.");
+                    $bot->reply("Important : Une fois vos changements faits, cliquez sur le bouton vert ENREGISTRER LES MODIFICATIONS en bas de page pour valider.");
+                }
+                else{
+
+                    $bot->reply("Pour avoir ou modifier vos informations, veuillez soit cliquer sur votre nom ( " . Auth::user()->name . " ) dans la barre bleue ou cliquer sur ce lien :<br><a href='/mon-profil'>👤 Afficher mon compte</a>");
+                }
+
             } else {
                 $bot->reply("Veuillez vous connecter pour accéder à votre profil.");
             }
         });
+
+
 
         $botman->hears('.*(professionnel|faire une demande|proposer).*', function (BotMan $bot) {
             if (Auth::check() && Auth::user()->professionnel) {

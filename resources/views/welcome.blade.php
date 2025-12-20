@@ -97,6 +97,7 @@
                 @endif
             @endauth
         </nav>
+        @endif
     </header>
 
     @if(session('success'))
@@ -157,7 +158,7 @@
         </div>
         </div>
     </div>
-    @endif
+    
 
     <script src="{{ asset('js/script.js') }}"></script>
     
