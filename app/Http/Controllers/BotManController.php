@@ -80,7 +80,14 @@ class BotManController extends Controller
 
         $botman->hears('.*(commande|achat|mes commandes).*', function (BotMan $bot) {
             if (Auth::check()) {
-                $bot->reply("Pour voir vos achats, veuillez soit cliquer sur le bouton bleu Mes commandes à droite de votre nom ou cliquer sur ce lien :<br><a href='/mes_commandes'>📦 Mes commandes</a>");
+                if ($currentUrl == '/commande')
+                {
+                    $bot->reply("Vous êtes déjà sur vos commandes");
+
+                }
+                else{
+                    $bot->reply("Pour voir vos commande, veuillez soit cliquer sur le bouton bleu Mes commandes à droite de votre nom ou cliquer sur ce lien :<br><a href='/mes_commandes'>📦 Mes commandes</a>");
+                }
             } else {
                 $bot->reply("Vous devez être connecté pour voir vos commandes. Cliquez sur l'icône de profil à droite.");
             }
