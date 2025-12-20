@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>FIFA</title>
@@ -15,18 +16,12 @@
 </head>
 
 <body class="antialiased">
-    
-    <script>
-        var botmanWidget = {
-            aboutText: '',
-            introMessage: "Bienvenue chez FIFA. En quoi puis-je vous aider"
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js"></script>
 
     <header>
         <nav>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
@@ -164,6 +159,8 @@
     </div>
 
     <script src="{{ asset('js/script.js') }}"></script>
-    @endif
+    
+
+    @include('botman')
 </body>
 </html>

@@ -10,9 +10,11 @@
 
 <body>
 
-<header>
+<header><header>
         <nav>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
@@ -90,6 +92,7 @@
             @endauth
         </nav>
     </header>
+
 
 <main class="checkout-container">
 

@@ -8,8 +8,12 @@
 <body>
 <header>
         <nav>
-            <a href="/produits">Fifa Store</a>
             <a href="/">Accueil</a>
+            <a href="/produits">Fifa Store</a>
+
+
+            <!-- CORRECTION : lien Vote propre -->
+            <a href="{{ route('vote.page') }}">Vote</a>
 
             <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
@@ -84,6 +88,7 @@
             @endauth
         </nav>
     </header>
+
 <div id="vote_div">
 <div class="card">
 
@@ -230,5 +235,7 @@
 </div>
 </div>
 <script src="{{ asset('js/vote.js') }}"></script>
+
+    @include('botman')
 </body>
 </html>

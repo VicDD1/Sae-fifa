@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 // Controllers
-use App\Http\Controllers\BotManController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\NationController;
 use App\Http\Controllers\PanierController;
@@ -17,6 +16,8 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\MfaController;
 
+use App\Http\Controllers\BotManController;
+Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
 
 /*
 |--------------------------------------------------------------------------

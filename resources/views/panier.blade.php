@@ -13,8 +13,9 @@
 
 <header>
         <nav>
-            <a href="/">Acceuil</a>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
@@ -22,7 +23,20 @@
             <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
 
-            
+            @auth
+                @php
+                    $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
+                    $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
+                @endphp
+            @endauth
+
+            @guest
+                @php $totalQuantite = 0; @endphp
+            @endguest
+
+            <a href="{{ route('panier.index') }}" style="margin-left: 15px; font-weight: bold;">
+                <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
+            </a>
 
             @auth
                 <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
@@ -79,6 +93,7 @@
             @endauth
         </nav>
     </header>
+
 
 
 <main class="cart-container">
