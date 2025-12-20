@@ -10,7 +10,7 @@
 
 <body>
 
-<header><header>
+<header>
         <nav>
             <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
