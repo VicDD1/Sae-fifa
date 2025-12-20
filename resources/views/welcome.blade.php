@@ -157,10 +157,10 @@
         </div>
         </div>
     </div>
+    @endif
 
     <script src="{{ asset('js/script.js') }}"></script>
     
-
     @include('botman')
 </body>
 </html>
