@@ -18,8 +18,8 @@
                 <p>Mettez à jour vos informations. Si vous changez votre email, vous devrez l'utiliser pour votre prochaine connexion.</p>
             </div>
             <div style="margin-top: auto;">
-                <a href="/parametre_compte" style="color: white; text-decoration: none; font-weight: bold;">
-                    <i class="fa-solid fa-xmark"></i> Annuler et Retourner au profil
+                <a href="/" style="color: white; text-decoration: none; font-weight: bold;">
+                    <i class="fa-solid fa-xmark"></i> Annuler et retourner a l'accueil
                 </a>
             </div>
         </div>
@@ -30,7 +30,7 @@
 
                 <form action="{{ route('profile.update') }}" method="POST">
                     @csrf 
-            
+                    
 
                     <div style="display: flex; gap: 20px;">
                         <div class="form-group" style="flex: 1;">
@@ -135,6 +135,43 @@
                     </button>
 
                 </form>
+                <div style="margin-top: 40px; border-top: 2px solid #f3f4f6; padding-top: 25px;">
+                    <h2 class="login-title" style="font-size: 1.2rem; margin-bottom: 15px;">Sécurité (Double Authentification)</h2>
+
+                    @if($user->mfa_active)
+                        {{-- SI ACTIVÉ : Affiche un message vert --}}
+                        <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 8px;">
+                            <p style="color: #065f46; font-weight: bold; margin-bottom: 5px;">
+                                <i class="fa-solid fa-shield-halved"></i> Protection activée
+                            </p>
+                            <p style="color: #047857; font-size: 13px;">
+                                Numéro associé : <strong>{{ $user->numero_telephone_user_connecte }}</strong>
+                            </p>
+                        </div>
+                    @else
+                        {{-- SI DÉSACTIVÉ : Affiche le formulaire pour activer --}}
+                        <p style="font-size: 13px; color: #666; margin-bottom: 15px;">
+                            Sécurisez votre compte avec un code SMS à chaque connexion.
+                        </p>
+                        
+                        <form action="{{ route('mfa.enable') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label class="input-label">Numéro de téléphone mobile</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" name="numero_telephone_user_connecte" class="custom-input" placeholder="0612345678" style="margin-bottom: 0;" required>
+                                    
+                                    <button type="submit" class="btn-login" style="width: auto; padding: 0 20px; background-color: #3b82f6; color: white; margin-top: 0;">
+                                        ACTIVER
+                                    </button>
+                                </div>
+                                @error('numero_telephone_user_connecte')
+                                    <div class="error-message" style="margin-top: 5px;">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

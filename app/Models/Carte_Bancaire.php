@@ -9,15 +9,15 @@ class Carte_Bancaire extends Model
 {
     use HasFactory;
 
-    protected $table = 'carte_bancaire';         
-    protected $primaryKey = 'id_carte';   
+    protected $table = 'carte_bancaire';
+    protected $primaryKey = 'id_carte';
     public $timestamps = false;
 
     protected $fillable = [
         'id_user_connecte',
-        'numero_carte',
-        'date_expiration',
-        'cryptogramme',
+        'numero_carte',     // chiffré
+        'date_expiration',  // chiffré ou non (au choix)
         'nom_titulaire',
     ];
 }
+
