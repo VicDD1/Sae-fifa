@@ -200,9 +200,8 @@
             <button type="submit" class="btn-pay">Confirmer et payer</button>
         </form>
 
-            <a href="{{ url('/produits') }}" class="return">Retour à la boutique</a>
         </div>
     </div>
-
+    @include('botman')
 </body>
 </html>

@@ -80,23 +80,37 @@ class BotManController extends Controller
 
         $botman->hears('.*(commande|achat|mes commandes).*', function (BotMan $bot) use ($currentUrl) {
             if (Auth::check()) {
-                if ($currentUrl == '/mes_commandes')
-                {
-                    $bot->reply("Vous êtes déjà sur vos commandes");
+                // 1. Aide au remplissage du formulaire de livraison
+                if ($currentUrl == '/commande') {
+                    $bot->reply("Vous êtes sur la première étape de votre commande.");
+                    $bot->reply("- Astuce : Une fois l'adresse remplie, la ville et le code postal se complètent automatiquement.");
+                    $bot->reply("- Validation : Vérifiez vos infos de livraison puis cliquez sur le bouton bleu Valider la commande ou ici : <br><a href='/confirmation_commande'>💳 Valider ma commande</a>.");
                 }
-                else{
+                elseif ($currentUrl == '/confirmation_commande') {
+                    $bot->reply("Vous êtes à l'étape du paiement sécurisé.");
+                    $bot->reply("- Titulaire : Saisissez le nom présent sur votre carte bancaire.");
+                    $bot->reply("- Carte : Entrez vos numéros de carte, la date d'expiration (MM/AA) et le code CVV à 3 chiffres au dos.");
+                    $bot->reply("- Finalisation : Cliquez sur le bouton bleu Confirmer et payer pour valider définitivement votre achat.");
+                }
+                // 2. Consultation de l'historique
+                elseif ($currentUrl == '/mes_commandes') {
+                    $bot->reply("Vous êtes déjà sur la page de vos commandes.");
+                }
+                // 3. Cas général : Lien vers les commandes
+                else {
                     $bot->reply("Pour voir vos commande, veuillez soit cliquer sur le bouton bleu Mes commandes à droite de votre nom ou cliquer sur ce lien :<br><a href='/mes_commandes'>📦 Mes commandes</a>");
                 }
             } else {
                 $bot->reply("Vous devez être connecté pour voir vos commandes. Cliquez sur l'icône de profil à droite.");
             }
         });
-
         $botman->hears('.*(profil|compte|modifier|paramètre|voir mon compte).*', function (BotMan $bot)use ($currentUrl) {
             if (Auth::check()) {
                 if($currentUrl=='/mon-profil'){
 
-                    $bot->reply("Veuillez cliquer sur le bouton en bas à droite pour accéder à la modification ou cliquer sur ce lien :<br><a href='/parametre_compte'>👤 Modifier mon compte</a>");
+                    $bot->reply("Vous visualisez actuellement vos informations personnelles.");
+                    $bot->reply("Pour pouvoir faire des changements, cliquez sur le bouton bleu MODIFIER MES INFOS situé tout en bas de la page.");
+                    $bot->reply("Vous pouvez aussi utiliser ce lien direct : <a href='/parametre_compte'>👤 Modifier mon compte</a>");
                 }
                 elseif($currentUrl == "/parametre_compte"){
                     $bot->reply("Vous êtes sur la page de modification de vos informations.");
@@ -118,7 +132,7 @@ class BotManController extends Controller
 
         $botman->hears('.*(professionnel|faire une demande|proposer).*', function (BotMan $bot) {
             if (Auth::check() && Auth::user()->professionnel) {
-                $bot->reply("Pour ajouter un article, cliquez sur l'onglet Faire une demande de produit situé à l'extrémité droite de la barre de navigation ou ici :<br><a href='/proposer_un_produit'>💡 Faire une demande</a>");
+                $bot->reply("Pour demander à ajouter un article, cliquez sur l'onglet Faire une demande de produit situé à l'extrémité droite de la barre de navigation ou ici :<br><a href='/proposer_un_produit'>💡 Faire une demande</a>");
             } else {
                 $bot->reply("La proposition de produit est réservée aux comptes professionnels.");
             }
@@ -154,8 +168,17 @@ class BotManController extends Controller
             $bot->reply("L'onglet Les Articles (5ème position) est en cours de préparation.");
         });
 
-        $botman->hears('.*(panier|mon panier).*', function (BotMan $bot) {
-            $bot->reply("Pour accéder au panier, veuillez soit cliquer sur l'onglet Mon Panier en 6ème position ou cliquer sur ce lien :<br><a href='/panier'>🛒 Voir mon Panier</a>");
+        $botman->hears('.*(panier|mon panier).*', function (BotMan $bot) use($currentUrl) {
+            if ($currentUrl == '/panier') {
+                $bot->reply("Vous êtes actuellement dans votre panier.");
+                $bot->reply("- Quantité : Utilisez les boutons + ou - à côté de l'article pour changer le nombre.");
+                $bot->reply("- Suppression : Cliquez sur le lien rouge Supprimer sous l'image pour retirer un produit.");
+                $bot->reply("- Etape suivante : Pour payer, cliquez sur le bouton jaune PASSER LA COMMANDE ou sur ce lien : <br><a href='/commande'>💳 Passer a la commande</a>.");
+    }
+            else{
+
+                $bot->reply("Pour accéder au panier, veuillez soit cliquer sur l'onglet Mon Panier en 6ème position ou cliquer sur ce lien :<br><a href='/panier'>🛒 Voir mon Panier</a>");
+            }
         });
 
         $botman->hears('.*(connexion|connecter|login|quitter|déconnexion).*', function (BotMan $bot) {

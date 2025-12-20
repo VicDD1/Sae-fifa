@@ -257,6 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
-
+ @include('botman')
 </body>
 </html>

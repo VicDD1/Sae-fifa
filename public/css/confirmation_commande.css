@@ -201,7 +201,7 @@ ul li {
 }
 
 .row {
-    display: flex;
+    display: grid;
     gap: 15px;
 }
 
