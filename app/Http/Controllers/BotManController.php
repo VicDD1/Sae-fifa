@@ -96,7 +96,10 @@ class BotManController extends Controller
                     $bot->reply("- Finalisation : Cliquez sur le bouton bleu Confirmer et payer pour valider définitivement votre achat.");
                 }
                 elseif ($currentUrl == '/mes_commandes') {
-                    $bot->reply("Vous êtes déjà sur la page de vos commandes.");
+                    $bot->reply("Vous visualisez l'historique de vos achats.");
+                    $bot->reply("- Voir les détails : Cliquez sur n'importe quelle carte de commande (ex: Commande #123) pour voir la liste des articles achetés.");
+                    $bot->reply("- Icônes : Le symbole + devient - une fois la commande dépliée.");
+                    $bot->reply("- Infos disponibles : Pour chaque achat, vous retrouvez le montant total, le mode de paiement et le statut (Payé ou en attente).");
                 }
                 else {
                     $bot->reply("Pour voir vos commande, veuillez soit cliquer sur le bouton bleu Mes commandes à droite de votre nom ou cliquer sur ce lien :<br><a href='/mes_commandes'>📦 Mes commandes</a>");
