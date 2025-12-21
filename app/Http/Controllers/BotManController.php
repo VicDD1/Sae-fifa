@@ -130,22 +130,42 @@ class BotManController extends Controller
 
 
 
-        $botman->hears('.*(professionnel|faire une demande|proposer|demande).*', function (BotMan $bot) use ($currentUrl) {
-            if (Auth::check() && Auth::user()->professionnel) {
-                // 1. Guide spécifique sur la page du formulaire
-                if ($currentUrl == '/proposer_un_produit') {
-                    $bot->reply("Vous êtes sur le formulaire de proposition de produit.");
-                    $bot->reply("- Produit : Saisissez le nom complet de l'article que vous souhaitez proposer dans le premier champ.");
-                    $bot->reply("- Description : Donnez un maximum de détails sur l'article dans le second champ pour nous aider à l'étudier.");
-                    $bot->reply("- Envoi : Cliquez sur le bouton bleu CRÉER LA PROPOSITION pour soumettre votre demande.");
+        $botman->hears('.*(professionnel|compte pro|devenir partenaire|proposer|demande).*', function (BotMan $bot) use ($currentUrl) {
+            if (Auth::check()) {
+                // 1. Si l'utilisateur est déjà professionnel : gestion des demandes de produits
+                if (Auth::user()->professionnel) {
+                    if ($currentUrl == '/proposer_un_produit') {
+                        $bot->reply("Vous êtes sur le formulaire de proposition de produit.");
+                        $bot->reply("- Produit : Saisissez le nom complet de l'article dans le premier champ.");
+                        $bot->reply("- Description : Donnez un maximum de détails dans le second champ.");
+                        $bot->reply("- Envoi : Cliquez sur le bouton bleu CRÉER LA PROPOSITION.");
+                    } else {
+                        $bot->reply("En tant que professionnel, vous pouvez proposer de nouveaux articles.");
+                        $bot->reply("Cliquez sur l'onglet faire une demande de produit à droite ou ici : <br><a href='/proposer_un_produit'>💡 Faire une demande</a>");
+                    }
                 } 
-                // 2. Cas général : l'utilisateur est ailleurs sur le site
+                // 2. Si l'utilisateur est un client standard : guide pour devenir professionnel
                 else {
-                    $bot->reply("En tant que professionnel, vous pouvez proposer de nouveaux articles.");
-                    $bot->reply("Cliquez sur l'onglet faire une demande de produit à l'extrémité droite de la barre de navigation ou ici : <br><a href='/proposer_un_produit'>💡 Faire une demande</a>");
+                    if ($currentUrl == '/') {
+                        $bot->reply("Bonjour " . Auth::user()->name . " ! Pour devenir professionnel, cliquez sur le bouton Compte professionnel en haut à droite.");
+                        $bot->reply("Ou utilisez ce lien direct : <br><a href='/creer_un_compte_professionnel_1'>💼 Devenir Professionnel</a>");
+                    }
+                    
+                    if ($currentUrl == '/creer_un_compte_professionnel_1') {
+                        $bot->reply("Etape 1/2 : Informations entreprise.");
+                        $bot->reply("- Saisie : Remplissez le nom de la société, le numéro de TVA, l'activité et vos coordonnées complètes.");
+                        $bot->reply("- Suite : Cliquez sur le bouton bleu POURSUIVRE.");
+                    }
+
+                    if ($currentUrl == '/creer_un_compte_professionnel_2') {
+                        $bot->reply("Etape 2/2 : Sécurisation.");
+                        $bot->reply("- Mot de passe : Saisissez et confirmez votre mot de passe.");
+                        $bot->reply("- Légalité : Cochez la case des conditions d'utilisation puis cliquez sur CRÉER LE COMPTE.");
+                    }
                 }
             } else {
-                $bot->reply("Désolé, la proposition de produit est une fonctionnalité réservée exclusivement aux comptes professionnels.");
+                $bot->reply("Désolé, cette fonctionnalité nécessite d'être connecté.");
+                $bot->reply("Si vous voulez devenir professionnel, connectez-vous d'abord à votre compte client : <br><a href='/se_connecter'>🔑 Se connecter</a>");
             }
         });
 
