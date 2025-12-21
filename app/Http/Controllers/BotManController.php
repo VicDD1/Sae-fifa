@@ -43,7 +43,7 @@ class BotManController extends Controller
                 });
                 $produitNettoye = !empty($motsUtiles) ? implode(' ', $motsUtiles) : $phraseSaisie;
 
-                $bot->reply("C'est noté ! Pour trouver " . $produitNettoye . " sur notre boutique, voici la marche à suivre :");
+                $bot->reply("Pour trouver " . $produitNettoye . " sur notre boutique, voici la marche à suivre :");
                 $bot->reply("1. Dans la barre de recherche en haut, tapez simplement : " . $produitNettoye . ".");
                 $bot->reply("2. Cliquez directement sur l'image ou le nom de l'article pour accéder à sa fiche.");
                 if (Auth::check()) {
@@ -192,12 +192,52 @@ class BotManController extends Controller
             }
         });
 
-        $botman->hears('.*(connexion|connecter|login|quitter|déconnexion).*', function (BotMan $bot) {
+        $botman->hears('.*(connexion|connecter|login|créer un compte|inscription).*', function (BotMan $bot) use ($currentUrl) {
             if (Auth::check()) {
-                $bot->reply("Bonjour " . Auth::user()->name . " ! Vous êtes connecté.");
-                $bot->reply("Pour quitter, cliquez sur l'icône Power rouge à droite ou ici :<br><a href='/logout'>🚪 Se déconnecter</a>");
+                $bot->reply("Bonjour " . Auth::user()->name . " ! Vous êtes déjà connecté.");
+                $bot->reply("Pour quitter votre session, cliquez sur l'icône Power rouge à droite ou ici : <br><a href='/logout'>🚪 Se déconnecter</a>");
             } else {
-                $bot->reply("Pour vous connecter, veuillez cliquer sur l'icône de profil grise à droite ou ici :<br><a href='/se_connecter'>🔑 Se connecter</a>");
+                // 1. Aide spécifique sur la page de connexion
+                if ($currentUrl == '/se_connecter') {
+                    $bot->reply("Vous êtes sur la page de connexion.");
+                    $bot->reply("- Déjà inscrit : Saisissez votre email et votre mot de passe pour accéder à votre compte.");
+                    $bot->reply("- Une fois que vous avez entrez vos informations, vous pouvez maintenant cliquer sur le bouton bleu se connecter qui se trouve juste en dessous du mot de passe");
+                    $bot->reply("- Nouveau client : Cliquez sur le premier bouton pour créer votre compte standard : <br><a href='/creer_un_compte_1'>👤 Créer un compte particulier</a>");
+                    $bot->reply("- Professionnel : Si vous êtes un partenaire, utilisez le deuxième bouton : <br><a href='/creer_un_compte_professionnel_1'>💼 Créer un compte pro</a>");
+                } 
+                // 2. Cas général
+                else {
+                    $bot->reply("Pour accéder à votre espace ou créer un compte, cliquez sur l'icône de profil grise à droite ou ici : <br><a href='/se_connecter'>🔑 Se connecter / S'inscrire</a>");
+                }
+            }
+        });
+        $botman->hears('.*(créer un compte|création de compte|inscrire|inscription).*', function (BotMan $bot) use ($currentUrl) {
+            // 1. Condition pour le compte Professionnel
+            if (str_contains(request()->fullUrl(), 'professionnel')) {
+                $bot->reply("Pour créer un compte professionnel, vous devez impérativement posséder un compte client standard au préalable.");
+                $bot->reply("Cette démarche s'effectue uniquement depuis la page d'accueil une fois connecté.");
+            }
+
+            // 2. Guide pour l'Etape 1/2 (Données personnelles)
+            if ($currentUrl == '/creer_un_compte_1') {
+                $bot->reply("Vous êtes à l'étape 1 sur 2 de votre inscription.");
+                $bot->reply("- Informations : Remplissez votre prénom, adresse électronique et pseudonyme.");
+                $bot->reply("- Profil : Indiquez votre date de naissance, pays, équipe favorite et langue.");
+                $bot->reply("- Suite : Cliquez sur le bouton bleu POURSUIVRE pour passer à l'étape suivante.");
+            }
+
+            // 3. Guide pour l'Etape 2/2 (Sécurité)
+            if ($currentUrl == '/creer_un_compte_2') {
+                $bot->reply("Vous êtes à l'étape 2 sur 2 : Sécurisation du compte.");
+                $bot->reply("- Mot de passe : Choisissez un mot de passe et confirmez-le dans le second champ.");
+                $bot->reply("- Légalité : Vous devez impérativement cocher la case d'acceptation des conditions d'utilisation.");
+                $bot->reply("- Finalisation : Cliquez sur le bouton bleu CRÉER LE COMPTE pour valider votre inscription.");
+            }
+
+            // 4. Cas général (si l'utilisateur n'est pas encore sur les formulaires)
+            if ($currentUrl != '/creer_un_compte_1' && $currentUrl != '/creer_un_compte_2') {
+                $bot->reply("Pour commencer votre inscription, veuillez vous rendre sur la page de création de compte :");
+                $bot->reply("👉 <a href='/creer_un_compte_1'>👤 Créer mon compte client</a>");
             }
         });
         // --- 3. AIDE ÉTENDUE (PLUS DE CONTENU COMME DEMANDÉ) ---
