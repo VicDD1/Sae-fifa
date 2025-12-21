@@ -130,11 +130,22 @@ class BotManController extends Controller
 
 
 
-        $botman->hears('.*(professionnel|faire une demande|proposer).*', function (BotMan $bot) {
+        $botman->hears('.*(professionnel|faire une demande|proposer|demande).*', function (BotMan $bot) use ($currentUrl) {
             if (Auth::check() && Auth::user()->professionnel) {
-                $bot->reply("Pour demander à ajouter un article, cliquez sur l'onglet Faire une demande de produit situé à l'extrémité droite de la barre de navigation ou ici :<br><a href='/proposer_un_produit'>💡 Faire une demande</a>");
+                // 1. Guide spécifique sur la page du formulaire
+                if ($currentUrl == '/proposer_un_produit') {
+                    $bot->reply("Vous êtes sur le formulaire de proposition de produit.");
+                    $bot->reply("- Produit : Saisissez le nom complet de l'article que vous souhaitez proposer dans le premier champ.");
+                    $bot->reply("- Description : Donnez un maximum de détails sur l'article dans le second champ pour nous aider à l'étudier.");
+                    $bot->reply("- Envoi : Cliquez sur le bouton bleu CRÉER LA PROPOSITION pour soumettre votre demande.");
+                } 
+                // 2. Cas général : l'utilisateur est ailleurs sur le site
+                else {
+                    $bot->reply("En tant que professionnel, vous pouvez proposer de nouveaux articles.");
+                    $bot->reply("Cliquez sur l'onglet faire une demande de produit à l'extrémité droite de la barre de navigation ou ici : <br><a href='/proposer_un_produit'>💡 Faire une demande</a>");
+                }
             } else {
-                $bot->reply("La proposition de produit est réservée aux comptes professionnels.");
+                $bot->reply("Désolé, la proposition de produit est une fonctionnalité réservée exclusivement aux comptes professionnels.");
             }
         });
 

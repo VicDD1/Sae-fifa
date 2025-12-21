@@ -2,115 +2,127 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title></title>
-
-    <link rel="stylesheet" href="{{ asset('css/product.css') }}">
-
-    <style>
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .product-detail { display: flex; gap: 40px; margin-top: 30px; }
-        .img-box img { width: 100%; max-width: 500px; border-radius: 10px; }
-        .info-box { flex: 1; }
-        .price { font-size: 24px; color: #b12727; font-weight: bold; margin: 20px 0; }
-        .desc { line-height: 1.6; color: white; font-size: 18px; }
-        .btn-back { display: inline-block; margin-bottom: 20px; color: black; text-decoration: underline; }
-        .choice label { display:block; margin-top:5px; }
-        .input-label-produit {             display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: black;
-            margin-bottom: 8px;}
-            .middle {
-
-  
-  font: 1.2em sans-serif;
-
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-            }
-            .custom-input {
-            width: 100%;
-            padding: 12px 0;
-            border: none;
-            border-bottom: 1px solid #d1d1d1; 
-            background-color: transparent;
-            font-size: 16px;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        .footer {
-    position: absolute;
-    bottom: 0;
-    left: 50%;            
-    transform: translateX(-50%);
-    text-align: center;
-}
-        .login-title{
-            margin-top:60%;
-            color:black;
-        }
-        .group{
-margin-top:30%;
-
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fifa - Demande Produit</title>
+    <link rel="stylesheet" href="{{ asset('css/product_demande.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body id="body">
+<body>
 
-<header>
-    <div class="logo">Suggerer un produit pour le FIFA Store</div>  
-         
-</header>
+     <header>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/produits">Fifa Store</a>
 
-<section>
-<div class="middle">
-            <div class="login-box">
-                <h2 class="login-title">demande de produit</h2>
 
-                <form method="POST" action="{{ route('registerProduct.step1.post') }}">
-    @csrf
+            <!-- CORRECTION : lien Vote propre -->
+            <a href="{{ route('vote.page') }}">Vote</a>
 
-                    <div  class="group">
-                        <label class="input-label-produit">Nom du produit proposé</label>
-                        <input type="text"  name="nom_produit_propose" class="custom-input" value="{{ old('nom_produit_propose') }}" required>
-                        
-                        @error('nom_produit_propose')
-                    <div class="error-message">{{ $message }}</div>
-                    @enderror
-                        
-                    </div>
+            <a href="/players">Les joueurs</a>
+            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+
+            @auth
+                @php
+                    $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
+                    $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
+                @endphp
+            @endauth
+
+            @guest
+                @php $totalQuantite = 0; @endphp
+            @endguest
+
+            <a href="{{ route('panier.index') }}" style="margin-left: 15px; font-weight: bold;">
+                <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
+            </a>
+
+            @auth
+                <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
                     
-                    
-                    <div class="group">
-                        <label class="input-label-produit">Description du produit</label>
-                        <input type="text" name="description_produit_propose" value="{{ old('description_produit_propose') }}" class="custom-input" required>
-                       
-                    </div>
- 
+                    <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
+                        <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
+                            {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
+                        </span>
+                    </a>
 
-                    <button type="submit" class="btn-login">créer la proposition</button>
-                </form>
+                    <form action="/logout" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" title="Se déconnecter" style="background: none; border: none; cursor: pointer; color: #ffcccc;">
+                            <i class="fa-solid fa-power-off"></i>
+                        </button>
+                    </form>
 
+                </div>
+            @endauth
+
+            @guest
+                <a href="/connexion" class="account_creation" title="Se connecter">
+                    <img src="{{ asset('assets/icone.png') }}" alt="Compte">
+                </a>
+            @endguest
+@auth
+
+            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+
+
+                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
                 
+            @endauth
+            @auth
+                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
+                    Mes commandes
+                </a>
+            @endauth
 
+            @auth
+                @if (!Auth::user()->professionnel)
+                    <a href="/creer_un_compte_professionnel_1" class="account_creation">
+                        <p>Compte professionnel</p>
+                    </a>
+                @endif
 
+                @if (Auth::user()->professionnel)
+                    <a href="/proposer_un_produit" class="account_creation">
+                        <p>faire une demande de produit</p>
+                    </a>
+                @endif
+            @endauth
+        </nav>
+        @endif
+    </header>
 
-            </div>
+    <main class="middle">
+        <div class="login-box">
+            <h2 class="login-title">demande de produit</h2>
+
+            <form method="POST" action="{{ route('registerProduct.step1.post') }}">
+                @csrf
+
+                <div class="group">
+                    <label class="input-label-produit">Nom du produit proposé</label>
+                    <input type="text" name="nom_produit_propose" class="custom-input" value="{{ old('nom_produit_propose') }}" required>
+                    @error('nom_produit_propose')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="group">
+                    <label class="input-label-produit">Description du produit</label>
+                    <input type="text" name="description_produit_propose" value="{{ old('description_produit_propose') }}" class="custom-input" required>
+                </div>
+
+                <button type="submit" class="btn-login">créer la proposition</button>
+            </form>
         </div>
-    </div>
+    </main>
 
-
-</section>
-<footer class="footer">
-                    <a href="#"> Conditions d'utilisation</a>
-                    <span>|</span>
-                    <a href="/privacy_policy"> Respect de la vie privée </a> </footer>
-
-
-
+    <footer>
+        <a href="#">Conditions d'utilisation</a>
+        <span>|</span>
+        <a href="/privacy_policy">Respect de la vie privée</a>
+    </footer>
+@include('botman')
 </body>
 </html>
