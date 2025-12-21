@@ -153,6 +153,6 @@
         });
     });
 </script>
-
+@include('botman')
 </body>
 </html>
