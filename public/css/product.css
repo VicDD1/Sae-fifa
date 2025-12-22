@@ -5,6 +5,7 @@
 
 * {
     box-sizing: border-box;
+    z-index: 999;
 }
 
 body {
@@ -26,11 +27,12 @@ header{
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 footer{
-    position: absolute;
     bottom: 20px;
     left: 30%;
     align-content: center;
     text-align: center;
+    position:fixed;
+    z-index: 0;
 }
 nav{
     display: flex;
