@@ -184,7 +184,14 @@
             <span class="total-price">{{ number_format($total, 2) }} €</span>
         </div>
     </aside>
-
+<footer>
+    <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
+        <span>|</span>
+    <a href="/privacy_policy"> Conditions d'utilisation </a>
+        <span>|</span>
+     <a href="/privacy_policy"> Respect de la vie privée </a> 
+</footer>
+ 
 </main>
 
 <script>

@@ -18,7 +18,9 @@ use App\Http\Controllers\MfaController;
 
 use App\Http\Controllers\BotManController;
 Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
-
+Route::get('/cookies', function () {
+    return view('voir_cookies');
+})->name('cookies.manage');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

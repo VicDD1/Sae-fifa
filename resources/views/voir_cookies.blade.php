@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{{ asset('css/cookies.css') }}">
 
-        <title>FIFA</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="css/players.css">
-    </head>
-        
-     <header>
+<header>
         <nav>
             <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
@@ -70,7 +58,6 @@
 
 
                 <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
-            @endif
                 
             @endauth
             @auth
@@ -93,18 +80,73 @@
                 @endif
             @endauth
         </nav>
+        @endif
     </header>
 
-           Joueur Ici
-           
-    <footer>
-    <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
-        <span>|</span>
-    <a href="/privacy_policy"> Conditions d'utilisation </a>
-        <span>|</span>
-     <a href="/privacy_policy"> Respect de la vie privée </a> 
-</footer>
-    </body>
 
-    @include('botman')
-</html>
+
+<div class="container" style="max-width: 800px; margin: 50px auto; padding: 20px; font-family: sans-serif;">
+    <h1 style="color: #0b2640;">Gestion de vos préférences cookies</h1>
+    <p style="color: #5b6e78; line-height: 1.6;">
+        Vous pouvez à tout moment modifier vos choix concernant les traceurs utilisés sur ce site. 
+        Actuellement, seuls les cookies nécessaires au fonctionnement sont actifs.
+    </p>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+    <div class="prefs" style="width: 100%; box-shadow: none; border: 1px solid #eee;">
+        <div class="prefs__body">
+            <div class="prefs__row">
+                <details class="prefs__details" open>
+                    <summary>
+                        <div>
+                            <strong>Cookies actuellement présents</strong>
+                            <div class="small">Voici la liste des cookies détectés sur votre navigateur pour ce domaine.</div>
+                        </div>
+                        <span class="badge">Analyse dynamique</span>
+                    </summary>
+                    <div class="cookie-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Expiration</th>
+                                    <th>Nature</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dynamic-cookie-list">
+                                </tbody>
+                        </table>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="prefs__footer" style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-start;">
+            <button id="resetConsentBtn" class="btn btn-primary">Réinitialiser mes choix</button>
+            <a href="/" class="btn btn-ghost-dark" style="text-decoration: none; display: flex; align-items: center;">Retour à l'accueil</a>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('js/script.js') }}"></script>
+
+<script>
+    // Petit script supplémentaire spécifique à cette page
+    document.addEventListener('DOMContentLoaded', () => {
+        // Force l'affichage de la liste au chargement
+        if (typeof updateDynamicCookieList === "function") {
+            updateDynamicCookieList();
+        }
+
+        // Bouton pour réinitialiser
+        const resetBtn = document.getElementById('resetConsentBtn');
+        if (resetBtn) {
+            resetBtn.onclick = () => {
+                localStorage.removeItem('cookieConsent');
+                alert('Vos préférences ont été réinitialisées. Le bandeau s\'affichera au prochain chargement.');
+                window.location.href = '/'; // Redirection vers l'accueil
+            };
+        }
+    });
+</script>
