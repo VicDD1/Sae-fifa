@@ -14,7 +14,7 @@ class Ligne_PanierController extends Controller
     public function index()
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
         }
 
         $panier = Panier::where('id_user_connecte', Auth::id())->first();
@@ -34,7 +34,7 @@ class Ligne_PanierController extends Controller
     public function ajouter(Request $request, $id)
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter pour ajouter un article.');
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter pour ajouter un article.');
         }
 
         $produit = Produit::findOrFail($id);

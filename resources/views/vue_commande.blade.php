@@ -97,6 +97,21 @@
     <section class="checkout-box">
         <h1 class="title">Informations de livraison</h1>
 
+        @if (session('error'))
+            <p>{{ session('error') }}</p>
+        @endif
+
+        @if ($errors->any())
+            <div>
+                <p>Erreurs :</p>
+                <ul>
+                    @foreach ($errors->all() as $message)
+                        <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{ route('commande.valider') }}" method="POST">
             @csrf
 
