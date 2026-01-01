@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fifa - Demande Produit</title>
-    <link rel="stylesheet" href="{{ asset('css/product_demande.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
+<link rel="stylesheet" href="{{ asset('css/cookies.css') }}">
 
-<body>
-
-     <header>
+<header>
         <nav>
             <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
@@ -93,36 +83,70 @@
         @endif
     </header>
 
-    <main class="middle">
-        <div class="login-box">
-            <h2 class="login-title">demande de produit</h2>
 
-            <form method="POST" action="{{ route('registerProduct.step1.post') }}">
-                @csrf
 
-                <div class="group">
-                    <label class="input-label-produit">Nom du produit proposé</label>
-                    <input type="text" name="nom_produit_propose" class="custom-input" value="{{ old('nom_produit_propose') }}" required>
-                    @error('nom_produit_propose')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                </div>
+<div class="container" style="max-width: 800px; margin: 50px auto; padding: 20px; font-family: sans-serif;">
+    <h1 style="color: #0b2640;">Gestion de vos préférences cookies</h1>
+    <p style="color: #5b6e78; line-height: 1.6;">
+        Vous pouvez à tout moment modifier vos choix concernant les traceurs utilisés sur ce site. 
+        Actuellement, seuls les cookies nécessaires au fonctionnement sont actifs.
+    </p>
 
-                <div class="group">
-                    <label class="input-label-produit">Description du produit</label>
-                    <input type="text" name="description_produit_propose" value="{{ old('description_produit_propose') }}" class="custom-input" required>
-                </div>
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
 
-                <button type="submit" class="btn-login">créer la proposition</button>
-            </form>
+    <div class="prefs" style="width: 100%; box-shadow: none; border: 1px solid #eee;">
+        <div class="prefs__body">
+            <div class="prefs__row">
+                <details class="prefs__details" open>
+                    <summary>
+                        <div>
+                            <strong>Cookies actuellement présents</strong>
+                            <div class="small">Voici la liste des cookies détectés sur votre navigateur pour ce domaine.</div>
+                        </div>
+                        <span class="badge">Analyse dynamique</span>
+                    </summary>
+                    <div class="cookie-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Expiration</th>
+                                    <th>Nature</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dynamic-cookie-list">
+                                </tbody>
+                        </table>
+                    </div>
+                </details>
+            </div>
         </div>
-    </main>
 
-    <footer>
-        <a href="#">Conditions d'utilisation</a>
-        <span>|</span>
-        <a href="/privacy_policy">Respect de la vie privée</a>
-    </footer>
-@include('botman')
-</body>
-</html>
+        <div class="prefs__footer" style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-start;">
+            <button id="resetConsentBtn" class="btn btn-primary">Réinitialiser mes choix</button>
+            <a href="/" class="btn btn-ghost-dark" style="text-decoration: none; display: flex; align-items: center;">Retour à l'accueil</a>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('js/script.js') }}"></script>
+
+<script>
+    // Petit script supplémentaire spécifique à cette page
+    document.addEventListener('DOMContentLoaded', () => {
+        // Force l'affichage de la liste au chargement
+        if (typeof updateDynamicCookieList === "function") {
+            updateDynamicCookieList();
+        }
+
+        // Bouton pour réinitialiser
+        const resetBtn = document.getElementById('resetConsentBtn');
+        if (resetBtn) {
+            resetBtn.onclick = () => {
+                localStorage.removeItem('cookieConsent');
+                alert('Vos préférences ont été réinitialisées. Le bandeau s\'affichera au prochain chargement.');
+                window.location.href = '/'; // Redirection vers l'accueil
+            };
+        }
+    });
+</script>

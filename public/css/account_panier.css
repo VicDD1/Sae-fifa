@@ -16,7 +16,13 @@ body {
     margin: 0;
     padding: 0;
 }
-
+footer{
+    position: absolute;
+    bottom: 20px;
+    left: 30%;
+    align-content: center;
+    text-align: center;
+}
 /* Header simple */
 header{
     background-color: #045694;

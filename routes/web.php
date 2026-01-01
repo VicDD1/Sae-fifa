@@ -15,8 +15,13 @@
     use App\Http\Controllers\CommandeController;
     use App\Http\Controllers\VoteController;
     use App\Http\Controllers\ResetPasswordController;
-
-
+  
+  use App\Http\Controllers\BotManController;
+  Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
+  Route::get('/cookies', function () {
+      return view('voir_cookies');
+  })->name('cookies.manage');
+  /*
     /*
     |--------------------------------------------------------------------------
     | Web Routes
@@ -215,3 +220,17 @@
     Route::get('/reset-mdp/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-mdp', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 
+// --- Routes pour la Double Authentification (MFA) ---
+
+// 1. Pour activer l'option depuis le profil (il faut être connecté)
+Route::post('/profil/activer-mfa', [MfaController::class, 'enableMfa'])
+    ->name('mfa.enable')
+    ->middleware('auth');
+
+// 2. Pour afficher la page "Entrez le code" (lors de la connexion)
+Route::get('/login/mfa', [MfaController::class, 'showMfaForm'])
+    ->name('mfa.form');
+
+// 3. Pour valider le code et se connecter
+Route::post('/login/mfa', [MfaController::class, 'verifyMfa'])
+    ->name('mfa.verify');

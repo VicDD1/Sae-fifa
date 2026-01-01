@@ -14,12 +14,14 @@
         
      <header>
         <nav>
-            <a href="/">Acceuil</a>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
+            <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
 
             @auth
@@ -41,8 +43,7 @@
                 <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
                     
                     <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
-                
-    <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
+                        <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
                             {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
                         </span>
                     </a>
@@ -94,7 +95,16 @@
         </nav>
     </header>
 
-           Joueur Ici 
+           Joueur Ici
+           
+    <footer>
+    <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
+        <span>|</span>
+    <a href="/privacy_policy"> Conditions d'utilisation </a>
+        <span>|</span>
+     <a href="/privacy_policy"> Respect de la vie privée </a> 
+</footer>
     </body>
 
+    @include('botman')
 </html>
