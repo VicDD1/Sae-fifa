@@ -3,7 +3,6 @@
     use Illuminate\Support\Facades\Route;
 
     // Controllers
-    use App\Http\Controllers\BotManController;
     use App\Http\Controllers\ProductController;
     use App\Http\Controllers\NationController;
     use App\Http\Controllers\PanierController;

@@ -231,6 +231,35 @@
                 @endif
 
             </div>
+  <div class="history-sidebar">
+    <h2>Vus récemment</h2>
+
+    <div class="history-list">
+        @forelse($recentProducts as $recent)
+            <div class="history-item">
+                <a href="{{ route('product.detail', $recent->id_produit) }}" class="history-link">
+                    
+                    <img src="../assets/photo_produit/{{ $recent->id_produit }}.webp"
+                         alt="{{ $recent->label_produit }}"
+                         class="history-img">
+                    <div class="history-body">     
+                        <h4 class="history-label">
+                            {{ $recent->label_produit }}
+                        </h4>
+    
+                        <div class="history-price">
+                            {{ number_format($recent->prix_base, 2) }} €
+                        </div>
+                    </div>
+                </a>
+            </div>
+        @empty
+            <p class="history-empty">
+                Aucun article consulté pour le moment.
+            </p>
+        @endforelse
+    </div>
+</div>
         </main>
         <footer>
     <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
