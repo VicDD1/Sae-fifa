@@ -16,15 +16,52 @@ use App\Models\Acheteur;
 use App\Models\Carte_Bancaire;
 use App\Models\Mode_livraison;
 
+
 class CommandeController extends Controller
 {
+    /**
+     * GET /confirmation_commande
+     * Permet de ré-afficher la page de confirmation après un redirect back (erreurs validation),
+     * uniquement si les données checkout existent en session.
+     */
+    public function confirmationPage()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
+        }
+
+        $data = session('checkout.data');
+        $modeId = session('checkout.mode_id');
+
+        if (!$data || !$modeId) {
+            return redirect()->route('commande.page');
+        }
+
+        $panier = Panier::where('id_user_connecte', Auth::id())->first();
+        if (!$panier || $panier->lignes->count() === 0) {
+            return redirect('/panier')->with('error', 'Votre panier est vide.');
+        }
+
+        $lignes = $panier->lignes;
+        $total  = $lignes->sum(fn($l) => $l->quantitee * $l->produit->prix_base);
+        $mode   = Mode_livraison::findOrFail($modeId);
+        $cartes = Carte_Bancaire::where('id_user_connecte', Auth::id())->get();
+
+        return view('confirmation_commande', [
+            'lignes' => $lignes,
+            'total'  => $total + $mode->prix_mode_livraison,
+            'data'   => $data,
+            'mode'   => $mode,
+            'cartes' => $cartes,
+        ]);
+    }
     /**
      * Étape 1 : Affichage de la page commande
      */
     public function afficher()
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
         }
 
         $panier = Panier::where('id_user_connecte', Auth::id())->first();
@@ -48,10 +85,10 @@ class CommandeController extends Controller
     public function valider(Request $request)
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
         }
 
-        $request->validate([
+        $rules = [
             'nom'       => 'required|string|max:255',
             'adresse'   => 'required|string|max:255',
             'ville'     => 'required|string|max:255',
@@ -59,21 +96,42 @@ class CommandeController extends Controller
             'telephone' => 'required|string|max:20',
             'paiement'  => 'required|string',
             'mode_livraison' => 'required|integer|exists:mode_livraison,id_mode_livraison',
-        ]);
+        ];
+
+        if ($request->carte_existante === 'nouvelle') {
+            $rules['card_name']   = 'required|string|max:255';
+            $rules['card_number'] = 'required|string|max:16';
+            $rules['expiry']      = 'required|string|max:5';
+            $rules['cvv']         = 'required|string|max:3';
+        }
+
+        $request->validate($rules);
+
+
+        
 
         $panier = Panier::where('id_user_connecte', Auth::id())->firstOrFail();
         $lignes = $panier->lignes;
         $total  = $lignes->sum(fn($l) => $l->quantitee * $l->produit->prix_base);
+        $cartes = Carte_Bancaire::where('id_user_connecte', Auth::id())->get();
 
-        $mode = Mode_livraison::find($request->mode_livraison);
+        $mode = Mode_livraison::findOrFail($request->mode_livraison);
+
+        // Stocke les infos checkout en session pour permettre un GET /confirmation_commande
+        // (utile quand `confirmation()` renvoie un redirect back après validation).
+        session([
+            'checkout.data' => $request->all(),
+            'checkout.mode_id' => $mode->id_mode_livraison,
+        ]);
 
         return view('confirmation_commande', [
             'lignes' => $lignes,
             'total'  => $total + $mode->prix_mode_livraison,
             'data'   => $request->all(),
-            'mode'   => $mode
-,
+            'mode'   => $mode,
+            'cartes' => $cartes,
         ]);
+
     }
 
 
@@ -83,10 +141,10 @@ class CommandeController extends Controller
     public function confirmation(Request $request)
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
         }
 
-        $request->validate([
+        $rules = [
             'nom'       => 'required|string|max:255',
             'adresse'   => 'required|string|max:255',
             'ville'     => 'required|string|max:255',
@@ -95,11 +153,22 @@ class CommandeController extends Controller
             'paiement'  => 'required|string',
             'mode_livraison' => 'required|integer|exists:mode_livraison,id_mode_livraison',
 
-            'card_name'   => 'required|string|max:255',
-            'card_number' => 'required|string|max:16',
-            'expiry'      => 'required|string|max:5',
-            'cvv'         => 'required|string|max:3',
-        ]);
+            // peut être 'nouvelle' ou un id de carte
+            'carte_existante' => 'nullable',
+        ];
+
+        $useExistingCard = $request->filled('carte_existante') && $request->carte_existante !== 'nouvelle';
+
+        if ($useExistingCard) {
+            $rules['carte_existante'] = 'required|integer|exists:carte_bancaire,id_carte';
+        } else {
+            $rules['card_name']   = 'required|string|max:255';
+            $rules['card_number'] = 'required|string|max:16';
+            $rules['expiry']      = 'required|string|max:5';
+            $rules['cvv']         = 'required|string|max:3';
+        }
+
+        $request->validate($rules);
 
         $panier = Panier::where('id_user_connecte', Auth::id())->firstOrFail();
         $lignes = $panier->lignes;
@@ -127,15 +196,25 @@ class CommandeController extends Controller
             'ville_adresse' => $request->ville,
         ]);
 
-        $pan = preg_replace('/\D+/', '', $request->card_number); // 16 digits
-        $last4 = substr($pan, -4);
-        
-        $carte = Carte_Bancaire::create([
-            'id_user_connecte' => Auth::id(),
-            'numero_carte'     => Crypt::encryptString($pan),
-            'date_expiration'  => Crypt::encryptString($request->expiry), // optionnel
-            'nom_titulaire'    => $request->card_name,
-        ]);
+        // ---- Carte bancaire ----
+        if ($useExistingCard) {
+            $carte = Carte_Bancaire::where('id_carte', $request->carte_existante)
+                ->where('id_user_connecte', Auth::id())
+                ->first();
+
+            if (!$carte) {
+                return redirect()->back()->with('error', 'Carte bancaire invalide.');
+            }
+        } else {
+            $pan = preg_replace('/\D+/', '', $request->card_number);
+
+            $carte = Carte_Bancaire::create([
+                'id_user_connecte' => Auth::id(),
+                'numero_carte'     => Crypt::encryptString($pan),
+                'date_expiration'  => Crypt::encryptString($request->expiry),
+                'nom_titulaire'    => $request->card_name,
+            ]);
+        }
 
 
         // ---- Commande ----
@@ -170,7 +249,7 @@ class CommandeController extends Controller
     public function liste()
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
         }
 
         $commandes = Commande::where('id_user_connecte', Auth::id())
@@ -182,7 +261,7 @@ class CommandeController extends Controller
     public function succes()
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')->with('error', 'Veuillez vous connecter.');
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
         }
 
         return view('succes_commande');
