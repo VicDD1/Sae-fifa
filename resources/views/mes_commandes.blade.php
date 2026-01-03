@@ -10,18 +10,17 @@
 <body>
 
 <div class="commande-container">
-<header>
-           
-    <nav>
-            <a href="/" class="home-link">
-                <i class="fa-solid fa-house"></i> Accueil
-            </a>
+ <header>
+        <nav>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
-            <a href="/vote">Vote</a>
+
+
+            <!-- CORRECTION : lien Vote propre -->
+            <a href="{{ route('vote.page') }}">Vote</a>
+
             <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
-            
-
 
             @auth
                 @php
@@ -39,14 +38,13 @@
             </a>
 
             @auth
-
                 <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
                     
-                <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
-                    <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
-                        {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
-                    </span>
-                </a>
+                    <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
+                        <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
+                            {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
+                        </span>
+                    </a>
 
                     <form action="/logout" method="POST" style="display:inline;">
                         @csrf
@@ -54,19 +52,20 @@
                             <i class="fa-solid fa-power-off"></i>
                         </button>
                     </form>
+
                 </div>
             @endauth
 
             @guest
                 <a href="/connexion" class="account_creation" title="Se connecter">
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
-            </a>
+                </a>
             @endguest
-            @auth
+@auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
                 <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-            @endif
+
 
                 <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
                 
@@ -77,7 +76,21 @@
                 </a>
             @endauth
 
+            @auth
+                @if (!Auth::user()->professionnel)
+                    <a href="/creer_un_compte_professionnel_1" class="account_creation">
+                        <p>Compte professionnel</p>
+                    </a>
+                @endif
+
+                @if (Auth::user()->professionnel)
+                    <a href="/proposer_un_produit" class="account_creation">
+                        <p>faire une demande de produit</p>
+                    </a>
+                @endif
+            @endauth
         </nav>
+         @endif
     </header>
     @if($commandes->isEmpty())
         <p class="commande-empty">Vous n'avez encore passé aucune commande.</p>
@@ -140,6 +153,6 @@
         });
     });
 </script>
-
+@include('botman')
 </body>
 </html>

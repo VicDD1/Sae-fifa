@@ -112,10 +112,21 @@ class ProductController extends Controller
 
         $products = $query->get();
 
-        return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories'));
+
+        $historyIds = session()->get('recent_products', []);
+        $recentProducts = !empty($historyIds) 
+        ? Produit::whereIn('id_produit', $historyIds)->get() 
+        : collect();
+
+
+        return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories','recentProducts'));
     }
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
+        $history = session()->get('recent_products', []);
+        if (($key = array_search($id, $history)) !== false) unset($history[$key]);
+            array_unshift($history, $id);
+        session()->put('recent_products', array_slice($history, 0, 10));
         // Charger le produit demandé
         $product = Produit::with(['couleurs', 'tailles'])->findOrFail($id);
         //stocks

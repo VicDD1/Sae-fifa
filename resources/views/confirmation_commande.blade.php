@@ -99,6 +99,21 @@
                 Veuillez renseigner vos informations bancaires pour finaliser l’achat.
             </p>
 
+            @if (session('error'))
+                <p>{{ session('error') }}</p>
+            @endif
+
+            @if ($errors->any())
+                <div>
+                    <p>Erreurs :</p>
+                    <ul>
+                        @foreach ($errors->all() as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
         <!-- INFORMATIONS CLIENT -->
         <div class="section-title">Informations de livraison</div>
         <div class="info-box">
@@ -150,7 +165,7 @@
             @endforeach
         </ul>
 
-        <form action="{{ route('commande.succes') }}" method="GET" class="payment-form">
+        <form action="{{ route('commande.succes') }}" method="POST" class="payment-form">
             @csrf
             <input type="hidden" name="nom" value="{{ $data['nom'] }}">
             <input type="hidden" name="adresse" value="{{ $data['adresse'] }}">
@@ -159,9 +174,34 @@
             <input type="hidden" name="telephone" value="{{ $data['telephone'] }}">
             <input type="hidden" name="paiement" value="{{ $data['paiement'] }}">
             <input type="hidden" name="mode_livraison" value="{{ $mode->id_mode_livraison }}">
+            @if(isset($cartes) && $cartes->count() > 0)
+                <div class="section-title">Carte enregistrée</div>
+
+                <div class="info-box">
+                    @foreach($cartes as $index => $carte)
+                        <label style="display:block; margin-bottom:8px;">
+                            <input
+                                type="radio"
+                                name="carte_existante"
+                                value="{{ $carte->id_carte }}"
+                                data-nom="{{ $carte->nom_titulaire }}"
+                                data-expiry="{{ Crypt::decryptString($carte->date_expiration) }}"
+                            >
+                            Carte {{ $index + 1 }} — {{ $carte->nom_titulaire }}
+                            (expire {{ Crypt::decryptString($carte->date_expiration) }})
+                        </label>
+                    @endforeach
+
+                    <label style="display:block; margin-top:10px;">
+                        <input type="radio" name="carte_existante" value="nouvelle" checked>
+                        Utiliser une nouvelle carte
+                    </label>
+                </div>
+            @endif
+
 
             <label>Titulaire de la carte</label>
-            <input type="text" name="card_name"
+            <input type="text" name="card_name" id="card_name"
                 required
                 minlength="2"
                 maxlength="60"
@@ -169,8 +209,7 @@
                 title="Nom invalide. Caractères autorisés : lettres, espaces, tirets.">
 
             <label>Numéro de carte bancaire</label>
-            <input type="text" name="card_number"
-                required
+            <input type="text" name="card_number" id="card_number"
                 pattern="^[0-9]{16}$"
                 maxlength="16"
                 inputmode="numeric"
@@ -179,8 +218,7 @@
             <div class="row">
                 <div class="col">
                     <label>Date d’expiration</label>
-                    <input type="text" name="expiry"
-                        required
+                    <input type="text" name="expiry" id="expiry"
                         pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$"
                         maxlength="5"
                         placeholder="MM/AA"
@@ -189,20 +227,66 @@
 
                 <div class="col">
                     <label>CVV</label>
-                    <input type="text" name="cvv"
-                        required
+                    <input type="text" name="cvv" id="cvv"
                         pattern="^[0-9]{3}$"
                         maxlength="3"
                         title="Le code CVV doit contenir 3 chiffres.">
                 </div>
+                <input type="hidden" name="card_number" id="card_number_hidden">
+                <input type="hidden" name="cvv" id="cvv_hidden">
+
 
 
             <button type="submit" class="btn-pay">Confirmer et payer</button>
         </form>
 
-            <a href="{{ url('/produits') }}" class="return">Retour à la boutique</a>
         </div>
     </div>
 
+
+<script>
+document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+        const isNouvelle = this.value === 'nouvelle';
+
+        const nameInput   = document.getElementById('card_name');
+        const numberInput = document.getElementById('card_number');
+        const expiryInput = document.getElementById('expiry');
+        const cvvInput    = document.getElementById('cvv');
+
+        if (!isNouvelle) {
+            numberInput.value = '';
+            cvvInput.value = '';
+
+            numberInput.readOnly = true;
+            cvvInput.readOnly = true;
+            numberInput.disabled = false;
+            cvvInput.disabled = false;
+
+            numberInput.placeholder = "**** **** **** ****";
+            cvvInput.placeholder = "***";
+            } 
+            else {
+            numberInput.readOnly = false;
+            cvvInput.readOnly = false;
+            numberInput.disabled = false;
+            cvvInput.disabled = false;
+
+            numberInput.placeholder = "";
+            cvvInput.placeholder = "";
+        }
+
+    });
+});
+</script>
+
+    <footer>
+    <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
+        <span>|</span>
+    <a href="/privacy_policy"> Conditions d'utilisation </a>
+        <span>|</span>
+     <a href="/privacy_policy"> Respect de la vie privée </a> 
+</footer>
+    @include('botman')
 </body>
 </html>
