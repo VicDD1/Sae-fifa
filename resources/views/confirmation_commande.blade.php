@@ -240,7 +240,6 @@
             <button type="submit" class="btn-pay">Confirmer et payer</button>
         </form>
 
-            <a href="{{ url('/produits') }}" class="return">Retour à la boutique</a>
         </div>
     </div>
 
@@ -290,5 +289,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+    <footer>
+    <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
+        <span>|</span>
+    <a href="/privacy_policy"> Conditions d'utilisation </a>
+        <span>|</span>
+     <a href="/privacy_policy"> Respect de la vie privée </a> 
+</footer>
+    @include('botman')
 </body>
 </html>

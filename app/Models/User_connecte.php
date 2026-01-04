@@ -25,6 +25,10 @@ class User_connecte extends Authenticatable
         'favori_user_connecte',
         'langue_user_connecte',
         'password_user_connecte',
+        'numero_telephone_user_connecte',
+        'mfa_active',
+        'mfa_code',
+        'mfa_expiration'
     ];
     public function getAuthPassword()
     {

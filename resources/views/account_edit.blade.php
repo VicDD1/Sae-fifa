@@ -9,7 +9,88 @@
     <link rel="stylesheet" href="{{ asset('css/account_creation.css') }}">
 </head>
 <body>
+ <header>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/produits">Fifa Store</a>
 
+
+            <!-- CORRECTION : lien Vote propre -->
+            <a href="{{ route('vote.page') }}">Vote</a>
+
+            <a href="/players">Les joueurs</a>
+            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+
+            @auth
+                @php
+                    $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
+                    $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
+                @endphp
+            @endauth
+
+            @guest
+                @php $totalQuantite = 0; @endphp
+            @endguest
+
+            <a href="{{ route('panier.index') }}" style="margin-left: 15px; font-weight: bold;">
+                <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
+            </a>
+
+            @auth
+                <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
+                    
+                    <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
+                        <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
+                            {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
+                        </span>
+                    </a>
+
+                    <form action="/logout" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" title="Se déconnecter" style="background: none; border: none; cursor: pointer; color: #ffcccc;">
+                            <i class="fa-solid fa-power-off"></i>
+                        </button>
+                    </form>
+
+                </div>
+            @endauth
+
+            @guest
+                <a href="/connexion" class="account_creation" title="Se connecter">
+                    <img src="{{ asset('assets/icone.png') }}" alt="Compte">
+                </a>
+            @endguest
+@auth
+
+            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+
+
+                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
+                
+            @endauth
+            @auth
+                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
+                    Mes commandes
+                </a>
+            @endauth
+
+            @auth
+                @if (!Auth::user()->professionnel)
+                    <a href="/creer_un_compte_professionnel_1" class="account_creation">
+                        <p>Compte professionnel</p>
+                    </a>
+                @endif
+
+                @if (Auth::user()->professionnel)
+                    <a href="/proposer_un_produit" class="account_creation">
+                        <p>faire une demande de produit</p>
+                    </a>
+                @endif
+            @endauth
+        </nav>
+        @endif
+    </header>
     <div class="container">
         <div class="left-panel">
             <div class="fifa-logo">FIFA ID</div>
@@ -18,9 +99,7 @@
                 <p>Mettez à jour vos informations. Si vous changez votre email, vous devrez l'utiliser pour votre prochaine connexion.</p>
             </div>
             <div style="margin-top: auto;">
-                <a href="/parametre_compte" style="color: white; text-decoration: none; font-weight: bold;">
-                    <i class="fa-solid fa-xmark"></i> Annuler et Retourner au profil
-                </a>
+
             </div>
         </div>
 
@@ -135,9 +214,46 @@
                     </button>
 
                 </form>
+                <div style="border-top: 2px solid #f3f4f6; padding-top: 25px;">
+                    <h2 class="login-title" style="font-size: 1.2rem; margin-bottom: 15px;">Sécurité (Double Authentification)</h2>
+
+                    @if($user->mfa_active)
+                        {{-- SI ACTIVÉ : Affiche un message vert --}}
+                        <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 8px;">
+                            <p style="color: #065f46; font-weight: bold; margin-bottom: 5px;">
+                                <i class="fa-solid fa-shield-halved"></i> Protection activée
+                            </p>
+                            <p style="color: #047857; font-size: 13px;">
+                                Numéro associé : <strong>{{ $user->numero_telephone_user_connecte }}</strong>
+                            </p>
+                        </div>
+                    @else
+                        {{-- SI DÉSACTIVÉ : Affiche le formulaire pour activer --}}
+                        <p style="font-size: 13px; color: #666; margin-bottom: 15px;">
+                            Sécurisez votre compte avec un code SMS à chaque connexion.
+                        </p>
+                        
+                        <form action="{{ route('mfa.enable') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label class="input-label">Numéro de téléphone mobile</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" name="numero_telephone_user_connecte" class="custom-input" placeholder="0612345678" style="margin-bottom: 0;" required>
+                                    
+                                    <button type="submit" class="btn-login" style="width: auto; padding: 0 20px; background-color: #3b82f6; color: white; margin-top: 0;">
+                                        ACTIVER
+                                    </button>
+                                </div>
+                                @error('numero_telephone_user_connecte')
+                                    <div class="error-message" style="margin-top: 5px;">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
-
+    @include('botman')
 </body>
 </html>
