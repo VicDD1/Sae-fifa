@@ -276,8 +276,12 @@ h1 {
 }
 /* Conteneur principal de l'historique */
 .history-sidebar {
-    width: 100%;
+    width: 200px;
     margin-bottom: 30px;
+    position: fixed;
+    top: 10%;
+    left: 50px;
+    z-index: 0;
 }
 
 .history-sidebar h2 {

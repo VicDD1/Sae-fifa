@@ -114,9 +114,20 @@ class ProductController extends Controller
 
 
         $historyIds = session()->get('recent_products', []);
-        $recentProducts = !empty($historyIds) 
-        ? Produit::whereIn('id_produit', $historyIds)->get() 
-        : collect();
+        $recentProducts = collect();
+            
+        if (!empty($historyIds)) {
+            // On construit la chaîne CASE WHEN pour PostgreSQL
+            $orderByCase = 'CASE ';
+            foreach ($historyIds as $index => $id) {
+                $orderByCase .= "WHEN id_produit = " . (int)$id . " THEN " . $index . " ";
+            }
+            $orderByCase .= 'END';
+        
+            $recentProducts = Produit::whereIn('id_produit', $historyIds)
+                ->orderByRaw($orderByCase)
+                ->get();
+        }
 
 
         return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories','recentProducts'));
