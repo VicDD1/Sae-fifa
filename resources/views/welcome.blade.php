@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>FIFA</title>
@@ -15,18 +16,12 @@
 </head>
 
 <body class="antialiased">
-    
-    <script>
-        var botmanWidget = {
-            aboutText: '',
-            introMessage: "Bienvenue chez FIFA. En quoi puis-je vous aider"
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js"></script>
 
     <header>
         <nav>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
@@ -81,6 +76,8 @@
 
                 
             @endif
+
+                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
                 
             @endauth
             @auth
@@ -118,61 +115,16 @@
     <a href="/produits_en_cours"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> voir les produits en cours de creation</div></a>
     @endif
     @endauth
-
-
-    <!-- BANNIÈRE COOKIES + MODAL (inchangé) -->
-    <div id="cookieBanner" class="cookie-banner" role="region" aria-label="Bannière cookies">
-        <div class="cookie-banner__logo">BF</div>
-
-        <div class="cookie-banner__text">
-        <strong>Nous utilisons des cookies</strong><br>
-        Nous et nos partenaires utilisons des traceurs pour personnaliser le contenu, mesurer les performances et vous proposer des publicités personnalisées.
-        <a id="openPrefsLink" class="cookie-banner__link" href="#" role="button">Gérer mes préférences</a>
-        </div>
-
-        <div class="cookie-banner__actions">
-        <button id="rejectAllBtn" class="btn btn-ghost">Refuser</button>
-        <button id="acceptAllBtn" class="btn btn-primary">Accepter</button>
-        </div>
-    </div>
-
-    <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="prefs">
-        <h2>Préférences des cookies</h2>
-        <p>Choisissez les types de cookies que vous acceptez. Vous pouvez modifier ce choix à tout moment.</p>
-
-        <div class="prefs__row">
-            <div class="prefs__desc">
-            <strong>Cookies nécessaires</strong>
-            <div class="small">Indispensables au fonctionnement du site.</div>
-            </div>
-            <div class="prefs__toggle small">Toujours activés</div>
-        </div>
-
-        <div class="prefs__row">
-            <div class="prefs__desc">
-            <strong>Statistiques</strong>
-            <div class="small">Permettent d'améliorer l'expérience utilisateur.</div>
-            </div>
-            <button class="toggle" data-key="analytics"><span class="knob"></span></button>
-        </div>
-
-        <div class="prefs__row">
-            <div class="prefs__desc">
-            <strong>Marketing</strong>
-            <div class="small">Publicités personnalisées.</div>
-            </div>
-            <button class="toggle" data-key="marketing"><span class="knob"></span></button>
-        </div>
-
-        <div class="prefs__footer">
-            <button id="savePrefsBtn" class="btn btn-primary">Enregistrer</button>
-            <button id="closePrefsBtn" class="btn btn-ghost">Annuler</button>
-        </div>
-        </div>
-    </div>
-
-    <script src="{{ asset('js/script.js') }}"></script>
-
+    @include('cookies')
+<footer>
+    <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
+        <span>|</span>
+    <a href="/privacy_policy"> Conditions d'utilisation </a>
+        <span>|</span>
+     <a href="/privacy_policy"> Respect de la vie privée </a> 
+</footer>
+ 
+    
+    @include('botman')
 </body>
 </html>

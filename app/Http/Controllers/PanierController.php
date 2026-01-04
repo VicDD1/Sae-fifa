@@ -15,7 +15,7 @@ class PanierController extends Controller
     public function index()
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')
+              return redirect()->route('login')
                 ->with('error', 'Veuillez vous connecter pour accéder à votre panier.');
         }
 
@@ -41,7 +41,7 @@ class PanierController extends Controller
     public function ajouter(Request $request, $id_produit)
     {
         if (!Auth::check()) {
-            return redirect('/se_connecter')
+              return redirect()->route('login')
                 ->with('error', 'Vous devez être connecté pour ajouter un article au panier.');
         }
 

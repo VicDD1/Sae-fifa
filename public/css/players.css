@@ -1,3 +1,4 @@
+
 body{
     background-color: #eef2fb;
     margin: 0;
@@ -21,7 +22,13 @@ nav{
     padding: 0 30px;
     gap: 20px;
 }
-
+footer{
+    position: absolute;
+    bottom: 20px;
+    left: 30%;
+    align-content: center;
+    text-align: center;
+}
 nav a{
     color: #eef2fb;
     text-decoration: none;
@@ -92,3 +99,4 @@ nav a[style*="font-weight: bold;"] {
 .btn-primary:hover{
     background: #0088cc;
 }
+
