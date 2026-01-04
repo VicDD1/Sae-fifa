@@ -5,6 +5,55 @@
     <title>Créer un nouveau produit | FIFA Store</title>
     <link rel="stylesheet" href="{{ asset('css/product.css') }}">
     <style>
+        .dropdown-checkbox {
+    position: relative;
+    width: 260px;
+}
+
+.dropdown-btn {
+    width: 100%;
+    padding: 8px 12px;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.dropdown-content {
+    display: none;              /* 🔴 hidden by default */
+    position: absolute;         /* 🔴 floats over page */
+    top: 100%;                  /* just under button */
+    left: 0;
+    width: 100%;
+    background: #111;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 1000;              /* 🔴 on top of everything */
+}
+
+.dropdown-content label {
+    display: block;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.dropdown-content input {
+    margin-right: 6px;
+}
+
+/* when opened */
+.dropdown-content.open {
+    display: block;
+}
+
+        body {
+            background-color:black ;
+        }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; }
@@ -50,38 +99,127 @@
 
         <div class="form-group">
             <label for="image">Image du produit</label>
-            <input type="file" name="image" id="image" accept="image/*" required>
+            <input type="file" name="image" id="image" accept="image/*" >
             @error('image') <span style="color:red;">{{ $message }}</span> @enderror
         </div>
 
-        <!-- Couleurs dynamiques -->
-        <div class="form-group">
-            <label>Couleurs</label>
-            <div id="colors-container">
-                <div class="dynamic-fields">
-                    <input type="text" name="couleurs[]" placeholder="Ex: Rouge">
-                </div>
-            </div>
-            <button type="button" class="add-btn" onclick="addColor()">Ajouter une couleur</button>
-            @error('couleurs.*') <span style="color:red;">{{ $message }}</span> @enderror
-        </div>
 
-        <!-- Tailles dynamiques -->
-        <div class="form-group">
-            <label>Tailles</label>
-            <div id="sizes-container">
-                <div class="dynamic-fields">
-                    <input type="text" name="tailles[]" placeholder="Ex: M">
-                </div>
-            </div>
-            <button type="button" class="add-btn" onclick="addSize()">Ajouter une taille</button>
-            @error('tailles.*') <span style="color:red;">{{ $message }}</span> @enderror
+<div class="form-group">
+    <label for="id_nation">Nation</label>
+    <select name="id_nation" id="id_nation" required>
+        <option value="">-- Choisir une nation --</option>
+        @foreach($nations as $nation)
+            <option 
+                value="{{ $nation->id_nation }}"
+                {{ old('id_nation') == $nation->id_nation ? 'selected' : '' }}
+            >
+                {{ $nation->nom_nation }}
+            </option>
+        @endforeach
+    </select>
+    @error('id_nation')
+        <span style="color:red;">{{ $message }}</span>
+    @enderror
+</div>
+<div class="form-group">
+    <label for="id_categorie">Catégorie</label>
+    <select name="id_categorie" id="id_categorie" required>
+        <option value="">-- Choisir une catégorie --</option>
+        @foreach($categories as $categorie)
+            <option 
+                value="{{ $categorie->id_categorie }}"
+                {{ old('id_categorie') == $categorie->id_categorie ? 'selected' : '' }}
+            >
+                {{ $categorie->label_categorie }}
+            </option>
+        @endforeach
+    </select>
+    @error('id_categorie')
+        <span style="color:red;">{{ $message }}</span>
+    @enderror
+</div>
+<div class="form-group">
+    <label>Couleurs</label>
+
+    <div class="dropdown-checkbox">
+        <button type="button" class="dropdown-btn" onclick="toggleDropdown('colors-dropdown')">
+            Choisir des couleurs
+        </button>
+
+        <div id="colors-dropdown" class="dropdown-content">
+            @foreach($couleurs as $couleur)
+                <label>
+                    <input 
+                        type="checkbox"
+                        name="couleurs[]"
+                        value="{{ $couleur->id_colori }}"
+                        {{ is_array(old('couleurs')) && in_array($couleur->id_colori, old('couleurs')) ? 'checked' : '' }}
+                    >
+                    {{ $couleur->label_colori }}
+                </label>
+            @endforeach
         </div>
+    </div>
+
+    @error('couleurs') <span class="error">{{ $message }}</span> @enderror
+</div>
+<div class="form-group">
+    <label>Tailles</label>
+
+    <div class="dropdown-checkbox">
+        <button type="button" class="dropdown-btn" onclick="toggleDropdown('sizes-dropdown')">
+            Choisir des tailles
+        </button>
+
+        <div id="sizes-dropdown" class="dropdown-content">
+            @foreach($tailles as $taille)
+                <label>
+                    <input 
+                        type="checkbox"
+                        name="tailles[]"
+                        value="{{ $taille->id_taille }}"
+                        {{ is_array(old('tailles')) && in_array($taille->id_taille, old('tailles')) ? 'checked' : '' }}
+                    >
+                    {{ $taille->label_taille }}
+                </label>
+            @endforeach
+        </div>
+    </div>
+
+    @error('tailles') <span class="error">{{ $message }}</span> @enderror
+</div>
+
+
+
+
 
         <button type="submit">Créer le produit</button>
     </form>
 </div>
 
+<script>
+function toggleDropdown(id) {
+    document.getElementById(id).classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+    document.querySelectorAll('.dropdown-content').forEach(drop => {
+        if (!drop.parentElement.contains(e.target)) {
+            drop.classList.remove('open');
+        }
+    });
+});
+
+document.querySelectorAll('.dropdown-content').forEach(drop => {
+    drop.classList.add('dropdown-hidden');
+});
+</script>
+
+<style>
+.dropdown-content.open {
+    display: block;
+}
+</style>
 <script>
     function addColor() {
         const container = document.getElementById('colors-container');

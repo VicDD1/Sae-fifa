@@ -102,7 +102,7 @@
     <div class="product-detail">
 
         <div class="img-box">
-            <img src="../assets/photo_produit/{{$product->id_produit}}.webp" alt="Image produit">
+        <img src="{{ asset($product->photo->code_photo ?? 'assets/photo_produit/33.webp') }}">
         </div>
 
         <div class="info-box">
@@ -214,7 +214,7 @@
                 <a href="{{ route('product.detail', $sim->id_produit) }}"
                    style="text-decoration:none; color:inherit;">
 
-                    <img src="../assets/photo_produit/{{ $sim->id_produit }}.webp"
+                   <img src="{{ asset($product->photo->code_photo ?? 'assets/photo_produit/33.webp') }}"
                          alt="{{ $sim->label_produit }}"
                          style="width:100%; height:200px; object-fit:cover; border-radius:6px;">
 

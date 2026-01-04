@@ -206,7 +206,7 @@
                         <article class="card">
                             
                             <a href="{{ route('product.detail', $product->id_produit) }}" class="card-img">
-                                <img src="assets/photo_produit/{{$product->id_produit}}.webp" alt="{{ $product->label_produit }}">
+                            <img src="{{ asset($product->photo->code_photo ?? 'assets/photo_produit/33.webp') }}">
                             </a>
 
                             <div class="card-body">

@@ -3,76 +3,108 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Produit as Product; // Assure-toi que ton modèle s'appelle Product
-use App\Models\Color;
-use App\Models\Size;
+use App\Models\Produit;
+use App\Models\Colori;
+use App\Models\Taille;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Photo;
+use App\Models\Nation;
+use App\Models\Categorie_Produit;
+use App\Models\Variante_produit;
+use App\Models\Sous_categorie_produit;
 class MakeProductController extends Controller
 {
-    // Affiche le formulaire de création
-    public function create()
-    {
-        return view('product_creation'); // nom de la vue que tu as créée
+
+public function create()
+{
+    $couleurs = Colori::orderBy('label_colori')->get();   
+    $tailles = Taille::orderBy('label_taille')->get();     
+    $nations = Nation::orderBy('nom_nation')->get();       
+    $categories = Categorie_Produit::whereNull('sous_categorie')
+        ->orderBy('label_categorie')->get();              
+
+
+    return view('product_creation', compact('couleurs', 'tailles', 'nations',    'categories'));
+}
+
+
+public function store(Request $request)
+{
+    // Validate input
+    $request->validate([
+        'label_produit' => 'required|string|max:255',
+        'prix_base' => 'required|numeric|min:0',
+        'description_produit' => 'nullable|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        'id_nation' => 'required|exists:nation,id_nation',
+        'id_categorie' => 'required|exists:categorie_produit,id_categorie',
+        'couleurs' => 'required|array',
+        'couleurs.*' => 'exists:colori,id_colori',
+        'tailles' => 'required|array',
+        'tailles.*' => 'exists:taille,id_taille',
+    ], ['image.max' => "La taille de l'image ne peut pas dépasser 2048px"]);
+
+    // Create the product
+    $product = Produit::create([
+        'label_produit' => $request->label_produit,
+        'prix_base' => $request->prix_base,
+        'description_produit' => $request->description_produit,
+        'id_nation' => $request->id_nation,
+        'id_categorie' => $request->id_categorie,
+    ]);
+
+    // Handle image upload or default
+    $dest = public_path('assets/photo_produit');
+    if (!is_dir($dest)) mkdir($dest, 0755, true);
+
+    if ($request->hasFile('image')) {
+        $newName = $product->id_produit . '.webp';
+        $request->file('image')->move($dest, $newName);
+        $photoPath = 'assets/photo_produit/' . $newName;
+    } else {
+        
+        $photoPath = 'assets/photo_produit/33.webp'; 
+
+    $product->photo()->create([
+        
+        'code_photo' => $photoPath
+    ]);
+
+    $color_ids = $request->input('couleurs', []);
+    $size_ids  = $request->input('tailles', []);
+    
+    // If sent as ["1,3,4"] → explode
+    if (count($color_ids) === 1 && str_contains($color_ids[0], ',')) {
+        $color_ids = explode(',', $color_ids[0]);
+    }
+    
+    if (count($size_ids) === 1 && str_contains($size_ids[0], ',')) {
+        $size_ids = explode(',', $size_ids[0]);
+    }
+    
+    // Clean + normalize
+    $color_ids = array_values(array_unique(array_map('intval', $color_ids)));
+    $size_ids  = array_values(array_unique(array_map('intval', $size_ids)));
+    
+    // Insert variants safely
+    foreach ($color_ids as $color_id) {
+        foreach ($size_ids as $size_id) {
+            Variante_produit::firstOrCreate(
+                [
+                    'id_produit' => $product->id_produit,
+                    'id_colori'  => $color_id,  
+                    'id_taille'  => $size_id,
+                ],
+                ['quantitee_stock' => 0]
+            );
+        }
     }
 
-    // Traite le formulaire de création
-    public function store(Request $request)
-    {
-        $request->validate([
-            'label_produit' => 'required|string|max:255',
-            'prix_base' => 'required|numeric|min:0',
-            'description_produit' => 'nullable|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'couleurs' => 'nullable|array',
-            'couleurs.*' => 'nullable|string|max:50',
-            'tailles' => 'nullable|array',
-            'tailles.*' => 'nullable|string|max:50',
-        ]);
-    
-        // 1) créer le produit d'abord (image null temporairement)
-        $product = Product::create([
-            'label_produit' => $request->label_produit,
-            'prix_base' => $request->prix_base,
-            'description_produit' => $request->description_produit,
-            'image' => null,
-        ]);
-    
-        // 2) gérer le fichier image — on le nomme {id}.webp et on le place dans public/assets/photo_produit
-        if ($request->hasFile('image')) {
-            // s'assurer que le dossier existe
-            $dest = public_path('assets/photo_produit');
-            if (! is_dir($dest)) {
-                mkdir($dest, 0755, true);
-            }
-    
-            $newName = $product->id_produit . '.webp';
-    
-            // déplacer le fichier uploadé
-            $request->file('image')->move($dest, $newName);
-    
-            // sauvegarder le chemin relatif en BDD (optionnel)
-            $product->image = 'assets/photo_produit/' . $newName;
-            $product->save();
-        }
-    
-        // 3) couleurs — supprimer les valeurs vides avant création
-        if ($request->filled('couleurs')) {
-            $colors = array_filter($request->input('couleurs', []), fn($c) => ! is_null($c) && trim($c) !== '');
-            foreach ($colors as $color) {
-                $product->couleurs()->create(['label_colori' => $color]);
-            }
-        }
-    
-        // 4) tailles — idem
-        if ($request->filled('tailles')) {
-            $sizes = array_filter($request->input('tailles', []), fn($s) => ! is_null($s) && trim($s) !== '');
-            foreach ($sizes as $size) {
-                $product->tailles()->create(['label_taille' => $size]);
-            }
-        }
-    
-        return redirect()->route('make_product.create')
-                         ->with('success', 'Produit créé avec succès !');
-    }
+    return redirect()->route('product.index')->with('success', 'Produit créé avec succès !');
+}
+
+
+ 
+
+}
 }

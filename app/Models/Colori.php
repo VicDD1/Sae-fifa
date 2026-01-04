@@ -16,4 +16,8 @@ class Colori extends Model
 
         'label_colori',
     ];
+public function produits()
+{
+    return $this->belongsToMany(Produit::class, 'variante_produit', 'id_colori', 'id_produit');
+}
 }

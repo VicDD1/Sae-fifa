@@ -10,7 +10,7 @@ class Variante_produit extends Model
     use HasFactory;
 
     protected $table = 'variante_produit';
-    protected $primaryKey = 'id_variante_produit';
+    protected $primaryKey = 'id_variante';
     public $timestamps = false;
 
     protected $fillable = [
@@ -31,8 +31,8 @@ class Variante_produit extends Model
         return $this->belongsTo(Taille::class, 'id_taille');
     }
 
-    public function coloris()
-    {
-        return $this->belongsTo(Coloris::class, 'id_colori');
-    }
+public function colori()
+{
+    return $this->belongsTo(\App\Models\Colori::class, 'id_colori', 'id_colori');
+}
 }

@@ -15,7 +15,7 @@ use App\Http\Controllers\ProduitProposeController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\MakeProductController;
 use App\Http\Controllers\VoteController;
-
+use App\Http\Controllers\SalesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +41,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
+Route::get('/localisation_des_ventes', [SalesController::class, 'localisation']);
+
+
 Route::view('/parametre_compte', 'account_modification');
 Route::view('/se_connecter', 'account_connection');
 Route::view('/privacy_policy', 'privacy_policy');
@@ -58,26 +62,23 @@ Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 Route::get('/produits', [ProductController::class, 'index']);
 Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
-/* ------------------------------
-   Authentification — Inscription
------------------------------- */
-// Particulier
-Route::get('/creer_un_produit', function () {
-    return view('product_creation');
-});
-/*
-|--------------------------------------------------------------------------
-| PRODUITS
-|--------------------------------------------------------------------------
-*/
-// Afficher le formulaire de création de produit
-Route::get('/produit/creer', [MakeProductController::class, 'create'])
+
+
+
+
+
+
+
+Route::get('/creer_un_produit', [MakeProductController::class, 'create'])
     ->name('make_product.create');
 
 // Traiter le formulaire (sauvegarde en base)
-Route::post('/produit/creer', [MakeProductController::class, 'store'])
+Route::post('/creer_un_produit', [MakeProductController::class, 'store'])
     ->name('make_product.store');
-Route::get('/produits', [ProductController::class, 'index']);
+
+
+
+Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
 Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')
 ->name('product.detail');

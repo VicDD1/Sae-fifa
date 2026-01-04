@@ -6,19 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Adresse extends Model
 {
-    protected $table = 'adresse';               // nom EXACT de la table
-    protected $primaryKey = 'id_adresse';       // clé primaire
-    public $timestamps = false;                 // pas de created_at / updated_at
+    protected $table = 'adresse';
+    protected $primaryKey = 'id_adresse';
+    public $timestamps = false;
 
     protected $fillable = [
         'pays_adresse',
         'code_postal',
         'ville_adresse',
+        'latitude',
+        'longitude',
     ];
 
     // Relation vers commande
     public function commandes()
     {
         return $this->hasMany(Commande::class, 'id_adresse', 'id_adresse');
+    }
+
+    // Adresse complète pour géocodage
+    public function getFullAddressAttribute()
+    {
+        return "{$this->code_postal} {$this->ville_adresse}, {$this->pays_adresse}";
     }
 }

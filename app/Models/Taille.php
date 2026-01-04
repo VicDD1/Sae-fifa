@@ -11,4 +11,13 @@ class Taille extends Model
     protected $table = 'taille';
     protected $primaryKey = 'id_taille';
     public $timestamps = false; 
+    protected $fillable = [
+
+
+        'label_taille',
+    ];
+public function produits()
+{
+    return $this->belongsToMany(Produit::class, 'variante_produit', 'id_taille', 'id_produit');
+}
 }
