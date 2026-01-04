@@ -77,7 +77,6 @@
                 
             @endif
 
-                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
                 
             @endauth
             @auth
@@ -93,7 +92,7 @@
                     </a>
                 @endif
 
-                @if (Auth::user()->professionnel   &&(Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) )
+                @if (Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11)
                     <a href="/proposer_un_produit" class="account_creation">
                         <p>faire une demande de produit</p>
                     </a>
