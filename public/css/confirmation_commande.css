@@ -196,13 +196,21 @@ ul li {
     border: 1px solid #ccc;
     border-radius: 8px;
     margin-bottom: 20px;
-    display: inline;
+    display: block;
     font-size: 15px;
 }
 
 .row {
     display: grid;
     gap: 15px;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+}
+
+/* Keep non-field elements aligned in the grid */
+.row > input[type="hidden"],
+.row > .btn-pay {
+    grid-column: 1 / -1;
 }
 
 .col {
@@ -225,4 +233,10 @@ ul li {
 
 .btn-pay:hover {
     background: #1f5ec1;
+}
+
+@media (max-width: 640px) {
+    .row {
+        grid-template-columns: 1fr;
+    }
 }
