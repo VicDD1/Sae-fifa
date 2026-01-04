@@ -255,6 +255,9 @@ document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
         const cvvInput    = document.getElementById('cvv');
 
         if (!isNouvelle) {
+            if (nameInput) {
+                nameInput.value = this.dataset.nom || '';
+            }
             numberInput.value = '';
             cvvInput.value = '';
 
@@ -277,6 +280,12 @@ document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
         }
 
     });
+});
+
+// Apply initial state on page load (useful after validation errors)
+document.addEventListener('DOMContentLoaded', () => {
+    const selected = document.querySelector('input[name="carte_existante"]:checked');
+    if (selected) selected.dispatchEvent(new Event('change'));
 });
 </script>
 

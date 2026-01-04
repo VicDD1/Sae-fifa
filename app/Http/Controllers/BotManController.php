@@ -27,7 +27,7 @@ class BotManController extends Controller
 
         // --- MOTEUR DE RECHERCHE PRODUITS ---
 
-        $botman->hears('.*(acheter|chercher|trouver|vouloir|besoin|aimerais) (.*)', function (BotMan $bot, $action, $phraseSaisie) use ($currentUrl){
+        $botman->hears('.*(cherche|acheter|chercher|trouver|vouloir|besoin|aimerais) (.*)', function (BotMan $bot, $action, $phraseSaisie) use ($currentUrl){
             if ($currentUrl == '/produits'){
                 $phraseSaisie = mb_strtolower(trim($phraseSaisie));
                 $separateurs = [' pour ', ' car ', ' afin ', ' parce ', ' quand '];
@@ -48,9 +48,9 @@ class BotManController extends Controller
                 $bot->reply("1. Dans la barre de recherche en haut, tapez simplement : " . $produitNettoye . ".");
                 $bot->reply("2. Cliquez directement sur l'image ou le nom de l'article pour accéder à sa fiche.");
                 if (Auth::check()) {
-                    $bot->reply("4. Sur la fiche produit, choisissez votre taille et votre couleur, puis cliquez sur Ajouter au panier.");
+                    $bot->reply("3. Sur la fiche produit, choisissez votre taille et votre couleur, puis cliquez sur Ajouter au panier.");
                 } else {
-                    $bot->reply("4. Attention : Vous devez être connecté pour ajouter au panier. Une fois connecté, vous pourrez choisir la taille et la couleur.");
+                    $bot->reply("3. Attention : Vous devez être connecté pour ajouter au panier. Une fois connecté, vous pourrez choisir la taille et la couleur.");
                     $bot->reply("👉 <a href='/se_connecter'>🔑 Se connecter ici</a>");
                 }
             }
@@ -82,7 +82,7 @@ class BotManController extends Controller
 
         // --- TUNNEL DE COMMANDE ET PAIEMENT ---
 
-        $botman->hears('.*(commande|achat|mes commandes).*', function (BotMan $bot) use ($currentUrl) {
+        $botman->hears('.*(passe|passer|commande|achat|mes commandes).*', function (BotMan $bot) use ($currentUrl) {
             if (Auth::check()) {
                 if ($currentUrl == '/commande') {
                     $bot->reply("Vous êtes sur la première étape de votre commande.");
@@ -101,6 +101,10 @@ class BotManController extends Controller
                     $bot->reply("- Icônes : Le symbole + devient - une fois la commande dépliée.");
                     $bot->reply("- Infos disponibles : Pour chaque achat, vous retrouvez le montant total, le mode de paiement et le statut (Payé ou en attente).");
                 }
+                elseif($currentUrl=='/panier'){
+                    $bot->reply("- Etape suivante : Pour payer, cliquez sur le bouton jaune PASSER LA COMMANDE ou sur ce lien : <br><a href='/commande'>💳 Passer a la commande</a>.");
+                }
+
                 else {
                     $bot->reply("Pour voir vos commande, veuillez soit cliquer sur le bouton bleu Mes commandes à droite de votre nom ou cliquer sur ce lien :<br><a href='/mes_commandes'>📦 Mes commandes</a>");
                 }

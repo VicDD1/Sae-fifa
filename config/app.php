@@ -168,8 +168,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Gemini\Laravel\ServiceProvider::class,
-    ])->toArray(),
+    ])->merge(class_exists(\Gemini\Laravel\ServiceProvider::class)
+        ? [\Gemini\Laravel\ServiceProvider::class]
+        : []
+    )->toArray(),
 
     /*
     |--------------------------------------------------------------------------
@@ -182,8 +184,9 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
-        'Gemini' => Gemini\Laravel\Facades\Gemini::class,
-    ])->toArray(),
+    'aliases' => Facade::defaultAliases()->merge(
+        class_exists(\Gemini\Laravel\Facades\Gemini::class)
+            ? ['Gemini' => \Gemini\Laravel\Facades\Gemini::class]
+            : []
+    )->toArray(),
 ];
