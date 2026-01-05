@@ -14,12 +14,9 @@ class Produit extends Model
     public $timestamps = false;
     public $incrementing = true;
     protected $keyType = 'int';
-    public function variantes()
-    {
-        return $this->hasMany(Variante_produit::class, 'id_produit', 'id_produit');
-    }
 
-protected $fillable = [
+    // --- AJOUTE CECI ---
+    protected $fillable = [
     'id_competition',
     'id_nation',
     'id_categorie',
@@ -27,6 +24,14 @@ protected $fillable = [
     'label_produit',
     'prix_base',
 ];
+    // -------------------
+
+    public function variantes()
+    {
+        return $this->hasMany(Variante_produit::class, 'id_produit', 'id_produit');
+    }
+
+
     public function photo()
     {
         return $this->hasOne(Photo::class, 'id_produit', 'id_produit');

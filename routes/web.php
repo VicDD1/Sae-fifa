@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Controllers
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Categorie_ProduitControler;
 use App\Http\Controllers\NationController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -72,7 +73,8 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product
 
 
 
-
+Route::get('/creer_categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');
+Route::post('/categorie_store', [Categorie_ProduitControler::class, 'store'])->name('categorie.store');
 
 Route::get('/creer_un_produit', [MakeProductController::class, 'create'])
     ->name('make_product.create');
@@ -87,6 +89,10 @@ Route::get('/produits', [ProductController::class, 'index'])->name('product.inde
 Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')
 ->name('product.detail');
+
+Route::get('/produits/creer', [ProductController::class, 'create'])->name('products.create');
+Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
+Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
 
 /* ------------------------------
    Authentification — Inscription
