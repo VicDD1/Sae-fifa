@@ -18,6 +18,7 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
+use App\Http\Controllers\MfaController;
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');

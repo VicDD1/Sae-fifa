@@ -47,8 +47,12 @@ class LoginController extends Controller
                     'mfa_expiration' => Carbon::now()->addMinutes(10)
                 ]);
 
-                // C. SIMULATION SMS : On écrit dans les logs
-                Log::info("🔐 SMS MFA pour {$user->courriel_user_connecte} : CODE = {$code}");
+                // C. SIMULATION SMS REALISTE 📱
+                // On récupère le numéro de téléphone pour prouver qu'on l'a bien trouvé
+                $numero = $user->numero_telephone_user_connecte;
+                
+                // On écrit dans le fichier log comme si on était l'opérateur
+                Log::info("🚀 [SIMULATION SMS] Envoi au numéro {$numero} : Votre code FIFA ID est {$code}");
 
                 // D. Mettre l'ID en session "d'attente"
                 session(['mfa_user_id' => $user->id_user_connecte]);

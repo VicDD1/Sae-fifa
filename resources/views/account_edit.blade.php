@@ -238,7 +238,7 @@
                             <div class="form-group">
                                 <label class="input-label">Numéro de téléphone mobile</label>
                                 <div style="display: flex; gap: 10px;">
-                                    <input type="text" name="numero_telephone_user_connecte" class="custom-input" placeholder="0612345678" style="margin-bottom: 0;" required>
+                                    <input type="text" name="numero_telephone_user_connecte" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="custom-input" placeholder="0612345678" style="margin-bottom: 0;" required>
                                     
                                     <button type="submit" class="btn-login" style="width: auto; padding: 0 20px; background-color: #3b82f6; color: white; margin-top: 0;">
                                         ACTIVER
@@ -254,6 +254,6 @@
             </div>
         </div>
     </div>
-    @include('botman')
+    
 </body>
 </html>

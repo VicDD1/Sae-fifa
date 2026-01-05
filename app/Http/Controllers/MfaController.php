@@ -12,22 +12,29 @@ class MfaController extends Controller
 {
     // 1. Activer le MFA (Quand l'utilisateur est connecté sur son profil)
     public function enableMfa(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        // Validation du numéro (10 à 15 chiffres)
-        $request->validate([
-            'numero_telephone_user_connecte' => 'required|numeric|digits_between:10,15'
-        ]);
+    // 1. On nettoie l'entrée (on enlève les espaces, tirets, etc.)
+    $inputClean = preg_replace('/[^0-9]/', '', $request->numero_telephone_user_connecte);
+    
+    // Si c'était un +33..., on remplace par 0 pour la vérification ou on garde tel quel
+    // Pour simplifier, on injecte le numéro nettoyé dans la requête pour la validation
+    $request->merge(['numero_telephone_user_connecte' => $inputClean]);
 
-        // Mise à jour : On active le booléen (true)
-        $user->update([
-            'numero_telephone_user_connecte' => $request->numero_telephone_user_connecte,
-            'mfa_active' => true 
-        ]);
+    // 2. Validation
+    $request->validate([
+        'numero_telephone_user_connecte' => 'required|numeric|digits_between:10,15'
+    ]);
 
-        return back()->with('success', 'Sécurité activée ! Vous recevrez un code par SMS à la prochaine connexion.');
-    }
+    // 3. Mise à jour
+    $user->update([
+        'numero_telephone_user_connecte' => $request->numero_telephone_user_connecte,
+        'mfa_active' => true 
+    ]);
+
+    return back()->with('success', 'Sécurité activée ! Vous recevrez un code par SMS à la prochaine connexion.');
+}
 
     // 2. Afficher la page "Entrez le code" (Quand on essaie de se connecter)
     public function showMfaForm()
