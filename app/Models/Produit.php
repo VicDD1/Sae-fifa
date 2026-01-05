@@ -30,20 +30,36 @@ class Produit extends Model
         return $this->hasMany(Variante_produit::class, 'id_produit', 'id_produit');
     }
 
-    public function couleurs()
+protected $fillable = [
+    'id_competition',
+    'id_nation',
+    'id_categorie',
+    'description_produit',
+    'label_produit',
+    'prix_base',
+];
+    public function photo()
     {
-        return $this->belongsToMany(Colori::class, 'variante_produit', 'id_produit', 'id_colori')
-                    ->distinct();
+        return $this->hasOne(Photo::class, 'id_produit', 'id_produit');
     }
 
+    public function couleurs()
+    {
+        return $this->belongsToMany(
+            Colori::class,
+            'variante_produit',
+            'id_produit',
+            'id_colori'
+        )->distinct();
+    }
+    
     public function tailles()
     {
-        return $this->belongsToMany(Taille::class, 'variante_produit', 'id_produit', 'id_taille')
-                    ->distinct();
+        return $this->belongsToMany(
+            Taille::class,
+            'variante_produit',
+            'id_produit',
+            'id_taille'
+        )->distinct();
     }
-public function photo()
-{
-    // hasOne = a UN seul
-    return $this->hasOne(Photo::class, 'id_produit', 'id_produit');
-}
 }

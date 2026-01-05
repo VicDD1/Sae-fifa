@@ -1,94 +1,74 @@
 const STORAGE_KEY = "cookieConsent";
-const defaultPrefs = {
-  necessary: true,
-  analytics: false,
-  marketing: false,
-  timestamp: null
-};
 
-function getPrefs(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  return raw ? JSON.parse(raw) : null;
+/**
+ * Analyse les cookies réels du navigateur
+ */
+function updateDynamicCookieList() {
+    const tbody = document.getElementById('dynamic-cookie-list');
+    if (!tbody) return;
+
+    const cookies = document.cookie.split(';');
+    tbody.innerHTML = '';
+
+    if (cookies[0].trim() === "") {
+        tbody.innerHTML = '<tr><td colspan="3">Aucun cookie détecté.</td></tr>';
+        return;
+    }
+
+    cookies.forEach(cookie => {
+        const [name] = cookie.split('=');
+        const row = document.createElement('tr');
+        
+        let usage = "Cookie technique";
+        if (name.includes('_ga')) usage = "Statistiques (Google)";
+        if (name.includes('_fbp')) usage = "Marketing (Facebook)";
+        if (name.includes('XSRF')) usage = "Sécurité (Protection)";
+
+        row.innerHTML = `
+            <td><strong>${name.trim()}</strong></td>
+            <td>Session</td>
+            <td>${usage}</td>
+        `;
+        tbody.appendChild(row);
+    });
 }
 
-function savePrefs(p){
-  p.timestamp = new Date().toISOString();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+/* --- Fonctions de gestion du bandeau --- */
+function confirmConsent() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        accepted: true,
+        date: new Date().toISOString()
+    }));
+    document.getElementById("cookieBanner").style.display = "none";
+    document.getElementById("overlay").classList.remove("open");
 }
 
-/* --- Sélection des éléments --- */
-const banner = document.getElementById("cookieBanner");
-const overlay = document.getElementById("overlay");
-const openPrefsLink = document.getElementById("openPrefsLink");
-const acceptAllBtn = document.getElementById("acceptAllBtn");
-const rejectAllBtn = document.getElementById("rejectAllBtn");
-const savePrefsBtn = document.getElementById("savePrefsBtn");
-const closePrefsBtn = document.getElementById("closePrefsBtn");
-const toggles = document.querySelectorAll(".toggle");
+/* --- Initialisation et Événements --- */
+// On utilise DOMContentLoaded pour que ça s'exécute le plus vite possible
+document.addEventListener("DOMContentLoaded", () => {
+    const banner = document.getElementById("cookieBanner");
+    const overlay = document.getElementById("overlay");
 
-/* --- Affichage / Masquage --- */
-function hideBanner(){ banner.style.display = "none"; }
-function showBanner(){ banner.style.display = "flex"; }
+    // MODIFICATION ICI : On vérifie TOUT DE SUITE si on doit cacher le bandeau
+    if (localStorage.getItem(STORAGE_KEY)) {
+        if (banner) banner.style.display = "none";
+    } else {
+        if (banner) banner.style.display = "block";
+    }
 
-function setToggle(btn, state){
-  btn.classList.toggle("on", state);
-  btn.setAttribute("aria-pressed", state);
-}
+    // Gestion des clics (avec sécurité si les boutons n'existent pas sur toutes les pages)
+    document.getElementById("openPrefsLink").onclick = (e) => {
+        e.preventDefault();
+        updateDynamicCookieList();
+        overlay.classList.add("open");
+    };
 
-/* --- Ouvrir / Fermer les préférences --- */
-openPrefsLink.addEventListener("click", e => {
-  e.preventDefault();
-  overlay.classList.add("open");
+    document.getElementById("savePrefsBtn").onclick = () => confirmConsent();
+    document.getElementById("acceptAllBtn").onclick = () => confirmConsent();
+    document.getElementById("rejectAllBtn").onclick = () => confirmConsent();
+    
+    // Bouton annuler de la modal
+    document.getElementById("closePrefsBtn").onclick = () => {
+        overlay.classList.remove("open");
+    };
 });
-
-closePrefsBtn.addEventListener("click", ()=> {
-  overlay.classList.remove("open");
-});
-
-/* --- Gestion des toggles --- */
-toggles.forEach(t => {
-  t.addEventListener("click", () => {
-    const current = t.classList.contains("on");
-    setToggle(t, !current);
-  });
-});
-
-/* --- ACTIONS PRINCIPALES --- */
-acceptAllBtn.addEventListener("click", () => {
-  const prefs = { ...defaultPrefs, analytics:true, marketing:true };
-  savePrefs(prefs);
-  hideBanner();
-});
-
-rejectAllBtn.addEventListener("click", () => {
-  const prefs = { ...defaultPrefs };
-  savePrefs(prefs);
-  hideBanner();
-});
-
-savePrefsBtn.addEventListener("click", () => {
-  const prefs = { ...defaultPrefs };
-  toggles.forEach(t => {
-    prefs[t.dataset.key] = t.classList.contains("on");
-  });
-  savePrefs(prefs);
-  overlay.classList.remove("open");
-  hideBanner();
-});
-
-/* --- INIT: Vérifier si l'utilisateur a déjà choisi --- */
-(function init(){
-  const prefs = getPrefs();
-  if(!prefs){
-    showBanner();
-  } else {
-    hideBanner();
-  }
-
-  // Mettre à jour les toggles si des prefs existent
-  const p = prefs || defaultPrefs;
-  toggles.forEach(t => {
-    const key = t.dataset.key;
-    setToggle(t, p[key]);
-  });
-})();

@@ -11,7 +11,9 @@
 
         <header>
         <nav>
-            <a href="/">Acceuil</a>
+            <a href="/">Accueil</a>
+            <a href="/produits">Fifa Store</a>
+
 
             <a href="{{ route('vote.page') }}">Vote</a>
 
@@ -88,6 +90,7 @@
             @endauth
         </nav>
     </header>
+
 
         @if(session('success'))
             <div style="background-color: #d4edda; color: #155724; padding: 15px; text-align: center; margin: 20px auto; max-width: 800px; border-radius: 5px;">
@@ -243,9 +246,43 @@
             <a href="{{ url()->current() }}" style="color: blue; text-decoration: underline;">Voir tout le catalogue</a>
         </div>
     @endif
+    </div>
+ <div class="history-sidebar">
+    <h2>Vus récemment</h2>
+    <div class="history-list">
+        @forelse($recentProducts as $recent)
+            <div class="history-item">
+                <a href="{{ route('product.detail', $recent->id_produit) }}" class="history-link">
+                    
+                    <img src="../assets/photo_produit/{{ $recent->id_produit }}.webp"
+                         alt="{{ $recent->label_produit }}"
+                         class="history-img">
+                    <div class="history-body">     
+                        <h4 class="history-label">
+                            {{ $recent->label_produit }}
+                        </h4>
+    
+                        <div class="history-price">
+                            {{ number_format($recent->prix_base, 2) }} €
+                        </div>
+                    </div>
+                </a>
+            </div>
+        @empty
+            <p class="history-empty">
+                Aucun article consulté pour le moment.
+            </p>
+        @endforelse
+    </div>
 </div>
-
         </main>
-
+        <footer>
+    <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
+        <span>|</span>
+    <a href="/privacy_policy"> Conditions d'utilisation </a>
+        <span>|</span>
+     <a href="/privacy_policy"> Respect de la vie privée </a> 
+</footer>
+        @include('botman')
     </body>
 </html>

@@ -13,7 +13,7 @@
     <div>
       <h1>Politique de confidentialité</h1>
       <div class="lead">Cette politique explique comment nous collectons, utilisons, partageons et protégeons vos données personnelles.</div>
-      <div class="meta">Dernière mise à jour : <strong>March 2025</strong> &nbsp;•&nbsp; Contact : <a href="mailto:dataprotection@fifa.org">dataprotection@fifa.org</a></div>
+      <div class="meta">Dernière mise à jour : <strong>March 2025</strong> &nbsp;</div>
     </div>
   </header>
 
@@ -34,10 +34,9 @@
       <li><a href="#s11">11. Enfants et mineurs</a></li>
       <li><a href="#s12">12. Modifications de cette politique</a></li>
       <li><a href="#s13">13. Cookies</a></li>
-      <li><a href="#s14">14. Contact</a></li>
-      <li><a href="#s15">15. Réclamations et autorités de contrôle</a></li>
-      <li><a href="#s16">16. Liens vers d'autres sites</a></li>
-      <li><a href="#s17">17. Définitions</a></li>
+      <li><a href="#s14">14. Réclamations et autorités de contrôle</a></li>
+      <li><a href="#s15">15. Liens vers d'autres sites</a></li>
+      <li><a href="#s16">16. Définitions</a></li>
     </ol>
   </nav>
 
@@ -65,7 +64,6 @@
       <div class="section-body">
         <h2>Vos droits</h2>
         <p>Selon votre juridiction, vous pouvez exercer des droits tels que : accès, rectification, suppression, limitation, opposition, portabilité et retrait du consentement.</p>
-        <p class="subnote">Pour exercer vos droits, contactez notre Délégué à la protection des données à <a href="mailto:dataprotection@fifa.org">dataprotection@fifa.org</a>.</p>
       </div>
     </section>
 
@@ -153,36 +151,29 @@
       <div class="section-body">
         <h2>Cookies</h2>
         <p>Nous utilisons des cookies et technologies similaires pour assurer le fonctionnement du site, mesurer l’audience, personnaliser le contenu et afficher des publicités pertinentes.</p>
-        <p><a class="btn" href="#">Paramètres des cookies</a></p>
+        <p><a class="btn" href="/cookies">Paramètres des cookies</a></p>
       </div>
     </section>
+
 
     <section id="s14" class="section">
       <div class="section-number">14.</div>
-      <div class="section-body">
-        <h2>Contact</h2>
-        <p>Pour toute question relative à cette politique ou pour exercer vos droits, contactez-nous à : <a href="mailto:dataprotection@fifa.org">dataprotection@fifa.org</a>.</p>
-      </div>
-    </section>
-
-    <section id="s15" class="section">
-      <div class="section-number">15.</div>
       <div class="section-body">
         <h2>Réclamations et autorités de contrôle</h2>
         <p>Si vous n’êtes pas satisfait de la réponse, vous pouvez déposer une réclamation auprès de l’autorité de protection des données compétente dans votre pays.</p>
       </div>
     </section>
 
-    <section id="s16" class="section">
-      <div class="section-number">16.</div>
+    <section id="s15" class="section">
+      <div class="section-number">15.</div>
       <div class="section-body">
         <h2>Liens vers d'autres sites</h2>
         <p>Notre site peut contenir des liens vers des sites tiers. Nous ne sommes pas responsables des pratiques de confidentialité de ces sites. Consultez leur politique de confidentialité pour plus d’informations.</p>
       </div>
     </section>
 
-    <section id="s17" class="section">
-      <div class="section-number">17.</div>
+    <section id="s16" class="section">
+      <div class="section-number">16.</div>
       <div class="section-body">
         <h2>Définitions</h2>
         <p>Quelques définitions utiles : "Données personnelles" signifie toute information se rapportant à une personne physique identifiée ou identifiable.</p>
@@ -190,10 +181,6 @@
     </section>
 
   </main>
-
-  <footer>
-    <p class="small">Dernière mise à jour : <strong>March 2025</strong>. Pour toute question : <a href="mailto:dataprotection@fifa.org">dataprotection@fifa.org</a>.</p>
-  </footer>
 
 </div>
 
