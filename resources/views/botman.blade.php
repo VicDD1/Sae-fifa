@@ -19,7 +19,7 @@
                 current_url: window.location.pathname 
             },
         
-            introMessage: "Bonjour ! Je suis l'assistant Fifa. Tapez aide pour voir ce que je peux faire sur cette page.",
+            introMessage: "Bonjour ! Je suis l'assistant Fifa. Comment puis-je vous aider aujourd'hui ?",
             placeholderText: 'Posez votre question...',
             displayMessageTime: true,
         };
