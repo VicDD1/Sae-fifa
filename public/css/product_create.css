@@ -1,0 +1,135 @@
+/* =========================================
+   STYLE GLOBAL
+   ========================================= */
+body {
+    background-color: #f4f6f9; /* Un gris très clair, reposant pour les yeux */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    padding-bottom: 50px; /* Espace en bas de page */
+}
+
+/* =========================================
+   LA CARTE (CONTENEUR PRINCIPAL)
+   ========================================= */
+.card {
+    border: none; /* On enlève la bordure grise par défaut */
+    border-radius: 15px; /* Coins bien arrondis */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Ombre douce portée */
+    overflow: hidden; /* Pour que le header ne dépasse pas des coins arrondis */
+}
+
+.card-header {
+    background: linear-gradient(135deg, #0d6efd 0%, #0043a8 100%); /* Dégradé bleu moderne */
+    padding: 1.5rem;
+    border-bottom: none;
+}
+
+.card-header h2 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================
+   FORMULAIRE & CHAMPS
+   ========================================= */
+/* Titres des sections (Infos générales / Stock) */
+h5.text-primary {
+    color: #0d6efd !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #eef2f7;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Labels au dessus des champs */
+.form-label {
+    font-weight: 500;
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+}
+
+/* Les champs de saisie (Inputs, Selects, Textarea) */
+.form-control, 
+.form-select {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 10px 15px; /* Plus d'espace à l'intérieur pour le confort */
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* Effet quand on clique dans un champ */
+.form-control:focus, 
+.form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1); /* Halo bleu léger */
+    background-color: #fff;
+}
+
+/* Zone de texte description */
+textarea.form-control {
+    resize: vertical; /* L'utilisateur peut agrandir en hauteur seulement */
+    min-height: 100px;
+}
+
+/* Petit texte d'aide sous les champs */
+.text-muted {
+    font-size: 0.8rem;
+    color: #888 !important;
+    margin-top: 4px;
+    display: block;
+}
+
+/* =========================================
+   BOUTONS
+   ========================================= */
+.btn-lg {
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-outline-secondary {
+    border-color: #ccc;
+    color: #666;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f1f1f1;
+    color: #333;
+    border-color: #bbb;
+}
+
+/* =========================================
+   RESPONSIVE (MOBILE)
+   ========================================= */
+/* Sur les petits écrans (tablettes et mobiles) */
+@media (max-width: 768px) {
+    /* On enlève la bordure droite qui sépare les colonnes */
+    .border-end {
+        border-right: none !important;
+        border-bottom: 1px solid #dee2e6; /* On la remplace par une bordure en bas */
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    /* Les boutons prennent toute la largeur sur mobile */
+    .d-flex.justify-content-between {
+        flex-direction: column-reverse;
+        gap: 15px;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
