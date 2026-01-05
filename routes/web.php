@@ -73,7 +73,8 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product
 
 
 
-
+Route::get('/creer_categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');
+Route::post('/categorie_store', [Categorie_ProduitControler::class, 'store'])->name('categorie.store');
 
 Route::get('/creer_un_produit', [MakeProductController::class, 'create'])
     ->name('make_product.create');
