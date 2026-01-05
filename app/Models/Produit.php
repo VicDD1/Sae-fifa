@@ -14,6 +14,17 @@ class Produit extends Model
     public $timestamps = false;
     public $incrementing = true;
     protected $keyType = 'int';
+
+    // --- AJOUTE CECI ---
+    protected $fillable = [
+        'label_produit',       // Important : C'est le nom de ta colonne
+        'prix_base',
+        'description_produit',
+        'id_categorie',
+        'id_nation'
+    ];
+    // -------------------
+
     public function variantes()
     {
         return $this->hasMany(Variante_produit::class, 'id_produit', 'id_produit');
