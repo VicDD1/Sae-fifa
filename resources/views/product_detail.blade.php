@@ -3,20 +3,19 @@
 <head>
     <meta charset="utf-8">
     <title>{{ $product->label_produit }} - FIFA Store</title>
-
     <link rel="stylesheet" href="{{ asset('css/product_detail.css') }}">
-
 </head>
 
 <body>
 
 <header>
         <nav>
-            <a href="/">Aceuil</a>
+            <a href="/">Accueil</a>
+            <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
-
             <a href="/players">Les joueurs</a>
             <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
 
@@ -37,20 +36,17 @@
 
             @auth
                 <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
-                    
                     <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
                         <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
                             {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
                         </span>
                     </a>
-
                     <form action="/logout" method="POST" style="display:inline;">
                         @csrf
                         <button type="submit" title="Se déconnecter" style="background: none; border: none; cursor: pointer; color: #ffcccc;">
                             <i class="fa-solid fa-power-off"></i>
                         </button>
                     </form>
-
                 </div>
             @endauth
 
@@ -59,20 +55,16 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
-@auth
-
-            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-
-
-                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
-            @endif
-                
-            @endauth
+            
             @auth
-                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
-                    Mes commandes
-                </a>
+                @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+                    <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+                    <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
+                @endif
+            @endauth
+            
+            @auth
+                <a href="{{ route('commande.liste') }}" class="btn btn-primary">Mes commandes</a>
             @endauth
 
             @auth
@@ -91,9 +83,10 @@
         </nav>
     </header>
 
+
 <div class="container">
 
-    <a href="javascript:history.back()" class="btn-back">
+    <a href="/produits" class="btn-back">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
         </svg>
@@ -102,9 +95,12 @@
     <div class="product-detail">
 
         <div class="img-box">
-            <img src="../assets/photo_produit/{{$product->id_produit}}.webp" alt="Image produit">
+            @if($product->photo)
+                <img src="{{ asset($product->photo->code_photo) }}" alt="{{ $product->label_produit }}">
+            @else
+                <img src="https://via.placeholder.com/400x400?text=Pas+d'image" alt="Image indisponible">
+            @endif
         </div>
-
         <div class="info-box">
 
             <h1>{{ $product->label_produit }}</h1>
@@ -120,7 +116,6 @@
 
                     <div style="margin-bottom:15px;">
                         <strong>Couleur :</strong><br>
-
                         @if($product->couleurs && $product->couleurs->count() > 0)
                             @foreach($product->couleurs as $index => $couleur)
                                 <label>
@@ -134,7 +129,6 @@
                         @else
                             <span>Unique</span>
                         @endif
-
                     </div>
 
                     @if($product->tailles && $product->tailles->count() > 0)
@@ -150,7 +144,6 @@
                     @else
                         <span>Standard</span>
                     @endif
-
 
                 </div>
                 <h3>Stock</h3>
@@ -168,8 +161,8 @@
                 </p>
 
                 <br>
-                <input type="hidden" name="image" value="../assets/photo_produit/{{ $product->id_produit }}.webp">
-
+                
+                <input type="hidden" name="image" value="{{ $product->photo ? asset($product->photo->code_photo) : '' }}">
                 <button type="submit" 
                 style="background:#333; color:white; padding:15px 30px;
                     border:none; border-radius:5px; cursor:pointer; margin-right:10px;">
@@ -182,7 +175,6 @@
                         border-radius:5px; text-decoration:none;">
                     Voir mon panier
                 </a>
-
 
             </form>
             @endauth
@@ -197,7 +189,7 @@
                     style="width: 100%; cursor: pointer; background:#aaa;">
                     Se connecter pour acheter
                 </a>
-            @endguest                                                               
+            @endguest                                                           
             
         </div>
     </div>
@@ -214,10 +206,15 @@
                 <a href="{{ route('product.detail', $sim->id_produit) }}"
                    style="text-decoration:none; color:inherit;">
 
-                    <img src="../assets/photo_produit/{{ $sim->id_produit }}.webp"
-                         alt="{{ $sim->label_produit }}"
-                         style="width:100%; height:200px; object-fit:cover; border-radius:6px;">
-
+                    @if($sim->photo)
+                        <img src="{{ asset($sim->photo->code_photo) }}"
+                             alt="{{ $sim->label_produit }}"
+                             style="width:100%; height:200px; object-fit:cover; border-radius:6px;">
+                    @else
+                         <img src="https://via.placeholder.com/200?text=No+Image"
+                             alt="Pas d'image"
+                             style="width:100%; height:200px; object-fit:cover; border-radius:6px;">
+                    @endif
                     <h4 style="margin:10px 0; font-size:16px;">
                         {{ $sim->label_produit }}
                     </h4>

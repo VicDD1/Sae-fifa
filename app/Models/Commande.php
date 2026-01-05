@@ -47,6 +47,10 @@ class Commande extends Model
 
     public function lignes()
     {
-        return $this->hasMany(LigneCommande::class, 'id_commande', 'id_commande');
+        return $this->hasMany(Ligne_commande::class, 'id_commande', 'id_commande');
+    }
+        public function reglements()
+    {
+        return $this->hasMany(Reglement::class);
     }
 }

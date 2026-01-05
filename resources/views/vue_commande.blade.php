@@ -12,7 +12,9 @@
 
 <header>
         <nav>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
@@ -91,11 +93,27 @@
         </nav>
     </header>
 
+
 <main class="checkout-container">
 
     <!-- INFORMATIONS DE LIVRAISON -->
     <section class="checkout-box">
         <h1 class="title">Informations de livraison</h1>
+
+        @if (session('error'))
+            <p>{{ session('error') }}</p>
+        @endif
+
+        @if ($errors->any())
+            <div>
+                <p>Erreurs :</p>
+                <ul>
+                    @foreach ($errors->all() as $message)
+                        <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <form action="{{ route('commande.valider') }}" method="POST">
             @csrf
@@ -181,7 +199,14 @@
             <span class="total-price">{{ number_format($total, 2) }} €</span>
         </div>
     </aside>
-
+<footer>
+    <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
+        <span>|</span>
+    <a href="/privacy_policy"> Conditions d'utilisation </a>
+        <span>|</span>
+     <a href="/privacy_policy"> Respect de la vie privée </a> 
+</footer>
+ 
 </main>
 
 <script>
@@ -254,6 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
-
+ @include('botman')
 </body>
 </html>
