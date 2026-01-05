@@ -17,20 +17,6 @@ class Produit extends Model
 
     // --- AJOUTE CECI ---
     protected $fillable = [
-        'label_produit',       // Important : C'est le nom de ta colonne
-        'prix_base',
-        'description_produit',
-        'id_categorie',
-        'id_nation'
-    ];
-    // -------------------
-
-    public function variantes()
-    {
-        return $this->hasMany(Variante_produit::class, 'id_produit', 'id_produit');
-    }
-
-protected $fillable = [
     'id_competition',
     'id_nation',
     'id_categorie',
@@ -38,6 +24,14 @@ protected $fillable = [
     'label_produit',
     'prix_base',
 ];
+    // -------------------
+
+    public function variantes()
+    {
+        return $this->hasMany(Variante_produit::class, 'id_produit', 'id_produit');
+    }
+
+
     public function photo()
     {
         return $this->hasOne(Photo::class, 'id_produit', 'id_produit');
