@@ -258,3 +258,26 @@ h1 {
     margin-top: 10px;
     transition: background 0.2s;
 }
+
+
+.btn-create {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6c757d; /* Le gris foncé pour les deux boutons */
+    color: white !important;   /* Texte blanc forcé */
+    text-decoration: none;
+    border-radius: 25px;       /* Bords arrondis */
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Légère ombre */
+    transition: all 0.3s ease;
+    margin-left: 10px;         /* Espace entre les boutons */
+}
+
+/* Effet au survol de la souris (devient plus foncé) */
+.btn-create:hover {
+    background-color: #5a6268; 
+    transform: translateY(-2px);
+}

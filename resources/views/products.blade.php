@@ -11,9 +11,8 @@
 
         <header>
         <nav>
-            <a href="/">Aceuil</a>
+            <a href="/">Acceuil</a>
 
-            <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
             <a href="/players">Les joueurs</a>
@@ -97,7 +96,6 @@
         @endif
 
         
-
         <main class="container">
             <h1>Nos Articles</h1>
             
@@ -197,37 +195,56 @@
 
                 <button type="submit" class="btn-filter">Appliquer</button>
                 <a href="{{ url()->current() }}" class="btn-reset">Effacer</a>
+@auth
+    @if(Auth::user()->email === 'servicevente@gmail.com')
+                <a href="{{ route('products.create') }}" class="btn-create">Créer un produit</a>
+
+                <a href="{{ route('categorie.create') }}" class="btn-create" style="background-color: #6c757d; margin-left: 5px;">
+                    Ajouter une Catégorie
+                </a>
+                @endif
+@endauth
             </form>
 
-            <div class="product-grid">
+<div class="product-grid">
+    @if(isset($products) && count($products) > 0)
+        @foreach($products as $product)
+            <article class="card">
                 
-                @if(isset($products) && count($products) > 0)
-                    @foreach($products as $product)
-                        <article class="card">
-                            
-                            <a href="{{ route('product.detail', $product->id_produit) }}" class="card-img">
-                                <img src="assets/photo_produit/{{$product->id_produit}}.webp" alt="{{ $product->label_produit }}">
-                            </a>
+                <a href="{{ route('product.detail', $product->id_produit) }}" class="card-img">
+                    {{-- DEBUT DE LA MODIFICATION --}}
+                    @if($product->photo)
+                        {{-- Si une photo existe en base, on utilise son chemin --}}
+                        <img src="{{ asset($product->photo->code_photo) }}" 
+                             alt="{{ $product->label_produit }}"
+                             style="width: 100%; height: auto; object-fit: cover;">
+                    @else
+                        {{-- Image par défaut si pas de photo --}}
+                        <img src="https://via.placeholder.com/300x300?text=Pas+d'image" 
+                             alt="Image non disponible">
+                    @endif
+                    {{-- FIN DE LA MODIFICATION --}}
+                </a>
 
-                            <div class="card-body">
-                                <a href="{{ route('product.detail', $product->id_produit) }}" style="text-decoration:none; color:inherit;">
-                                    <h2 class="card-title">{{ $product->label_produit }}</h2>
-                                </a>
-                                
-                                <p class="card-desc">{{ Str::limit($product->description_produit, 100) }}</p>
+                <div class="card-body">
+                    <a href="{{ route('product.detail', $product->id_produit) }}" style="text-decoration:none; color:inherit;">
+                        <h2 class="card-title">{{ $product->label_produit }}</h2>
+                    </a>
+                    
+                    <p class="card-desc">{{ Str::limit($product->description_produit, 100) }}</p>
 
-                                <span class="card-price">{{ number_format($product->prix_base, 2) }} €</span>
-                            </div>
-                        </article>
-                    @endforeach
-                @else
-                    <div style="grid-column: 1/-1; text-align:center; padding: 40px; background:#f0f0f0; border-radius: 8px;">
-                        <p style="font-size: 1.2rem; color: #555;">Aucun produit ne correspond à vos critères.</p>
-                        <a href="{{ url()->current() }}" style="color: blue; text-decoration: underline;">Voir tout le catalogue</a>
-                    </div>
-                @endif
+                    <span class="card-price">{{ number_format($product->prix_base, 2) }} €</span>
+                </div>
+            </article>
+        @endforeach
+    @else
+        <div style="grid-column: 1/-1; text-align:center; padding: 40px; background:#f0f0f0; border-radius: 8px;">
+            <p style="font-size: 1.2rem; color: #555;">Aucun produit ne correspond à vos critères.</p>
+            <a href="{{ url()->current() }}" style="color: blue; text-decoration: underline;">Voir tout le catalogue</a>
+        </div>
+    @endif
+</div>
 
-            </div>
         </main>
 
     </body>

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 // Controllers
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Categorie_ProduitControler;
 use App\Http\Controllers\NationController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -64,13 +65,33 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product
 Route::get('/creer_un_produit', function () {
     return view('product_creation');
 });
+
+/*
+|--------------------------------------------------------------------------
+| CATEGORIE_PRODUIT
+|--------------------------------------------------------------------------
+*/
+
+// Route pour VOIR le formulaire
+Route::get('/creer-categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');
+
+// Route pour ENVOYER le formulaire (POST)
+Route::post('/creer-categorie', [Categorie_ProduitControler::class, 'store'])->name('categorie.store');
+
+
 /*
 |--------------------------------------------------------------------------
 | PRODUITS
 |--------------------------------------------------------------------------
 */
+
 Route::get('/produits', [ProductController::class, 'index']);
 Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
+//Ajout produit
+Route::get('/produits/creer', [ProductController::class, 'create'])->name('products.create');
+Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
+Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
+
 
 /* ------------------------------
    Authentification — Inscription
@@ -203,4 +224,3 @@ Route::post('/vote/submit', [VoteController::class, 'submit'])
 Route::get('/vote/recap', [VoteController::class, 'recap'])
     ->middleware('auth')
     ->name('vote.recap');
-
