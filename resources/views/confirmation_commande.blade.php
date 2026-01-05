@@ -165,7 +165,7 @@
             @endforeach
         </ul>
 
-        <form action="{{ route('commande.succes') }}" method="POST" class="payment-form">
+        <form action="{{ route('commande.payer') }}" method="POST" class="payment-form">
             @csrf
             <input type="hidden" name="nom" value="{{ $data['nom'] }}">
             <input type="hidden" name="adresse" value="{{ $data['adresse'] }}">
@@ -232,10 +232,7 @@
                         maxlength="3"
                         title="Le code CVV doit contenir 3 chiffres.">
                 </div>
-                <input type="hidden" name="card_number" id="card_number_hidden">
-                <input type="hidden" name="cvv" id="cvv_hidden">
-
-
+            </div>
 
             <button type="submit" class="btn-pay">Confirmer et payer</button>
         </form>
@@ -255,6 +252,7 @@ document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
         const cvvInput    = document.getElementById('cvv');
 
         if (!isNouvelle) {
+            // Existing card selected
             if (nameInput) {
                 nameInput.value = this.dataset.nom || '';
             }
@@ -268,8 +266,13 @@ document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
 
             numberInput.placeholder = "**** **** **** ****";
             cvvInput.placeholder = "***";
-            } 
-            else {
+
+            // Remove required attribute when using existing card
+            numberInput.removeAttribute('required');
+            cvvInput.removeAttribute('required');
+            if (expiryInput) expiryInput.removeAttribute('required');
+        } else {
+            // New card selected
             numberInput.readOnly = false;
             cvvInput.readOnly = false;
             numberInput.disabled = false;
@@ -277,6 +280,11 @@ document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
 
             numberInput.placeholder = "";
             cvvInput.placeholder = "";
+
+            // Add back required attribute for new card
+            numberInput.setAttribute('required', 'required');
+            cvvInput.setAttribute('required', 'required');
+            if (expiryInput) expiryInput.setAttribute('required', 'required');
         }
 
     });
