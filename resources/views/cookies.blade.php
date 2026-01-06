@@ -23,6 +23,15 @@
         </div>
 
         <div class="prefs__body">
+        <div class="prefs__row_choice">
+        <div class="prefs__desc">
+            <strong>Cookie de décoration (Démo)</strong>
+            <div class="small">Permet de tester le dépôt du cookie "biscuits au chocolat".</div>
+        </div>
+        <button type="button" id="fakeCookieToggle" class="toggle">
+            <div class="knob"></div>
+                </button>
+            </div>
             <div class="prefs__row">
                 <details class="prefs__details" open>
                     <summary>

@@ -23,6 +23,7 @@ function updateDynamicCookieList() {
         if (name.includes('_ga')) usage = "Statistiques (Google)";
         if (name.includes('_fbp')) usage = "Marketing (Facebook)";
         if (name.includes('XSRF')) usage = "Sécurité (Protection)";
+        if (name.includes('site_decoration_preference')) usage = "Décoration (Inutile/Démo)";
 
         row.innerHTML = `
             <td><strong>${name.trim()}</strong></td>
@@ -32,20 +33,43 @@ function updateDynamicCookieList() {
         tbody.appendChild(row);
     });
 }
-
+function toggleFakeCookie(shouldExist) {
+    if (shouldExist) {
+        document.cookie = "site_decoration_preference=biscuits_au_chocolat; path=/; max-age=3600";
+    } else {
+        document.cookie = "site_decoration_preference=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+}
+let isDecoEnabled = false;
 /* --- Fonctions de gestion du bandeau --- */
-function confirmConsent() {
+function confirmConsent(isAccepted) {
+    const finalChoice = isAccepted === true ? true : isDecoEnabled;
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        accepted: true,
+        accepted: isAccepted,
+        deco: finalChoice,
         date: new Date().toISOString()
     }));
+    toggleFakeCookie(finalChoice);
+
     document.getElementById("cookieBanner").style.display = "none";
-    document.getElementById("overlay").classList.remove("open");
+    const overlay = document.getElementById("overlay");
+    if (overlay) overlay.classList.remove("open");
+
+    // Mise à jour visuelle immédiate du tableau
+    updateDynamicCookieList();
 }
 
 /* --- Initialisation et Événements --- */
 // On utilise DOMContentLoaded pour que ça s'exécute le plus vite possible
 document.addEventListener("DOMContentLoaded", () => {
+    const fakeToggle = document.getElementById("fakeCookieToggle");
+    
+    if (fakeToggle) {
+        fakeToggle.onclick = () => {
+            isDecoEnabled = !isDecoEnabled;
+            fakeToggle.classList.toggle("on", isDecoEnabled);
+        };
+    }
     const banner = document.getElementById("cookieBanner");
     const overlay = document.getElementById("overlay");
 
@@ -63,12 +87,13 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.classList.add("open");
     };
 
-    document.getElementById("savePrefsBtn").onclick = () => confirmConsent();
-    document.getElementById("acceptAllBtn").onclick = () => confirmConsent();
-    document.getElementById("rejectAllBtn").onclick = () => confirmConsent();
+    document.getElementById("savePrefsBtn").onclick = () => confirmConsent(true);
+    document.getElementById("acceptAllBtn").onclick = () => confirmConsent(true);
+    document.getElementById("rejectAllBtn").onclick = () => confirmConsent(false);
     
     // Bouton annuler de la modal
     document.getElementById("closePrefsBtn").onclick = () => {
         overlay.classList.remove("open");
     };
+    updateDynamicCookieList();
 });
