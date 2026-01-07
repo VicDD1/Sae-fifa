@@ -188,27 +188,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group" style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
-                        <label class="input-label" style="color: #d7003a;">Nouveau mot de passe (Optionnel)</label>
-                        <p style="font-size: 12px; color: #666; margin-bottom: 5px;">Laissez vide si vous ne voulez pas le changer.</p>
-                        <div style="position: relative;">
-                            <input type="password" name="password_user_connecte" class="custom-input" placeholder="••••••••">
-                            <i class="fa-solid fa-key password-icon"></i>
-                        </div>
-                        @error('password_user_connecte')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                    <label class="input-label" style="color: #d7003a;">confirmer le nouveau mot de passe </label>
-                        
-                        <div style="position: relative;">
-                        <input type="password" name="password_user_connecte_confirmation" class="custom-input" placeholder="••••••••">
-                            <i class="fa-solid fa-key password-icon"></i>
-                        </div>
-                        @error('password_user_connecte_confirmation')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                    </div>
-
+                
                     <button type="submit" class="btn-login" style="background-color: #00ff87; color: #001638;">
                         ENREGISTRER LES MODIFICATIONS
                     </button>
