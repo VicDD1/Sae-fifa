@@ -6,33 +6,59 @@
     <title>Gestion RGPD - FIFA Store</title>
 </head>
 <body>
-    <div class="rgpd-container">
-        <div class="rgpd-header">
-            <h1>Espace Délégué à la Protection des Données (DPO)</h1>
+    <div class="rgpd-container" style="max-width: 1000px; margin: auto; padding: 20px;">
+    <h1>Gestion des données (DPO)</h1>
+
+    @if(session('success'))
+        <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            {{ session('success') }}
         </div>
+    @endif
 
-        @if(session('success'))
-            <div class="alert-success">{{ session('success') }}</div>
-        @endif
-
-        <div class="rgpd-card">
-            <h3>Anonymisation des données personnelles</h3>
-            <p>Conformément à l'article 17 du RGPD (Droit à l'effacement), vous pouvez anonymiser les comptes inactifs.</p>
-            
-            <form action="{{ route('rgpd.anonymize') }}" method="POST">
-                @csrf
-                <div style="margin-bottom: 15px;">
-                    <label>Utilisateurs inactifs depuis le :</label>
-                    <input type="date" name="date_limite" value="{{ date('Y-m-d', strtotime('-3 years')) }}">
-                </div>
-
-                <button type="submit" class="btn-anonymize" onclick="return confirm('Attention : Cette action transformera les noms et emails en données génériques. Continuer ?')">
-                    Exécuter l'anonymisation massive
-                </button>
-            </form>
-        </div>
-
-        <a href="/" style="color: #666; text-decoration: none;">&larr; Retour au site</a>
+    <div class="rgpd-card" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+        <form action="{{ route('rgpd.gestion') }}" method="GET">
+            <label><strong>Afficher les comptes créés avant le :</strong></label>
+            <input type="date" name="date_limite" value="{{ $dateChoisie ?? '' }}" required>
+            <button type="submit" class="btn-primary">Filtrer les comptes</button>
+        </form>
     </div>
+
+    @if(isset($users))
+        <form action="{{ route('rgpd.destroy') }}" method="POST" style="margin-top: 30px;">
+            @csrf
+            <h3>Résultats du filtre : {{ $users->count() }} compte(s) trouvé(s)</h3>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <thead>
+                    <tr style="background: #2c3e50; color: white;">
+                        <th style="padding: 10px;">Suppr.</th>
+                        <th style="padding: 10px;">ID</th>
+                        <th style="padding: 10px;">Nom / Prénom</th>
+                        <th style="padding: 10px;">Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($users as $user)
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="text-align: center;"><input type="checkbox" name="user_ids[]" value="{{ $user->id_user_connecte }}"></td>
+                            <td style="padding: 10px;">{{ $user->id_user_connecte }}</td>
+                            <td style="padding: 10px;">{{ $user->surnom_user_connecte }} {{ $user->prenom_user_connecte }}</td>
+                            <td style="padding: 10px;">{{ $user->courriel_user_connecte }}</td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="4" style="padding: 20px; text-align: center;">Aucun utilisateur trouvé pour cette date.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            @if($users->count() > 0)
+                <button type="submit" class="btn-anonymize" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; cursor: pointer;"
+                        onclick="return confirm('Supprimer définitivement les comptes sélectionnés ?')">
+                    Supprimer la sélection
+                </button>
+            @endif
+        </form>
+    @endif
+</div>
 </body>
 </html>

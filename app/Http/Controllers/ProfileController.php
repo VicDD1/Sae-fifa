@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 class ProfileController extends Controller
 {
+    public $timestamps = true;
     // 1. Affiche la page de profil (Lecture seule)
     public function show()
     {
