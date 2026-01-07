@@ -233,22 +233,64 @@
                             Sécurisez votre compte avec un code SMS à chaque connexion.
                         </p>
                         
+                        
                         <form action="{{ route('mfa.enable') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label class="input-label">Numéro de téléphone mobile</label>
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="text" name="numero_telephone_user_connecte" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="custom-input" placeholder="0612345678" style="margin-bottom: 0;" required>
+                                
+                                {{-- Conteneur Flexbox pour aligner Select + Input + Bouton --}}
+                                <div style="display: flex; gap: 10px; align-items: flex-start;">
                                     
-                                    <button type="submit" class="btn-login" style="width: auto; padding: 0 20px; background-color: #3b82f6; color: white; margin-top: 0;">
-                                        ACTIVER
+                                    {{-- 1. Choix du pays --}}
+                                    <div style="width: 110px;">
+                                        <select name="indicatif" class="custom-input" style="padding: 10px; border-bottom: 2px solid #ccc; font-weight: bold;">
+                                            <option value="+33">🇫🇷 +33</option>
+                                            <option value="+41">🇨🇭 +41</option>
+                                            <option value="+32">🇧🇪 +32</option>
+                                            <option value="+1">🇨🇦 +1</option>
+                                            <option value="+44">🇬🇧 +44</option>
+                                            <option value="+49">🇩🇪 +49</option>
+                                            <option value="+34">🇪🇸 +34</option>
+                                            <option value="+351">🇵🇹 +351</option>
+                                            <option value="+39">🇮🇹 +39</option>
+                                            <option value="+212">🇲🇦 +212</option>
+                                            <option value="+213">🇩🇿 +213</option>
+                                            <option value="+216">🇹🇳 +216</option>
+                                        </select>
+                                    </div>
+
+                                    {{-- 2. Saisie du numéro --}}
+                                    <div style="flex: 1; display: flex; flex-direction: column;">
+                                        <input type="text" 
+                                            name="numero_suffixe" 
+                                            class="custom-input" 
+                                            placeholder="6 12 34 56 78" 
+                                            inputmode="numeric"
+                                            maxlength="10"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            required>
+                                        
+                                        {{-- Message d'erreur --}}
+                                        @error('numero_suffixe')
+                                            <div class="error-message" style="color: #d7003a; margin-top: 5px; font-size: 11px;">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- 3. Bouton OK --}}
+                                    <button type="submit" 
+                                            class="btn-login" 
+                                            style="width: auto; padding: 12px 20px; background-color: #3b82f6; color: white; margin-top: 0; cursor: pointer; position: relative; z-index: 10;">
+                                        Activer
                                     </button>
                                 </div>
-                                @error('numero_telephone_user_connecte')
-                                    <div class="error-message" style="margin-top: 5px;">{{ $message }}</div>
-                                @enderror
+
+                                <p style="font-size: 11px; color: #888; margin-top: 8px;">
+                                    <i class="fa-solid fa-circle-info"></i> Sélectionnez votre pays, puis tapez votre numéro (avec ou sans le 0).
+                                </p>
                             </div>
                         </form>
+                        
                     @endif
                 </div>
             </div>
