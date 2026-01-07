@@ -20,7 +20,13 @@ nav{
     padding: 0 30px;
     gap: 20px;
 }
-
+footer{
+    position: absolute;
+    bottom: 20px;
+    left: 30%;
+    align-content: center;
+    text-align: center;
+}
 nav a{
     color: #eef2fb;
     text-decoration: none;
@@ -63,13 +69,6 @@ header div[style*="display: inline-flex"] span {
     padding-bottom: 2px;
 }
 
-header div[style*="display: inline-flex"] button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #ffcccc;
-    font-size: 18px;
-}
 
 nav a.cart-link,
 nav a[style*="font-weight: bold;"] {
@@ -90,23 +89,6 @@ nav a[style*="font-weight: bold;"] {
 }
 .btn-primary:hover{
     background: #0088cc;
-}
-
-.cookie-banner{
-    color: whitesmoke;
-    position: fixed;
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
-    background: linear-gradient(90deg, rgba(11,38,64,0.98), rgba(7,30,50,0.98));
-    padding: 18px;
-    border-radius: 14px;
-    display:flex;
-    gap:20px;
-    align-items:center;
-    flex-wrap:wrap;
-    z-index:9999;
-    box-shadow: 0 0 10px rgba(0,0,0,0.35);
 }
 
 .logo {

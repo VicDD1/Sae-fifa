@@ -5,6 +5,7 @@
 
 * {
     box-sizing: border-box;
+    z-index: 999;
 }
 
 body {
@@ -25,7 +26,14 @@ header{
     align-items: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-
+footer{
+    bottom: 20px;
+    left: 30%;
+    align-content: center;
+    text-align: center;
+    position:fixed;
+    z-index: 0;
+}
 nav{
     display: flex;
     align-items: center;
@@ -257,4 +265,114 @@ h1 {
     cursor: pointer;
     margin-top: 10px;
     transition: background 0.2s;
+}
+
+/*-----------------------Historique------------------------------*/
+
+.history-body{
+    padding: 10px;
+    background-color: #424242;
+    border-radius:5px;
+}
+/* Conteneur principal de l'historique */
+.history-sidebar {
+    width: 200px;
+    margin-bottom: 30px;
+    position: fixed;
+    top: 10%;
+    left: 50px;
+    z-index: 0;
+}
+
+.history-sidebar h2 {
+    color: #424242;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Liste avec défilement vertical */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 850px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Carte produit individuelle */
+.history-item {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 8px;
+    background: #fff;
+    transition: transform 0.2s ease;
+}
+
+.history-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.history-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Image du produit */
+.history-img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+/* Label/Titre du produit */
+.history-label {
+    margin: 10px 0;
+    font-size: 14px;
+    height: 34px;
+    overflow: hidden;
+    line-height: 1.2;
+}
+
+/* Prix */
+.history-price {
+    font-weight: bold;
+    color: #eef2fb;;
+    font-size: 15px;
+}
+
+/* Message si vide */
+.history-empty {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    border: 1px dashed #ccc;
+    padding: 20px;
+    border-radius: 8px;
+
+.btn-create {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6c757d; /* Le gris foncé pour les deux boutons */
+    color: white !important;   /* Texte blanc forcé */
+    text-decoration: none;
+    border-radius: 25px;       /* Bords arrondis */
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Légère ombre */
+    transition: all 0.3s ease;
+    margin-left: 10px;         /* Espace entre les boutons */
+}
+
+/* Effet au survol de la souris (devient plus foncé) */
+.btn-create:hover {
+    background-color: #5a6268; 
+    transform: translateY(-2px);
 }

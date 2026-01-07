@@ -8,10 +8,13 @@
 </head>
 
 <body>
-    <header>
+
+<div class="commande-container">
+ <header>
         <nav>
-            <a href="/">Aceuil</a>
+            <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
+
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
@@ -58,15 +61,19 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
-            @auth
+@auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
                 <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
 
 
                 <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
-            @endif
                 
+            @endauth
+            @auth
+                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
+                    Mes commandes
+                </a>
             @endauth
 
             @auth
@@ -83,39 +90,69 @@
                 @endif
             @endauth
         </nav>
+         @endif
     </header>
-    <div class="commande-container">
+    @if($commandes->isEmpty())
+        <p class="commande-empty">Vous n'avez encore passé aucune commande.</p>
+    @else
+        <div class="commande-liste">
 
-        <h1 class="commande-title">Mes commandes</h1>
+            @foreach($commandes as $commande)
+                <div class="commande-card">
 
-        @if($commandes->isEmpty())
-            <p class="commande-empty">Vous n'avez encore passé aucune commande.</p>
-        @else
-            <div class="commande-liste">
-
-                @foreach($commandes as $commande)
-                    <div class="commande-card">
-
-                        <div class="commande-header">
+                    <div class="commande-header toggle-commande">
+                        <div>
                             <h2>Commande #{{ $commande->id_commande }}</h2>
                             <span class="commande-date">
-                                {{ $commande->date_commande }}
+                                {{ \Carbon\Carbon::parse($commande->date_commande)->format('d/m/Y H:i') }}
                             </span>
                         </div>
-
-                        <div class="commande-body">
-                            <p><strong>Montant total :</strong> {{ number_format($commande->montant_total, 2) }} €</p>
-                            <p><strong>Mode de paiement :</strong> {{ $commande->mode_paiement }}</p>
-                            <p><strong>Statut :</strong> {{ $commande->statut_paiement }}</p>
-                        </div>
-
+                        <span class="toggle-icon">+</span>
                     </div>
-                @endforeach
 
-            </div>
-        @endif
+                    <div class="commande-body">
+                        <p><strong>Montant total :</strong> {{ number_format($commande->montant_total, 2) }} €</p>
+                        <p><strong>Mode de paiement :</strong> {{ ucfirst($commande->mode_paiement) }}</p>
+                        <p><strong>Statut :</strong> {{ $commande->statut_paiement }}</p>
+                    </div>
+
+                    <!-- RÉCAP COMMANDE -->
+                    <div class="commande-details">
+                        <h3>Articles achetés</h3>
+
+                        <ul class="articles-list">
+                            @foreach($commande->lignes as $ligne)
+                                <li>
+                                    <span>{{ $ligne->produit->label_produit }}</span>
+                                    <span>x{{ $ligne->quantitee }}</span>
+                                    <span>{{ number_format($ligne->produit->prix_base, 2) }} €</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                </div>
+            @endforeach
+
+        </div>
+    @endif
 
     </div>
 
+<script>
+    document.querySelectorAll('.toggle-commande').forEach(header => {
+        header.addEventListener('click', () => {
+            const card = header.closest('.commande-card');
+            const details = card.querySelector('.commande-details');
+            const icon = header.querySelector('.toggle-icon');
+
+            const open = details.style.display === 'block';
+
+            details.style.display = open ? 'none' : 'block';
+            icon.textContent = open ? '+' : '−';
+        });
+    });
+</script>
+@include('botman')
 </body>
 </html>

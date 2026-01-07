@@ -25,6 +25,10 @@ class User_connecte extends Authenticatable
         'favori_user_connecte',
         'langue_user_connecte',
         'password_user_connecte',
+        'numero_telephone_user_connecte',
+        'mfa_active',
+        'mfa_code',
+        'mfa_expiration'
     ];
     public function getAuthPassword()
     {
@@ -35,7 +39,12 @@ class User_connecte extends Authenticatable
         return $this->primaryKey;
     }
     public function professionnel()
-{
-    return $this->hasOne(Professionnel::class, 'id_user_connecte');
-}
+    {
+        return $this->hasOne(Professionnel::class, 'id_user_connecte');
+    }
+    public function cartesBancaires()
+    {
+        return $this->hasMany(Carte_Bancaire::class, 'id_user_connecte', 'id_user_connecte');
+    }
+
 }
