@@ -74,9 +74,13 @@
                 <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
                  <a class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
 
-                
+            <?php
+            var_dump(Auth::user()->id_user_connecte)
+            ?>    
             @endif
-
+            @if (Auth::user()->id_user_connecte === 35)
+                <a class="account_creation" href="/gestion-rgpd">Espace DPO </a>
+            @endif
                 
             @endauth
             @auth
@@ -125,5 +129,6 @@
  
     
     @include('botman')
+
 </body>
 </html>
