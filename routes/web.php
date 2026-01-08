@@ -34,6 +34,7 @@ Route::get('/vote', fn() => view('vote_fifa'));
 Route::get('/privacy_policy', fn() => view('privacy_policy'));
 Route::get('/players', fn() => view('players'));
 
+
 /* ------------------------------
    Pages statiques & simples
 ------------------------------ */
@@ -48,8 +49,8 @@ Route::get('/', function () {
 });
 
 Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
-Route::get('/localisation_des_ventes', [SalesController::class, 'localisation']);
-
+Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap']);
+Route::get('/produits_en_cours',[ProductController::class,'incomplet']);
 
 Route::view('/parametre_compte', 'account_modification');
 Route::view('/se_connecter', 'account_connection');

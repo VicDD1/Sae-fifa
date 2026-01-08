@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Créer une Catégorie</title>
     <link rel="stylesheet" href="{{ asset('css/categorie_create.css') }}">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 </head>
 <body>
 

@@ -157,13 +157,7 @@
                     <label class="filter-label">Sous-Catégorie</label>
                     <select name="sous_categorie" class="filter-input" style="min-width: 180px;">
                         <option value="">Toutes</option>
-                        @foreach($sous_categories as $sub)
-                            <option 
-                                value="{{ $sub->id_categorie }}" 
-                                {{ request('sous_categorie') == $sub->id_categorie ? 'selected' : '' }}>
-                                {{ $sub->label_categorie }}
-                            </option>
-                        @endforeach
+  
                     </select>
                 </div>
 
@@ -221,6 +215,7 @@
 <div class="product-grid">
     @if(isset($products) && count($products) > 0)
         @foreach($products as $product)
+        
             <article class="card">
                 
                 <a href="{{ route('product.detail', $product->id_produit) }}" class="card-img">
@@ -248,6 +243,7 @@
                     <span class="card-price">{{ number_format($product->prix_base, 2) }} €</span>
                 </div>
             </article>
+       
         @endforeach
     @else
         <div style="grid-column: 1/-1; text-align:center; padding: 40px; background:#f0f0f0; border-radius: 8px;">
@@ -259,29 +255,9 @@
  <div class="history-sidebar">
     <h2>Vus récemment</h2>
     <div class="history-list">
-        @forelse($recentProducts as $recent)
-            <div class="history-item">
-                <a href="{{ route('product.detail', $recent->id_produit) }}" class="history-link">
-                    
-                    <img src="../assets/photo_produit/{{ $recent->id_produit }}.webp"
-                         alt="{{ $recent->label_produit }}"
-                         class="history-img">
-                    <div class="history-body">     
-                        <h4 class="history-label">
-                            {{ $recent->label_produit }}
-                        </h4>
-    
-                        <div class="history-price">
-                            {{ number_format($recent->prix_base, 2) }} €
-                        </div>
-                    </div>
-                </a>
-            </div>
-        @empty
-            <p class="history-empty">
-                Aucun article consulté pour le moment.
-            </p>
-        @endforelse
+        
+
+
     </div>
 </div>
         </main>
