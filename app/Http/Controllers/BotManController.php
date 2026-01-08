@@ -132,7 +132,7 @@ class BotManController extends Controller
                     $bot->reply("Pour avoir ou modifier vos informations, veuillez soit cliquer sur votre nom ( " . Auth::user()->name . " ) dans la barre bleue ou cliquer sur ce lien :<br><a href='/mon-profil'>👤 Afficher mon compte</a>");
                 }
             } else {
-                $bot->reply("Veuillez vous connecter pour accéder à votre profil.");
+                $bot->reply("Veuillez vous connecter pour accéder à votre profil. Cliquez sur l'icon en haut a droite ou Cliquez sur ce lien : <br><a href='/connexion'>👤 Se connecter</a>");
             }
         });
 
