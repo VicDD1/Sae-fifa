@@ -72,7 +72,7 @@
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
                 <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-                 <a class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
+                <a class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
 
             <?php
             var_dump(Auth::user()->id_user_connecte)
@@ -124,7 +124,7 @@
         <span>|</span>
     <a href="/privacy_policy"> Conditions d'utilisation </a>
         <span>|</span>
-     <a href="/privacy_policy"> Respect de la vie privée </a> 
+    <a href="/privacy_policy"> Respect de la vie privée </a> 
 </footer>
  
     

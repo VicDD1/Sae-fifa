@@ -20,20 +20,17 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\RGPDController;
 
+Route::middleware('auth')->group(function () {
+    Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
+    Route::post('/anonymize-donnees', [RGPDController::class, 'anonymize'])->name('rgpd.anonymize');
+});
 
-  Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
-  Route::get('/cookies', function () {
-      return view('voir_cookies');
-  })->name('cookies.manage');
+Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
+Route::get('/cookies', function () {
+    return view('voir_cookies');
+})->name('cookies.manage');
 
-  Route::get('/gestion-rgpd', [RGPDController::class, 'index'])
-  ->name('rgpd.gestion')
-  ->middleware('auth');
 
-// Route pour traiter l'anonymisation (le bouton)
-Route::post('/anonymiser-donnees', [RGPDController::class, 'anonymize'])
-  ->name('rgpd.anonymize')
-  ->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
