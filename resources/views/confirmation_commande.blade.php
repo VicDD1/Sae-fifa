@@ -173,7 +173,7 @@
             @endforeach
         </ul>
 
-        <form action="{{ route('commande.succes') }}" method="POST" class="payment-form">
+        <form action="{{ route('commande.payer') }}" method="POST" class="payment-form">
             @csrf
             <input type="hidden" name="nom" value="{{ $data['nom'] }}">
             <input type="hidden" name="adresse" value="{{ $data['adresse'] }}">
@@ -218,6 +218,7 @@
 
             <label>Numéro de carte bancaire</label>
             <input type="text" name="card_number" id="card_number"
+                required
                 pattern="^[0-9]{16}$"
                 maxlength="16"
                 inputmode="numeric"
@@ -227,6 +228,7 @@
                 <div class="col">
                     <label>Date d’expiration</label>
                     <input type="text" name="expiry" id="expiry"
+                        required
                         pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$"
                         maxlength="5"
                         placeholder="MM/AA"
@@ -236,14 +238,12 @@
                 <div class="col">
                     <label>CVV</label>
                     <input type="text" name="cvv" id="cvv"
+                        required
                         pattern="^[0-9]{3}$"
                         maxlength="3"
                         title="Le code CVV doit contenir 3 chiffres.">
                 </div>
-                <input type="hidden" name="card_number" id="card_number_hidden">
-                <input type="hidden" name="cvv" id="cvv_hidden">
-
-
+            </div>
 
             <button type="submit" class="btn-pay">Confirmer et payer</button>
         </form>
@@ -263,6 +263,7 @@ document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
         const cvvInput    = document.getElementById('cvv');
 
         if (!isNouvelle) {
+            // Existing card selected
             if (nameInput) {
                 nameInput.value = this.dataset.nom || '';
             }
@@ -276,8 +277,13 @@ document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
 
             numberInput.placeholder = "**** **** **** ****";
             cvvInput.placeholder = "***";
-            } 
-            else {
+
+            // Remove required attribute when using existing card
+            numberInput.removeAttribute('required');
+            cvvInput.removeAttribute('required');
+            if (expiryInput) expiryInput.removeAttribute('required');
+        } else {
+            // New card selected
             numberInput.readOnly = false;
             cvvInput.readOnly = false;
             numberInput.disabled = false;
@@ -285,6 +291,11 @@ document.querySelectorAll('input[name="carte_existante"]').forEach(radio => {
 
             numberInput.placeholder = "";
             cvvInput.placeholder = "";
+
+            // Add back required attribute for new card
+            numberInput.setAttribute('required', 'required');
+            cvvInput.setAttribute('required', 'required');
+            if (expiryInput) expiryInput.setAttribute('required', 'required');
         }
 
     });
