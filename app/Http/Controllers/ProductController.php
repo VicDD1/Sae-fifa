@@ -7,6 +7,8 @@ use App\Models\Produit;
 use App\Models\Nation;
 use App\Models\Taille;
 use App\Models\Colori;
+use App\Models\Photo;
+use App\Models\Stock;
 use App\Models\Categorie_Produit;
 use App\Models\Variante_produit;
 class ProductController extends Controller
@@ -114,9 +116,20 @@ class ProductController extends Controller
 
 
         $historyIds = session()->get('recent_products', []);
-        $recentProducts = !empty($historyIds) 
-        ? Produit::whereIn('id_produit', $historyIds)->get() 
-        : collect();
+        $recentProducts = collect();
+            
+        if (!empty($historyIds)) {
+            // On construit la chaîne CASE WHEN pour PostgreSQL
+            $orderByCase = 'CASE ';
+            foreach ($historyIds as $index => $id) {
+                $orderByCase .= "WHEN id_produit = " . (int)$id . " THEN " . $index . " ";
+            }
+            $orderByCase .= 'END';
+        
+            $recentProducts = Produit::whereIn('id_produit', $historyIds)
+                ->orderByRaw($orderByCase)
+                ->get();
+        }
 
 
         return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories','recentProducts'));
@@ -174,6 +187,84 @@ class ProductController extends Controller
             'stock' => $stock ?? 0
         ]);
     }
+    public function create()
+    {
+        $categories = Categorie_Produit::all();
+        $nations    = Nation::all();
+        $tailles    = Taille::all();
+        $coloris    = Colori::all();
+
+        return view('products_create', compact('categories', 'nations', 'tailles', 'coloris'));
+    }
+
+    // Traite le formulaire
+public function store(Request $request)
+    {
+        // 1. Validation
+        $request->validate([
+            'nom_produit'         => 'required|string|max:50',
+            'prix_base'           => 'required|numeric',
+            'description_produit' => 'nullable|string|max:500',
+            'id_categorie'        => 'required|exists:categorie_produit,id_categorie',
+            'id_nation'           => 'required|exists:nation,id_nation',
+            'quantite'            => 'required|integer|min:0',
+            'id_taille'           => 'required|exists:taille,id_taille',
+            'id_colori'           => 'required|exists:colori,id_colori',
+            'photo'               => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // 2. Création du Produit
+        // ATTENTION : On utilise "new Produit()" (le nom de ta classe)
+        $product = new Produit(); 
+        
+        // MAPPING : Formulaire (nom_produit) -> Base de données (label_produit)
+        $product->label_produit       = $request->nom_produit; 
+        
+        $product->prix_base           = $request->prix_base;
+        $product->description_produit = $request->description_produit;
+        $product->id_categorie        = $request->id_categorie;
+        $product->id_nation           = $request->id_nation;
+        
+        $product->save(); 
+
+        // 3. Gestion de la Photo
+        if ($request->hasFile('photo')) {
+        // A. On récupère le fichier
+        $file = $request->file('photo');
+        
+        // B. On génère un nom unique pour éviter d'écraser une autre image
+        // Ex: 17043829_monimage.jpg
+        $filename = time() . '_' . $file->getClientOriginalName();
+        
+        // C. On déplace le fichier dans public/assets/photo_produit
+        $file->move(public_path('assets/photo_produit'), $filename);
+
+        // D. Enregistrement en base de données
+        $photo = new Photo();
+        
+        // On enregistre le chemin relatif ou le nom du fichier
+        // Ici je mets le chemin complet pour que ce soit facile à afficher plus tard
+        $photo->code_photo = 'assets/photo_produit/' . $filename; 
+        
+        $photo->id_produit = $product->id_produit;
+        $photo->save();
+    }
+
+        // 4. Création du Stock
+    $stock = new Stock();
+    $stock->id_produit = $product->id_produit;
+    $stock->id_taille  = $request->id_taille;
+    $stock->id_colori  = $request->id_colori;
+    
+    // CORRECTION ICI (Double 'e')
+    // A gauche : nom de la colonne dans la BDD (quantitee_stock)
+    // A droite : nom du champ dans le formulaire HTML (quantite)
+    $stock->quantitee_stock = $request->quantite; 
+    
+    $stock->save();
+
+    return redirect()->route('products.index')->with('success', 'Produit créé avec succès !');
+}
 
 
 

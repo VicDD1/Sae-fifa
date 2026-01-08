@@ -276,11 +276,16 @@ h1 {
 }
 /* Conteneur principal de l'historique */
 .history-sidebar {
-    width: 100%;
+    width: 200px;
     margin-bottom: 30px;
+    position: fixed;
+    top: 10%;
+    left: 50px;
+    z-index: 0;
 }
 
 .history-sidebar h2 {
+    color: #424242;
     margin-bottom: 20px;
     font-size: 1.2rem;
     font-weight: bold;
@@ -349,4 +354,25 @@ h1 {
     border: 1px dashed #ccc;
     padding: 20px;
     border-radius: 8px;
+
+.btn-create {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6c757d; /* Le gris foncé pour les deux boutons */
+    color: white !important;   /* Texte blanc forcé */
+    text-decoration: none;
+    border-radius: 25px;       /* Bords arrondis */
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Légère ombre */
+    transition: all 0.3s ease;
+    margin-left: 10px;         /* Espace entre les boutons */
+}
+
+/* Effet au survol de la souris (devient plus foncé) */
+.btn-create:hover {
+    background-color: #5a6268; 
+    transform: translateY(-2px);
 }
