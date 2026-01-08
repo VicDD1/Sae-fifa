@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 class ProfileController extends Controller
 {
-    public $timestamps = true;
+    
     // 1. Affiche la page de profil (Lecture seule)
     public function show()
     {
@@ -64,7 +64,7 @@ class ProfileController extends Controller
             $user->password_user_connecte = \Illuminate\Support\Facades\Hash::make($request->password_user_connecte);
         }
 
-       
+        $user->updated_at = \Carbon\Carbon::now();
         $user->save();
 
         return redirect('/')->with('success', 'Votre profil a bien été mis à jour !');

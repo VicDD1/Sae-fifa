@@ -12,7 +12,7 @@ class User_connecte extends Authenticatable
 
     protected $primaryKey = 'id_user_connecte';
 
-    public $timestamps = false;
+    public $timestamps = true;
     public $incrementing = true;
     protected $keyType = 'int';
     
