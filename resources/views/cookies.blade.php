@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="{{ asset('css/cookies.css') }}">
-
+<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+<link rel="stylesheet" href="{{ asset('css/header.css') }}">
 <div id="cookieBanner" class="cookie-banner" role="region" aria-label="Bannière cookies">
     <div class="cookie-banner__content">
         <div class="cookie-banner__logo">BF</div>

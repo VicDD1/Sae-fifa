@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -12,34 +13,46 @@ class GeocodeAdresses extends Command
 
     public function handle()
     {
-        Adresse::whereNull('latitude')
-            ->orWhereNull('longitude')
-            ->chunk(50, function ($adresses) {
-                foreach ($adresses as $adresse) {
+        Adresse::where(function ($q) {
+            $q->whereNull('latitude')
+              ->orWhereNull('longitude');
+        })
+        ->orderBy('id_adresse')
+        ->chunkById(50, function ($adresses) {
 
-                    $response = Http::get(
-                        'https://nominatim.openstreetmap.org/search',
-                        [
-                            'q' => $adresse->full_address,
-                            'format' => 'json',
-                            'limit' => 1,
-                        ]
-                    );
+            foreach ($adresses as $adresse) {
 
-                    if ($response->successful() && count($response->json()) > 0) {
-                        $data = $response->json()[0];
+                $query = implode(', ', array_filter([
+                    $adresse->ville_adresse,
+                    $adresse->code_postal,
+                    $adresse->pays_adresse,
+                ]));
 
-                        $adresse->update([
-                            'latitude' => $data['lat'],
-                            'longitude' => $data['lon'],
-                        ]);
-
-                        $this->info("✔ {$adresse->full_address}");
-                    }
-
-                    sleep(1); // IMPORTANT: respect API rate limit
+                if (!$query) {
+                    continue;
                 }
-            });
+
+                $response = Http::withHeaders([
+                    'User-Agent' => 'LaravelApp/1.0 (contact@example.com)'
+                ])->get('https://nominatim.openstreetmap.org/search', [
+                    'q' => $query,
+                    'format' => 'json',
+                    'limit' => 1,
+                ]);
+
+                if ($response->successful() && !empty($response->json())) {
+                    $data = $response->json()[0];
+
+                    $adresse->update([
+                        'latitude'  => (float) $data['lat'],
+                        'longitude' => (float) $data['lon'],
+                    ]);
+
+                    $this->info("✔ {$query}");
+                }
+
+                sleep(1); // respect Nominatim rate limit
+            }
+        });
     }
-    
 }
