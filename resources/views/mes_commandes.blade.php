@@ -22,7 +22,7 @@
             <a href="{{ route('vote.page') }}">Vote</a>
 
             
-            <a href="https://www.fifa.com/fr/news" target="_blank">L'Actu </a>
+            <a href="/blog">L'Actu </a>
 
             @auth
                 @php

@@ -19,6 +19,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
+use App\Http\Controllers\BlogController;
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');
@@ -239,3 +240,12 @@ Route::get('/login/mfa', [MfaController::class, 'showMfaForm'])
 Route::post('/login/mfa', [MfaController::class, 'verifyMfa'])
     ->name('mfa.verify');
 
+
+// -- SECTION BLOG --
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
+
+// Route protégée (il faut être connecté pour commenter)
+Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
+    ->middleware('auth')
+    ->name('blog.comment.store');
