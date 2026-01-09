@@ -11,4 +11,5 @@ class Categorie_Produit extends Model
     protected $table = "categorie_produit";
     protected $primaryKey = "sous_categorie";
     public $timestamps = false;
+    
 }

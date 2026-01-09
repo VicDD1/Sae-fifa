@@ -168,9 +168,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-    ])->merge(class_exists(\Gemini\Laravel\ServiceProvider::class)
-        ? [\Gemini\Laravel\ServiceProvider::class]
-        : []
+    ]
     )->toArray(),
 
     /*
@@ -183,10 +181,5 @@ return [
     | the aliases are "lazy" loaded so they don't hinder performance.
     |
     */
-
-    'aliases' => Facade::defaultAliases()->merge(
-        class_exists(\Gemini\Laravel\Facades\Gemini::class)
-            ? ['Gemini' => \Gemini\Laravel\Facades\Gemini::class]
-            : []
-    )->toArray(),
+'aliases' => Facade::defaultAliases()->toArray(),
 ];
