@@ -117,18 +117,22 @@
     @csrf
 
                     <div  class="warn">
-                        <label class="input-label">Choisir son mot de passe</label>
+                        <label class="input-label" style="font-size:17px;">Choisir son mot de passe</label>
+                      <p style="font-size:13px;"> Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.</p> 
+
+
                         <input type="password"  name="password_user_connecte" placeholder="••••••••" class="custom-input" value="{{ old('password_user_connecte') }}" required>
                         <i class="fa-regular fa-eye-slash password-icon"></i>
-                        @error('password_user_connecte')
-                    <div class="error-message">{{ $message }}</div>
-                    @enderror
+                       
                         
                     </div>
+                    @error('password_user_connecte')
+                    <div class="error-message" style="font-size:13px; background-color:red; color:white; padding:5px;">{{ $message }}</div>
+                    @enderror
                     
                     
                     <div class="form-group">
-                        <label class="input-label">Confirmer votre mot de passe</label>
+                        <label class="input-label" style="font-size:17px;">Confirmer votre mot de passe</label>
                         <input type="password" name="password_user_connecte_confirmation" value="{{ old('password_user_connecte_confirmation') }}"placeholder="••••••••" class="custom-input" required>
                         <i class="fa-regular fa-eye-slash password-icon"></i>
                     </div>

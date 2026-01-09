@@ -291,6 +291,16 @@ public function incomplet()
         'categories'
     ));
 }
+public function modify()
+{
+    $categories = Categorie_Produit::all();
+    $nations    = Nation::all();
+    $tailles    = Taille::all();
+    $coloris    = Colori::all();
+
+    return view('products_validate', compact('categories', 'nations', 'tailles', 'coloris'));
+
+}
 
 
 }

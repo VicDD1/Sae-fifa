@@ -52,7 +52,7 @@ Route::get('/', function () {
 Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
 Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap']);
 Route::get('/produits_en_cours',[ProductController::class,'incomplet']);
-
+Route::get('/produit_en_cours/{id}', [ProductController::class, 'modify'])->name('product.modify');
 Route::view('/parametre_compte', 'account_modification');
 Route::view('/se_connecter', 'account_connection');
 Route::view('/privacy_policy', 'privacy_policy');
@@ -84,7 +84,8 @@ Route::get('/creer_un_produit', [MakeProductController::class, 'create'])
 // Traiter le formulaire (sauvegarde en base)
 Route::post('/creer_un_produit', [MakeProductController::class, 'store'])
     ->name('make_product.store');
-
+    Route::post('/valider_un_produit', [ProductController::class, 'validate'])
+    ->name('product.validate');
 
 
 Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
