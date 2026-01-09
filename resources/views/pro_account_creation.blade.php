@@ -346,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     @error('telephone_professionnel')
                     <div class="error-message">{{ $message }}</div>
                     @enderror
-                    <label class="input-label">Numero de telephone</label>
+                    <label class="input-label">Numero de telephone </label>
                 </div>
 
                 <button type="submit" class="btn-login">POURSUIVRE</button>
