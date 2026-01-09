@@ -5,20 +5,21 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash; // Pour vérifier le mot de passe
-use Illuminate\Support\Facades\Log;  // Pour simuler le SMS
-use Carbon\Carbon;                   // Pour gérer l'expiration du code
-use App\Models\User_connecte;        // Ton modèle utilisateur
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log; // Pour les logs
+use Carbon\Carbon;
+use App\Models\User_connecte;
+use Twilio\Rest\Client; // Pour Twilio
 
 class LoginController extends Controller
 {
-    // Fonction pour AFFICHER le formulaire 
+    // AFFICHER le formulaire 
     public function formulaire()
     {
         return view('account_connection');
     }
 
-    // Fonction pour TRAITER le formulaire
+    // TRAITER le formulaire
     public function traitement()
     {
         // 1. Validation
@@ -27,45 +28,65 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        // 2. On récupère l'utilisateur par son email (sans le connecter)
+        // 2. Récupération utilisateur
         $user = User_connecte::where('courriel_user_connecte', request('email'))->first();
 
-        // 3. On vérifie si l'utilisateur existe ET si le mot de passe est bon
+        // 3. Vérification mot de passe
         if ($user && Hash::check(request('password'), $user->password_user_connecte)) {
 
-            // === DÉBUT DE LA LOGIQUE MFA (Double sécurité) ===
-            
-            // Si le MFA est activé (true)
+            // === DÉBUT MFA (Double Authentification) ===
             if ($user->mfa_active) {
                 
-                // A. Générer un code (6 chiffres)
+                // A. Générer le code
                 $code = rand(100000, 999999);
                 
-                // B. Enregistrer le code en base (expire dans 10 min)
+                // B. Sauvegarder en base
                 $user->update([
                     'mfa_code' => $code,
                     'mfa_expiration' => Carbon::now()->addMinutes(10)
                 ]);
 
-                // C. SIMULATION SMS : On écrit dans les logs
-                Log::info("🔐 SMS MFA pour {$user->courriel_user_connecte} : CODE = {$code}");
+                // C. DOUBLE ACTION : LOG + SMS 📡
+                
+                // --- ACTION 1 : On écrit dans les LOGS (Au cas où le SMS échoue) ---
+                $numero = $user->numero_telephone_user_connecte;
+                Log::info("📝 [MFA BACKUP] Code pour {$numero} : {$code}");
 
-                // D. Mettre l'ID en session "d'attente"
+                // --- ACTION 2 : On envoie le SMS RÉEL (Twilio) ---
+                try {
+                    $message = "FIFA ID : Votre code de sécurité est {$code}";
+
+                    $client = new Client(env('TWILIO_SID'), env('TWILIO_TOKEN'));
+                    
+                    $client->messages->create(
+                        $numero, 
+                        [
+                            'from' => env('TWILIO_FROM'),
+                            'body' => $message
+                        ]
+                    );
+
+                    Log::info("✅ SMS Twilio envoyé avec succès.");
+
+                } catch (\Exception $e) {
+                    // Si Twilio échoue, on ne bloque pas l'utilisateur, car le code est dans les logs !
+                    Log::error("❌ Erreur SMS Twilio : " . $e->getMessage());
+                }
+
+                // D. Redirection
                 session(['mfa_user_id' => $user->id_user_connecte]);
-
-                // E. Rediriger vers la page du code
                 return redirect()->route('mfa.form');
             }
-            // === FIN DE LA LOGIQUE MFA ===
+            // === FIN MFA ===
 
-            // Si pas de MFA, on connecte l'utilisateur directement
+            // Connexion directe si pas de MFA
             Auth::login($user);
             request()->session()->regenerate();
             
-            return redirect('/'); // Connexion réussie
+            return redirect('/'); 
         }
 
-        // 4. Échec (Mauvais mot de passe ou email inconnu)
+        // 4. Échec
         return back()->withErrors([
             'email' => "L'email ou le mot de passe est incorrect.",
         ])->onlyInput('email');

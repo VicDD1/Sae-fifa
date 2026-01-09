@@ -149,6 +149,7 @@ nav a[style*="font-weight: bold;"] {
             padding: 40px;
             padding-top: 0;
             margin-bottom: 0;
+            z-index: 999;
         }
 
         .login-box {
