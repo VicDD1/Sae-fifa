@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Politique de confidentialité</title>
   <link rel="stylesheet" href="css/privacy_policy.css">
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+
 </head>
 <body>
 

@@ -112,8 +112,8 @@ class ProductController extends Controller
             }
         }
 
-        $products = $query->get();
-
+        //$products = $query->get();
+        $products = Produit::whereNotNull('prix_base')->get();
 
         $historyIds = session()->get('recent_products', []);
         $recentProducts = collect();
@@ -214,10 +214,10 @@ public function store(Request $request)
         ]);
 
         // 2. Création du Produit
-        // ATTENTION : On utilise "new Produit()" (le nom de ta classe)
+        
         $product = new Produit(); 
         
-        // MAPPING : Formulaire (nom_produit) -> Base de données (label_produit)
+        
         $product->label_produit       = $request->nom_produit; 
         
         $product->prix_base           = $request->prix_base;
@@ -227,9 +227,9 @@ public function store(Request $request)
         
         $product->save(); 
 
-        // 3. Gestion de la Photo
+    
         if ($request->hasFile('photo')) {
-        // A. On récupère le fichier
+        
         $file = $request->file('photo');
         
         // B. On génère un nom unique pour éviter d'écraser une autre image
@@ -266,6 +266,31 @@ public function store(Request $request)
     return redirect()->route('products.index')->with('success', 'Produit créé avec succès !');
 }
 
+
+public function incomplet()
+{
+
+    $products = Produit::whereNull('prix_base')->get();
+
+    $nations = Nation::whereIn('id_nation', function ($query) {
+        $query->select('id_nation')->from('produit')->whereNotNull('id_nation');
+    })->orderBy('nom_nation')->get();
+
+    $categories = Categorie_Produit::whereNull('sous_categorie')
+        ->orderBy('label_categorie')
+        ->get();
+
+    $tailles = Taille::orderBy('label_taille')->get();
+    $couleurs = Colori::orderBy('id_colori')->get();
+
+    return view('productsImcomplete', compact(
+        'products',
+        'nations',
+        'tailles',
+        'couleurs',
+        'categories'
+    ));
+}
 
 
 }

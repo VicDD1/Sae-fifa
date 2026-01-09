@@ -1,9 +1,73 @@
 <!DOCTYPE html>
 <html lang="fr">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    
 <head>
     <meta charset="UTF-8">
     <title>Créer un nouveau produit | FIFA Store</title>
     <link rel="stylesheet" href="{{ asset('css/product.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+
+    <style>
+        .dropdown-checkbox {
+    position: relative;
+    width: 260px;
+}
+
+.dropdown-btn {
+    width: 100%;
+    padding: 8px 12px;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.dropdown-content {
+    display: none;              /* 🔴 hidden by default */
+    position: absolute;         /* 🔴 floats over page */
+    top: 100%;                  /* just under button */
+    left: 0;
+    width: 100%;
+    background: #111;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 1000;              /* 🔴 on top of everything */
+}
+
+.dropdown-content label {
+    display: block;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.dropdown-content input {
+    margin-right: 6px;
+}
+
+/* when opened */
+.dropdown-content.open {
+    display: block;
+}
+
+        body {
+            background-color:black ;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], input[type="number"], textarea, input[type="file"] {
+            width: 100%; padding: 8px; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;
+        }
+        .dynamic-fields { margin-bottom: 10px; }
+        button { padding: 10px 20px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .add-btn { background: #00bfff; margin-left: 10px; }
+    </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>

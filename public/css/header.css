@@ -1,0 +1,80 @@
+/* ================= HEADER FIXED STYLE ================= */
+
+header {
+    background-color: #045694;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 1000;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 30px;
+    gap: 20px;
+}
+
+header nav a {
+    color: #eef2fb;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 6px 14px;
+    border-radius: 5px;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+header nav a:hover {
+    background-color: #02456f;
+}
+
+/* RIGHT SIDE GROUP */
+header .nav-right-group {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* ACCOUNT ICON */
+header .account_creation {
+    display: flex;
+    align-items: center;
+}
+
+header .account_creation img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+/* USER INFO */
+header .user-info,
+header div[style*="inline-flex"] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header span {
+    color: white;
+    font-weight: bold;
+    border-bottom: 2px solid #00ff87;
+}
+
+/* BUTTONS */
+header .btn-primary {
+    background: #00aaff;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+}
+
+header .btn-primary:hover {
+    background: #0088cc;
+}
