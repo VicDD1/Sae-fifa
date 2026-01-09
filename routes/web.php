@@ -91,9 +91,9 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')
 ->name('product.detail');
 
-Route::get('/produits/creer', [ProductController::class, 'create'])->name('products.create');
-Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
-Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
+Route::get('/produits/creer', [ProductController::class, 'create'])->name('make_product.create');
+Route::post('/produits', [ProductController::class, 'store'])->name('make_product.store');
+Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
 
 /* ------------------------------
    Authentification — Inscription
