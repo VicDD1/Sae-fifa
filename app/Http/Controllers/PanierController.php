@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Produit;
 use App\Models\Panier;
 use App\Models\Ligne_panier;
+use App\Models\Acheteur;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Variante_produit;
 
@@ -47,12 +48,18 @@ class PanierController extends Controller
 
         $produit = Produit::findOrFail($id_produit);
 
+        // Créer l'acheteur si inexistant (nécessaire pour la FK sur panier)
+        $acheteur = Acheteur::firstOrCreate(
+            ['id_user_connecte' => Auth::id()],
+            ['id_user_connecte' => Auth::id()]
+        );
+
         // Récupération du panier ou création
         $panier = Panier::firstOrCreate(
             ['id_user_connecte' => Auth::id()],
             [
                 'id_user_connecte' => Auth::id(),
-                'id_acheteur' => Auth::id()
+                'id_acheteur' => $acheteur->id_acheteur
             ]
         );
 
