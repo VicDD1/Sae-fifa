@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Mes commandes</title>
-
+<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="{{ asset('css/mes_commandes.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+
 </head>
 
 <body>
 
 <div class="commande-container">
- <header>
+     <header>
         <nav>
-            <a href="/">Accueil</a>
+            <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
             <a href="/produits">Fifa Store</a>
 
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
-            <a href="/players">Les joueurs</a>
-            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+            
+            <a href="https://www.fifa.com/fr/news" target="_blank">L'Actu </a>
 
             @auth
                 @php
@@ -44,6 +46,7 @@
                         <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
                             {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
                         </span>
+                        <img style="text-decoration: none; display: flex; align-items: center; width:40px;" src="{{asset('assets/iconEdit.png')}}" alt="voir mes informations"></img>
                     </a>
 
                     <form action="/logout" method="POST" style="display:inline;">
@@ -61,36 +64,40 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
-@auth
+            @auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+            <div class="nav-right-group">
+                <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+                 <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
 
+            </div>
+            @endif
 
-                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
                 
             @endauth
             @auth
+                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
                 <a href="{{ route('commande.liste') }}" class="btn btn-primary">
                     Mes commandes
                 </a>
+                @endif
             @endauth
 
             @auth
-                @if (!Auth::user()->professionnel)
+                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
                     <a href="/creer_un_compte_professionnel_1" class="account_creation">
                         <p>Compte professionnel</p>
                     </a>
                 @endif
 
-                @if (Auth::user()->professionnel)
+                @if ((Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) && Auth::user()->professionnel)
                     <a href="/proposer_un_produit" class="account_creation">
                         <p>faire une demande de produit</p>
                     </a>
                 @endif
             @endauth
         </nav>
-         @endif
     </header>
     @if($commandes->isEmpty())
         <p class="commande-empty">Vous n'avez encore passé aucune commande.</p>

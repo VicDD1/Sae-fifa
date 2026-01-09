@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    
 <head>
     <meta charset="UTF-8">
     <title>Créer un nouveau produit | FIFA Store</title>
     <link rel="stylesheet" href="{{ asset('css/product.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+
     <style>
         .dropdown-checkbox {
     position: relative;
@@ -64,6 +68,7 @@
         button { padding: 10px 20px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer; }
         .add-btn { background: #00bfff; margin-left: 10px; }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
