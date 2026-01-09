@@ -134,14 +134,13 @@
 <body>
     <header>
         <nav>
-            <a href="/">Accueil</a>
+            <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
             <a href="/produits">Fifa Store</a>
 
 
             <a href="{{ route('vote.page') }}">Vote</a>
 
-            <a href="/players">Les joueurs</a>
-            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+           
 
             @auth
                 @php
