@@ -4,13 +4,16 @@
     --text-light: #ffffff;
     --text-muted: #bcdcff;
 }
-body{
+
+body {
     background-color: #eef2fb;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
 }
-header{
+
+/* --- Header & Nav (Inchangés) --- */
+header {
     background-color: #045694;
     height: 85px;
     display: flex;
@@ -18,7 +21,7 @@ header{
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-nav{
+nav {
     display: flex;
     align-items: center;
     width: 100%;
@@ -26,7 +29,7 @@ nav{
     gap: 20px;
 }
 
-nav a{
+nav a {
     color: #eef2fb;
     text-decoration: none;
     font-size: 18px;
@@ -35,67 +38,23 @@ nav a{
     transition: 0.2s;
 }
 
-nav a:hover{
+nav a:hover {
     background-color: #02456f;
 }
 
-/* Alignement droite */
-.account_creation{
+.account_creation {
     margin-left: auto;
     display: flex;
     align-items: center;
 }
 
-.account_creation img{
+.account_creation img {
     height: 50px;
     width: 50px;
     border-radius: 50%;
 }
 
-/* User info */
-.user-info,
-header div[style*="display: inline-flex"] {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-}
-
-.user-info span,
-header div[style*="display: inline-flex"] span {
-    font-weight: bold;
-    border-bottom: 2px solid #00ff87;
-    color: white;
-    padding-bottom: 2px;
-}
-
-header div[style*="display: inline-flex"] button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #ffcccc;
-    font-size: 18px;
-}
-
-nav a.cart-link,
-nav a[style*="font-weight: bold;"] {
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.btn {
-    padding: 8px 14px;
-    border-radius: 6px;
-    transition: 0.2s;
-}
-.btn-primary{
-    background: #00aaff;
-    color: white;
-}
-.btn-primary:hover{
-    background: #0088cc;
-}
-
+/* --- Banner & Overlay --- */
 .cookie-banner {
     position: fixed;
     bottom: 20px;
@@ -109,64 +68,127 @@ nav a[style*="font-weight: bold;"] {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.cookie-banner__content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-/* Correction Lisibilité Texte */
-.cookie-banner__text strong { color: #fff; font-size: 1.1rem; }
-.cookie-banner__text { color: var(--text-muted); flex: 1; }
-
-.cookie-banner__link {
-    background: none; border: none; color: var(--primary);
-    text-decoration: underline; cursor: pointer; padding: 0; font: inherit;
-}
-
-/* Overlay et Modal */
 .overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-    display: none; align-items: center; justify-content: center; z-index: 10000;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
 }
 .overlay.open { display: flex; }
 
+/* --- Structure de la Modal et de la Page de Gestion --- */
 .prefs {
     width: min(600px, 95%);
-    background: #fff; color: #333; /* Fond clair pour la modal pour une lecture parfaite */
-    padding: 30px; border-radius: 16px; max-height: 90vh; overflow-y: auto;
+    background: #fff;
+    color: #333;
+    border-radius: 16px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
 
-/* Style de la liste des cookies */
-.prefs__details summary {
-    display: flex; justify-content: space-between; align-items: center;
-    list-style: none; cursor: pointer; outline: none;
+/* Nouvelles Sections Séparées */
+.section-essential, 
+.section-optional {
+    padding: 20px;
 }
 
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--dark-bg);
+    margin: 0 0 5px 0;
+    display: inline-block;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 3px;
+}
+
+.section-desc {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.section-divider {
+    border: 0;
+    height: 1px;
+    background: #eee;
+    margin: 0;
+}
+
+/* Zone de choix (Toggle Row) */
+.prefs__row_choice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+/* --- Tableau des Cookies --- */
 .cookie-list {
-    margin-top: 15px; padding: 10px; background: #f4f7f9; border-radius: 8px;
+    margin-top: 10px;
+    padding: 10px;
+    background: #f4f7f9;
+    border-radius: 8px;
 }
 
 .cookie-list table {
-    width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
 }
 
-.cookie-list th { border-bottom: 1px solid #ddd; padding: 5px; }
-.cookie-list td { padding: 5px; color: #555; }
+.cookie-list th { border-bottom: 1px solid #ddd; padding: 8px; text-align: left; }
+.cookie-list td { padding: 8px; color: #444; }
 
-/* Toggles */
+/* --- Toggles Animés --- */
 .toggle {
-    width: 44px; height: 22px; border-radius: 20px; background: #ccc;
-    position: relative; border: none; cursor: pointer; transition: 0.3s;
+    width: 44px;
+    height: 22px;
+    border-radius: 20px;
+    background: #ccc;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
+
 .toggle.on { background: var(--primary); }
+
 .knob {
-    width: 16px; height: 16px; background: white; border-radius: 50%;
-    position: absolute; left: 3px; top: 3px; transition: 0.3s;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    transition: transform 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
+
 .toggle.on .knob { transform: translateX(22px); }
 
-.badge { font-size: 11px; background: #e0e0e0; padding: 4px 8px; border-radius: 4px; }
+/* --- Boutons et Badges --- */
+.btn {
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: #0088cc; }
+
+.badge { font-size: 11px; background: #e0e0e0; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+.container{
+    margin-left: 700px;
+}
