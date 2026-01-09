@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <title>Récapitulatif de votre vote</title>
     <link rel="stylesheet" href="{{ asset('css/account_vote_fifa.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 </head>
 
 <body>

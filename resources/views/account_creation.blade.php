@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="css/account_creation.css">
 </head>
 <body>
-    <header>
+        <header>
         <nav>
-            <a href="/">Accueil</a>
+            <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
             <a href="/produits">Fifa Store</a>
 
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
-            <a href="/players">Les joueurs</a>
-            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+            
+            <a href="/blog">L'Actu </a>
 
             @auth
                 @php
@@ -45,6 +45,7 @@
                         <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
                             {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
                         </span>
+                        <img style="text-decoration: none; display: flex; align-items: center; width:40px;" src="{{asset('assets/iconEdit.png')}}" alt="voir mes informations"></img>
                     </a>
 
                     <form action="/logout" method="POST" style="display:inline;">
@@ -62,36 +63,40 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
-@auth
+            @auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+            <div class="nav-right-group">
+                <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+                 <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
 
+            </div>
+            @endif
 
-                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
                 
             @endauth
             @auth
+                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
                 <a href="{{ route('commande.liste') }}" class="btn btn-primary">
                     Mes commandes
                 </a>
+                @endif
             @endauth
 
             @auth
-                @if (!Auth::user()->professionnel)
+                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
                     <a href="/creer_un_compte_professionnel_1" class="account_creation">
                         <p>Compte professionnel</p>
                     </a>
                 @endif
 
-                @if (Auth::user()->professionnel)
+                @if ((Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) && Auth::user()->professionnel)
                     <a href="/proposer_un_produit" class="account_creation">
                         <p>faire une demande de produit</p>
                     </a>
                 @endif
             @endauth
         </nav>
-        @endif
     </header>
 
     <div class="container">
@@ -119,15 +124,15 @@
 
 
                     <div>
-                        <label class="input-label">Prenom</label>
                         <input type="text" name="prenom_user_connecte" value="{{ old('prenom_user_connecte') }}" class="custom-input" required>
+                        <label class="input-label">Prenom</label>
                     </div>
 
 
 
                     <div >
-                        <label class="input-label">Adresse électronique</label>
                         <input type="email" name="courriel_user_connecte" value="{{ old('courriel_user_connecte') }}" class="custom-input" required>
+                        <label class="input-label">Adresse électronique</label>
                     </div>
                     @error('courriel_user_connecte')
                     <div class="error-message">{{ $message }}</div>
@@ -135,33 +140,32 @@
  
 
                     <div>
-                        <label class="input-label">pseudonyme</label>
                         <input type="text" name="surnom_user_connecte" value="{{ old('surnom_user_connecte') }}" class="custom-input">
+                        <label class="input-label">pseudonyme</label>
                     </div>
                     <div>
-                        <label class="input-label">Date de naissance</label>
                         <input type="date" name="date_de_naissance_user_connecte" value="{{ old('date_de_naissance_user_connecte') }}"  class="custom-input" required>
+                        <label class="input-label">Date de naissance</label>
                     </div>
                     @error('date_de_naissance_user_connecte')
                     <div class="error-message">{{ $message }}</div>
                     @enderror
                     <div class="select">
-                        <label class="input-label">Pays de naissance</label>
-
+                        
                         <select name="pays_de_naissance_user_connecte"  value="{{ old('pays_de_naissance_user_connecte') }}">
-
-                        <option value="France">France</option>
+                            
+                            <option value="France">France</option>
                         <option value="Royaume-unis">Royaume-unis</option>
                         <option value="Allemagne">Allemagne</option>
                         <option value="Italie">Italie</option>
                         <option value="Espagne">Espagne</option>
                         <option value="Portugal">Portugal</option>
-                        </select>
+                    </select>
+                    <label class="input-label">Pays de naissance</label>
                     </div>
 
                     <div class="select">
-                        <label class="input-label">Equipe favorite</label>
-
+                        
                         <select name="favori_user_connecte" value="{{ old('favori_user_connecte') }}">
 
                         <option value="francaise">francaise</option>
@@ -171,20 +175,21 @@
                         <option value="espagnole">espagnole</option>
                         <option value="portugaise">portugaise</option>
                         </select>
+                        <label class="input-label">Equipe favorite</label>
                     </div>
 
                     <div class="select">
-                        <label class="input-label">Langue</label>
-
+                        
                         <select name="langue_user_connecte" value="{{ old('langue_user_connecte') }}">
-
-                        <option value="francais">francais</option>
+                            
+                            <option value="francais">francais</option>
                         <option value="anglais">anglais</option>
                         <option value="allemand">allemand</option>
                         <option value="italien">italien</option>
                         <option value="espagnol">espagnol</option>
                         <option value="portugais">portugais</option>
                         </select>
+                        <label class="input-label">Langue</label>
                     </div>
 
                     <button type="submit" class="btn-login">POURSUIVRE</button> 

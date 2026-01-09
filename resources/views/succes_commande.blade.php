@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commande réussie</title>
     <link rel="stylesheet" href="{{ asset('css/success_commande.css') }}">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 </head>
 
 <body>
