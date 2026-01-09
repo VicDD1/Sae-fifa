@@ -9,17 +9,17 @@
     <link rel="stylesheet" href="{{ asset('css/account_creation.css') }}">
 </head>
 <body>
- <header>
+     <header>
         <nav>
-            <a href="/">Accueil</a>
+            <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
             <a href="/produits">Fifa Store</a>
 
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
-            <a href="/players">Les joueurs</a>
-            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+            
+            <a href="https://www.fifa.com/fr/news" target="_blank">L'Actu </a>
 
             @auth
                 @php
@@ -43,6 +43,7 @@
                         <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
                             {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
                         </span>
+                        <img style="text-decoration: none; display: flex; align-items: center; width:40px;" src="{{asset('assets/iconEdit.png')}}" alt="voir mes informations"></img>
                     </a>
 
                     <form action="/logout" method="POST" style="display:inline;">
@@ -60,36 +61,40 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
-@auth
+            @auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+            <div class="nav-right-group">
+                <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+                 <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
 
+            </div>
+            @endif
 
-                <a href="/proposer_un_produit"  class="account_creation"><p>faire une demande de produit</p></a>
                 
             @endauth
             @auth
+                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
                 <a href="{{ route('commande.liste') }}" class="btn btn-primary">
                     Mes commandes
                 </a>
+                @endif
             @endauth
 
             @auth
-                @if (!Auth::user()->professionnel)
+                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
                     <a href="/creer_un_compte_professionnel_1" class="account_creation">
                         <p>Compte professionnel</p>
                     </a>
                 @endif
 
-                @if (Auth::user()->professionnel)
+                @if ((Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) && Auth::user()->professionnel)
                     <a href="/proposer_un_produit" class="account_creation">
                         <p>faire une demande de produit</p>
                     </a>
                 @endif
             @endauth
         </nav>
-        @endif
     </header>
     <div class="container">
         <div class="left-panel">
@@ -188,27 +193,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group" style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
-                        <label class="input-label" style="color: #d7003a;">Nouveau mot de passe (Optionnel)</label>
-                        <p style="font-size: 12px; color: #666; margin-bottom: 5px;">Laissez vide si vous ne voulez pas le changer.</p>
-                        <div style="position: relative;">
-                            <input type="password" name="password_user_connecte" class="custom-input" placeholder="••••••••">
-                            <i class="fa-solid fa-key password-icon"></i>
-                        </div>
-                        @error('password_user_connecte')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                    <label class="input-label" style="color: #d7003a;">confirmer le nouveau mot de passe </label>
-                        
-                        <div style="position: relative;">
-                        <input type="password" name="password_user_connecte_confirmation" class="custom-input" placeholder="••••••••">
-                            <i class="fa-solid fa-key password-icon"></i>
-                        </div>
-                        @error('password_user_connecte_confirmation')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                    </div>
-
+                
                     <button type="submit" class="btn-login" style="background-color: #00ff87; color: #001638;">
                         ENREGISTRER LES MODIFICATIONS
                     </button>
@@ -233,22 +218,64 @@
                             Sécurisez votre compte avec un code SMS à chaque connexion.
                         </p>
                         
+                        
                         <form action="{{ route('mfa.enable') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label class="input-label">Numéro de téléphone mobile</label>
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="text" name="numero_telephone_user_connecte" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="custom-input" placeholder="0612345678" style="margin-bottom: 0;" required>
+                                
+                                {{-- Conteneur Flexbox pour aligner Select + Input + Bouton --}}
+                                <div style="display: flex; gap: 10px; align-items: flex-start;">
                                     
-                                    <button type="submit" class="btn-login" style="width: auto; padding: 0 20px; background-color: #3b82f6; color: white; margin-top: 0;">
-                                        ACTIVER
+                                    {{-- 1. Choix du pays --}}
+                                    <div style="width: 110px;">
+                                        <select name="indicatif" class="custom-input" style="padding: 10px; border-bottom: 2px solid #ccc; font-weight: bold;">
+                                            <option value="+33">🇫🇷 +33</option>
+                                            <option value="+41">🇨🇭 +41</option>
+                                            <option value="+32">🇧🇪 +32</option>
+                                            <option value="+1">🇨🇦 +1</option>
+                                            <option value="+44">🇬🇧 +44</option>
+                                            <option value="+49">🇩🇪 +49</option>
+                                            <option value="+34">🇪🇸 +34</option>
+                                            <option value="+351">🇵🇹 +351</option>
+                                            <option value="+39">🇮🇹 +39</option>
+                                            <option value="+212">🇲🇦 +212</option>
+                                            <option value="+213">🇩🇿 +213</option>
+                                            <option value="+216">🇹🇳 +216</option>
+                                        </select>
+                                    </div>
+
+                                    {{-- 2. Saisie du numéro --}}
+                                    <div style="flex: 1; display: flex; flex-direction: column;">
+                                        <input type="text" 
+                                            name="numero_suffixe" 
+                                            class="custom-input" 
+                                            placeholder="6 12 34 56 78" 
+                                            inputmode="numeric"
+                                            maxlength="10"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            required>
+                                        
+                                        {{-- Message d'erreur --}}
+                                        @error('numero_suffixe')
+                                            <div class="error-message" style="color: #d7003a; margin-top: 5px; font-size: 11px;">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- 3. Bouton OK --}}
+                                    <button type="submit" 
+                                            class="btn-login" 
+                                            style="width: auto; padding: 12px 20px; background-color: #3b82f6; color: white; margin-top: 0; cursor: pointer; position: relative; z-index: 10;">
+                                        Activer
                                     </button>
                                 </div>
-                                @error('numero_telephone_user_connecte')
-                                    <div class="error-message" style="margin-top: 5px;">{{ $message }}</div>
-                                @enderror
+
+                                <p style="font-size: 11px; color: #888; margin-top: 8px;">
+                                    <i class="fa-solid fa-circle-info"></i> Sélectionnez votre pays, puis tapez votre numéro (avec ou sans le 0).
+                                </p>
                             </div>
                         </form>
+                        
                     @endif
                 </div>
             </div>

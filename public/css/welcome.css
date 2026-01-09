@@ -15,12 +15,12 @@ header{
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-nav{
+nav {
     display: flex;
     align-items: center;
     width: 100%;
     padding: 0 30px;
-    gap: 20px;
+    gap: 0px; 
 }
 
 nav a{
@@ -38,15 +38,15 @@ nav a:hover{
 
 /* Alignement droite */
 .account_creation{
-    margin-left: auto;
+    margin-right: 0px;
+    display: flex;
+    align-items: right;
+}
+.nav-right-group {
+    margin-left: auto !important;
     display: flex;
     align-items: center;
-}
-
-.account_creation img{
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
+    gap: 20px;
 }
 
 /* User info */
@@ -100,4 +100,21 @@ footer{
     left: 30%;
     align-content: center;
     text-align: center;
+}
+#botmanWidgetRoot div .desktop-closed-message-avatar img {
+    width: 420% !important;        
+    height: 420% !important;       
+    max-width: none !important;   
+    padding: 0 !important;         
+    object-fit: contain !important;
+
+    transform: scale(1.9);        
+}
+
+/* Ensure the button container remains a perfect circle */
+.desktop-closed-message-avatar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-size: cover !important;
 }
