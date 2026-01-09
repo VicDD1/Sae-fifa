@@ -199,7 +199,7 @@
             <a href="{{ route('vote.page') }}">Vote</a>
 
             <a href="/players">Les joueurs</a>
-            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+            <a href="/blog">L'Actu</a>
 
             @auth
                 @php
