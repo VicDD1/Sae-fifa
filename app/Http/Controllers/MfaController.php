@@ -12,8 +12,8 @@ class MfaController extends Controller
 {
     // 1. Activer le MFA (Version compatible avec le Sélecteur de Pays)
     public function enableMfa(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
         // A. Validation : On attend DEUX champs (l'indicatif et le reste)
         $request->validate([

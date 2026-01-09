@@ -79,15 +79,6 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product
 Route::get('/creer_categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');
 Route::post('/categorie_store', [Categorie_ProduitControler::class, 'store'])->name('categorie.store');
 
-Route::get('/creer_un_produit', [MakeProductController::class, 'create'])
-    ->name('make_product.create');
-
-// Traiter le formulaire (sauvegarde en base)
-Route::post('/creer_un_produit', [MakeProductController::class, 'store'])
-    ->name('make_product.store');
-
-
-
 Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
 Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')

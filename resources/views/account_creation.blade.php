@@ -124,15 +124,15 @@
 
 
                     <div>
-                        <label class="input-label">Prenom</label>
                         <input type="text" name="prenom_user_connecte" value="{{ old('prenom_user_connecte') }}" class="custom-input" required>
+                        <label class="input-label">Prenom</label>
                     </div>
 
 
 
                     <div >
-                        <label class="input-label">Adresse électronique</label>
                         <input type="email" name="courriel_user_connecte" value="{{ old('courriel_user_connecte') }}" class="custom-input" required>
+                        <label class="input-label">Adresse électronique</label>
                     </div>
                     @error('courriel_user_connecte')
                     <div class="error-message">{{ $message }}</div>
@@ -140,33 +140,32 @@
  
 
                     <div>
-                        <label class="input-label">pseudonyme</label>
                         <input type="text" name="surnom_user_connecte" value="{{ old('surnom_user_connecte') }}" class="custom-input">
+                        <label class="input-label">pseudonyme</label>
                     </div>
                     <div>
-                        <label class="input-label">Date de naissance</label>
                         <input type="date" name="date_de_naissance_user_connecte" value="{{ old('date_de_naissance_user_connecte') }}"  class="custom-input" required>
+                        <label class="input-label">Date de naissance</label>
                     </div>
                     @error('date_de_naissance_user_connecte')
                     <div class="error-message">{{ $message }}</div>
                     @enderror
                     <div class="select">
-                        <label class="input-label">Pays de naissance</label>
-
+                        
                         <select name="pays_de_naissance_user_connecte"  value="{{ old('pays_de_naissance_user_connecte') }}">
-
-                        <option value="France">France</option>
+                            
+                            <option value="France">France</option>
                         <option value="Royaume-unis">Royaume-unis</option>
                         <option value="Allemagne">Allemagne</option>
                         <option value="Italie">Italie</option>
                         <option value="Espagne">Espagne</option>
                         <option value="Portugal">Portugal</option>
-                        </select>
+                    </select>
+                    <label class="input-label">Pays de naissance</label>
                     </div>
 
                     <div class="select">
-                        <label class="input-label">Equipe favorite</label>
-
+                        
                         <select name="favori_user_connecte" value="{{ old('favori_user_connecte') }}">
 
                         <option value="francaise">francaise</option>
@@ -176,20 +175,21 @@
                         <option value="espagnole">espagnole</option>
                         <option value="portugaise">portugaise</option>
                         </select>
+                        <label class="input-label">Equipe favorite</label>
                     </div>
 
                     <div class="select">
-                        <label class="input-label">Langue</label>
-
+                        
                         <select name="langue_user_connecte" value="{{ old('langue_user_connecte') }}">
-
-                        <option value="francais">francais</option>
+                            
+                            <option value="francais">francais</option>
                         <option value="anglais">anglais</option>
                         <option value="allemand">allemand</option>
                         <option value="italien">italien</option>
                         <option value="espagnol">espagnol</option>
                         <option value="portugais">portugais</option>
                         </select>
+                        <label class="input-label">Langue</label>
                     </div>
 
                     <button type="submit" class="btn-login">POURSUIVRE</button> 

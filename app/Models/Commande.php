@@ -42,7 +42,7 @@ class Commande extends Model
 
     public function modeLivraison()
     {
-        return $this->belongsTo(ModeLivraison::class, 'id_mode_livraison', 'id_mode_livraison');
+        return $this->belongsTo(Mode_livraison::class, 'id_mode_livraison', 'id_mode_livraison');
     }
 
     public function lignes()
