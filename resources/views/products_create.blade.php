@@ -78,10 +78,18 @@
                                     <div class="col-6 mb-3">
                                         <label class="form-label">Taille *</label>
 <select class="form-select" name="id_taille" required>
-    @foreach($tailles as $taille)
-        <option value="{{ $taille->id_taille }}">{{ $taille->label_taille }}</option>
-    @endforeach
-</select>
+@foreach($tailles as $taille)
+                <label>
+                    <input 
+                        type="checkbox"
+                        name="tailles[]"
+                        value="{{ $taille->id_taille }}"
+                        {{ is_array(old('tailles')) && in_array($taille->id_taille, old('tailles')) ? 'checked' : '' }}
+                    >
+                    {{ $taille->label_taille }}
+                </label>
+            @endforeach
+                        </select>
                                     </div>
                                     <div class="col-6 mb-3">
                                         <label class="form-label">Quantité stock *</label>
@@ -91,11 +99,19 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Colori *</label>
-<select class="form-select" name="id_colori" required>
-    @foreach($coloris as $colori)
-        <option value="{{ $colori->id_colori }}">{{ $colori->label_colori }}</option>
-    @endforeach
-</select>   
+                                    <select class="form-select" name="id_colori" required>
+                                        @foreach($coloris as $couleur)
+                                        <label>
+                                            <input 
+                                                type="checkbox"
+                                                name="couleurs[]"
+                                                value="{{ $couleur->id_colori }}"
+                                                {{ is_array(old('couleurs')) && in_array($couleur->id_colori, old('couleurs')) ? 'checked' : '' }}
+                                            >
+                                            {{ $couleur->label_colori }}
+                                        </label>
+                                    @endforeach
+                        </select>   
                                 </div>
 
                                 <div class="mb-3">
