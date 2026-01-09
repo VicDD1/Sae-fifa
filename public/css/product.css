@@ -26,6 +26,7 @@ header{
     align-items: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
+
 footer{
     bottom: 20px;
     left: 30%;
@@ -249,7 +250,7 @@ h1 {
     height: 58px;
     width: 58px;
     border-radius: 50%;
-    background-color: whitesmoke;
+    
 }
 
 .btn-login {
@@ -354,6 +355,7 @@ h1 {
     border: 1px dashed #ccc;
     padding: 20px;
     border-radius: 8px;
+}
 
 .btn-create {
     display: inline-block;
@@ -375,4 +377,21 @@ h1 {
 .btn-create:hover {
     background-color: #5a6268; 
     transform: translateY(-2px);
+}
+#botmanWidgetRoot div .desktop-closed-message-avatar img {
+    width: 420% !important;        
+    height: 420% !important;       
+    max-width: none !important;   
+    padding: 0 !important;         
+    object-fit: contain !important;
+
+    transform: scale(1.9);        
+}
+
+/* Ensure the button container remains a perfect circle */
+.desktop-closed-message-avatar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-size: cover !important;
 }

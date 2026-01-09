@@ -18,6 +18,7 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
+use App\Http\Controllers\MfaController;
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');
@@ -34,6 +35,7 @@ Route::get('/vote', fn() => view('vote_fifa'));
 Route::get('/privacy_policy', fn() => view('privacy_policy'));
 Route::get('/players', fn() => view('players'));
 
+
 /* ------------------------------
    Pages statiques & simples
 ------------------------------ */
@@ -48,8 +50,8 @@ Route::get('/', function () {
 });
 
 Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
-Route::get('/localisation_des_ventes', [SalesController::class, 'localisation']);
-
+Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap']);
+Route::get('/produits_en_cours',[ProductController::class,'incomplet']);
 
 Route::view('/parametre_compte', 'account_modification');
 Route::view('/se_connecter', 'account_connection');
@@ -90,9 +92,9 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')
 ->name('product.detail');
 
-Route::get('/produits/creer', [ProductController::class, 'create'])->name('products.create');
-Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
-Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
+Route::get('/produits/creer', [ProductController::class, 'create'])->name('make_product.create');
+Route::post('/produits', [ProductController::class, 'store'])->name('make_product.store');
+Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
 
 /* ------------------------------
    Authentification — Inscription
