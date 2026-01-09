@@ -285,6 +285,8 @@
      <a href="/privacy_policy"> Respect de la vie privée </a> 
 </footer>
 
+@include('botman')
+
 <button onclick="toggleHelpModal()" style="position: fixed; bottom: 20px; left: 20px; background-color: #2563eb; color: white; width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 99999; display: flex; align-items: center; justify-content: center;">
     ?
 </button>
