@@ -22,7 +22,7 @@
             <a href="{{ route('vote.page') }}">Vote</a>
 
             
-            <a href="https://www.fifa.com/fr/news" target="_blank">L'Actu </a>
+            <a href="/blog">L'Actu </a>
 
             @auth
                 @php
@@ -120,7 +120,17 @@
                     <div class="commande-body">
                         <p><strong>Montant total :</strong> {{ number_format($commande->montant_total, 2) }} €</p>
                         <p><strong>Mode de paiement :</strong> {{ ucfirst($commande->mode_paiement) }}</p>
-                        <p><strong>Statut :</strong> {{ $commande->statut_paiement }}</p>
+                        <p><strong>État de livraison :</strong> {{ $commande->statut_paiement }}</p>
+                        <p><strong>Mode de livraison :</strong>
+                            {{ $commande->modeLivraison?->type_livraison ?? '—' }}
+                        </p>
+                        <p><strong>Adresse de livraison :</strong>
+                            @if($commande->adresse)
+                                {{ $commande->adresse->ville_adresse }} — {{ $commande->adresse->code_postal }}
+                            @else
+                                —
+                            @endif
+                        </p>
                     </div>
 
                     <!-- RÉCAP COMMANDE -->

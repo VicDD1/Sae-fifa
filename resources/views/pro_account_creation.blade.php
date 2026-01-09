@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <a href="{{ route('vote.page') }}">Vote</a>
 
             
-            <a href="https://www.fifa.com/fr/news" target="_blank">L'Actu </a>
+            <a href="/blog">L'Actu </a>
 
             @auth
                 @php
@@ -224,72 +224,72 @@ document.addEventListener("DOMContentLoaded", () => {
                 @csrf
 
                 <div>
-                    <label class="input-label">Votre société</label>
                     <input type="text" name="nom_societe" value="{{ old('nom_societe') }}" class="custom-input" required>
                     @error('nom_societe')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Votre société</label>
                 </div>
 
                 <div class="form-group">
-                    <label class="input-label">Numero de TVA de votre entreprise</label>
                     <input type="text" name="numero_TVA" value="{{ old('numero_TVA') }}" class="custom-input" required>
                     @error('numero_TVA')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Numero de TVA de votre entreprise</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Votre activité</label>
                     <input type="text" name="activite_professionnel" value="{{ old('activite_professionnel') }}" class="custom-input">
                     @error('activite_professionnel')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Votre activité</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Votre adresse email</label>
                     <input type="email" name="email_professionnel" value="{{ old('email_professionnel') }}" class="custom-input" required>
                     @error('email_professionnel')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Votre adresse email</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Nom</label>
                     <input type="text" name="nom_professionnel" value="{{ old('nom_professionnel') }}" class="custom-input" required>
                     @error('nom_professionnel')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Nom</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Prenom</label>
                     <input type="text" name="prenom_professionnel" value="{{ old('prenom_professionnel') }}" class="custom-input" required>
                     @error('prenom_professionnel')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Prenom</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Adresse</label>
                     <input id="adresse_auto" type="text" name="adresse_professionnel" value="{{ old('adresse_professionnel') }}" class="custom-input" autocomplete="off" required>
                     <div id="adresse_suggestions" class="suggestions"></div>
                     @error('adresse_professionnel')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Adresse</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Code postal</label>
                     <input id="postal_auto" type="text" name="code_postal_professionnel" value="{{ old('code_postal_professionnel') }}" class="custom-input" required>
                     @error('code_postal_professionnel')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Code postal</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Pays d'implentation de l'entreprise</label>
+                    
                     <select id="pays_auto" name="pays_professionnel" class="custom-input" required>
                         @foreach([
                             "Afghanistan","Afrique du Sud","Albanie","Algérie","Allemagne","Andorre","Angola","Antigua-et-Barbuda",
@@ -322,18 +322,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     @error('pays_professionnel')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Pays d'implentation de l'entreprise</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Ville</label>
                     <input id="ville_auto" type="text" name="ville_professionnel" value="{{ old('ville_professionnel') }}" class="custom-input" required>
                     @error('ville_professionnel')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Ville</label>
                 </div>
 
                 <div>
-                    <label class="input-label">Numero de telephone</label>
                     <div style="display: flex; gap: 5px;">
                         <select name="telephone_country_code" class="custom-input" style="width: 80px;" required>
                             <option value="+33" selected>+33</option>
@@ -344,8 +344,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         <input type="text" name="telephone_professionnel" value="{{ old('telephone_professionnel') }}" class="custom-input" style="flex:1;" required>
                     </div>
                     @error('telephone_professionnel')
-                        <div class="error-message">{{ $message }}</div>
+                    <div class="error-message">{{ $message }}</div>
                     @enderror
+                    <label class="input-label">Numero de telephone</label>
                 </div>
 
                 <button type="submit" class="btn-login">POURSUIVRE</button>

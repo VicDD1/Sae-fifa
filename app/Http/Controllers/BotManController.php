@@ -61,7 +61,7 @@ class BotManController extends Controller
 
         // --- NAVIGATION PRINCIPALE ---
 
-        $botman->hears('.*(accueil|home|début).*', function (BotMan $bot) use ($currentUrl) {
+        $botman->hears('.*(accueil|home|debut|début).*', function (BotMan $bot) use ($currentUrl) {
             if ( $currentUrl == '/') {
                 $bot->reply("Vous êtes déjà sur la page d'Accueil (1er onglet à gauche).");
             } else {
@@ -132,7 +132,7 @@ class BotManController extends Controller
                     $bot->reply("Pour avoir ou modifier vos informations, veuillez soit cliquer sur votre nom ( " . Auth::user()->name . " ) dans la barre bleue ou cliquer sur ce lien :<br><a href='/mon-profil'>👤 Afficher mon compte</a>");
                 }
             } else {
-                $bot->reply("Veuillez vous connecter pour accéder à votre profil. Cliquez sur l'icon en haut a droite ou Cliquez sur ce lien : <br><a href='/connexion'>👤 Se connecter</a>");
+                $bot->reply("Veuillez vous connecter pour accéder à votre profil. Cliquez sur l'icon en haut a droite ou Cliquez sur ce lien : <br><a href='/connexion'>👤 Se connecter</a> si ");
             }
         });
 
@@ -205,7 +205,7 @@ class BotManController extends Controller
 
         // --- ARTICLES ET ACTUALITES ---
 
-        $botman->hears('.*(article|actualité|news).*', function (BotMan $bot) {
+        $botman->hears('.*(article|actualite|actualité|news).*', function (BotMan $bot) {
             $bot->reply("L'onglet Les Articles (5ème position) est en cours de préparation.");
         });
 
@@ -225,7 +225,7 @@ class BotManController extends Controller
 
         // --- CONNEXION ET DECONNEXION ---
 
-        $botman->hears('.*(connexion|connecter|login|créer un compte|inscription).*', function (BotMan $bot) use ($currentUrl) {
+        $botman->hears('.*(connexion|connecter|login|créer un compte|creer un compte|inscription).*', function (BotMan $bot) use ($currentUrl) {
             if (Auth::check()) {
                 $bot->reply("Bonjour " . Auth::user()->name . " ! Vous êtes déjà connecté.");
                 $bot->reply("Pour quitter votre session, cliquez sur l'icône Power rouge à droite ou ici : <br><a href='/logout'>🚪 Se déconnecter</a>");
@@ -245,7 +245,7 @@ class BotManController extends Controller
 
         // --- INSCRIPTION CLIENT (ETAPES 1 ET 2) ---
 
-        $botman->hears('.*(créer un compte|création de compte|inscrire|inscription).*', function (BotMan $bot) use ($currentUrl) {
+        $botman->hears('.*(creation de compte|creer un compte | créer un compte|création de compte|inscrire|inscription).*', function (BotMan $bot) use ($currentUrl) {
             if (str_contains(request()->fullUrl(), 'professionnel')) {
                 $bot->reply("Pour créer un compte professionnel, vous devez impérativement posséder un compte client standard au préalable.");
                 $bot->reply("Cette démarche s'effectue uniquement depuis la page d'accueil une fois connecté.");

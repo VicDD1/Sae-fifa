@@ -19,6 +19,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
+use App\Http\Controllers\BlogController;
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');
@@ -77,15 +78,6 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product
 
 Route::get('/creer_categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');
 Route::post('/categorie_store', [Categorie_ProduitControler::class, 'store'])->name('categorie.store');
-
-Route::get('/creer_un_produit', [MakeProductController::class, 'create'])
-    ->name('make_product.create');
-
-// Traiter le formulaire (sauvegarde en base)
-Route::post('/creer_un_produit', [MakeProductController::class, 'store'])
-    ->name('make_product.store');
-
-
 
 Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
 Route::get('/produit/{id}', [ProductController::class, 'detail'])
@@ -248,3 +240,12 @@ Route::get('/login/mfa', [MfaController::class, 'showMfaForm'])
 Route::post('/login/mfa', [MfaController::class, 'verifyMfa'])
     ->name('mfa.verify');
 
+
+// -- SECTION BLOG --
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
+
+// Route protégée (il faut être connecté pour commenter)
+Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
+    ->middleware('auth')
+    ->name('blog.comment.store');
