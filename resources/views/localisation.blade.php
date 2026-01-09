@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sales Map</title>
-
+    <title>carte des ventes </title>
+<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
@@ -27,21 +27,31 @@
         attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
-  fetch('/api/sales/localisation')
+ fetch('/api/sales/localisation')
     .then(res => res.json())
     .then(data => {
-        if (!data.length) {
-            console.info('No sales to display');
-            return;
-        }
+        console.log("Total rows received:", data.length);
 
-        data.forEach(point => {
-            L.circleMarker([point.latitude, point.longitude], {
-                radius: Math.sqrt(point.total_sales) / 20,
-                fillOpacity: 0.7
-            })
-            .addTo(map)
-            .bindPopup(`Ventes: ${point.total_sales} €`);
+        data.forEach((point, index) => {
+            // CRITICAL CHECK: Skip if lat or lon is null or undefined
+            if (point.latitude === null || point.longitude === null) {
+                return; // Skip this iteration and go to the next one
+            }
+
+            const lat = parseFloat(point.latitude);
+            const lon = parseFloat(point.longitude);
+            const amount = parseFloat(point.montant_regle);
+
+            // Double check that the conversion to float worked
+            if (!isNaN(lat) && !isNaN(lon)) {
+                L.circleMarker([lat, lon], {
+                    radius: Math.sqrt(amount) || 5,
+                    color: '#ff7800',
+                    fillOpacity: 0.7
+                })
+                .addTo(map)
+                .bindPopup(`Ville: ${point.ville_adresse}<br>Vente: ${amount} €`);
+            }
         });
     });
 </script>

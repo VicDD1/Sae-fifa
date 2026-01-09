@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>FIFA Store - Accueil</title>
-        <link rel="stylesheet" href="{{ asset('css/product.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    </head>
-    <body>
+<head>
+    <meta charset="utf-8">
+    <title>Statistiques</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+</head>
+<body>
 
+<ul class="tabs">
+    <li class="tab-link current" data-tab="all-sales">Ventes Totales</li>
+    <li class="tab-link" data-tab="by-category">Ventes par Catégorie</li>
+</ul>
 
-<canvas id="salesChart"></canvas>
+<div id="all-sales" class="tab-content current" style="width:80vw; height:60vh;">
+    <x-chartjs-component :chart="$chart" />
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div id="by-category" class="tab-content" style="width:80vw; height:60vh;">
+    <x-chartjs-component :chart="$chartByCategory" />
+</div>
+
 <script>
-    const ctx = document.getElementById('salesChart').getContext('2d');
-    const salesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {!! json_encode($monthlySales->pluck('month')->map(fn($m) => Carbon\Carbon::create()->month($m)->format('M'))) !!},
-            datasets: [{
-                label: 'Total Sales (€)',
-                data: {!! json_encode($monthlySales->pluck('total_sales')) !!},
-                borderColor: 'rgba(75, 192, 192, 1)',
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
+document.querySelectorAll('.tab-link').forEach(link => {
+    link.addEventListener('click', function() {
+        const tab = this.dataset.tab;
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('current'));
+        document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('current'));
+        document.getElementById(tab).classList.add('current');
+        this.classList.add('current');
     });
+});
 </script>
 
-    
+<style>
+.tab-content { display:none; }
+.tab-content.current { display:block; }
+.tab-link.current { font-weight:bold; }
+</style>
 </body>
+</html>

@@ -4,67 +4,75 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; // Pour écrire le SMS dans le fichier log
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\User_connecte;
 
 class MfaController extends Controller
 {
-    // 1. Activer le MFA (Quand l'utilisateur est connecté sur son profil)
+    // 1. Activer le MFA (Version compatible avec le Sélecteur de Pays)
     public function enableMfa(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        // Validation du numéro (10 à 15 chiffres)
+        // A. Validation : On attend DEUX champs (l'indicatif et le reste)
         $request->validate([
-            'numero_telephone_user_connecte' => 'required|numeric|digits_between:10,15'
+            'indicatif' => 'required|string',     // Ex: "+33"
+            'numero_suffixe' => 'required',       // Ex: "0612345678"
         ]);
 
-        // Mise à jour : On active le booléen (true)
+        // B. Nettoyage : On ne garde que les chiffres pour le suffixe
+        $suffixeNettoye = preg_replace('/[^0-9]/', '', $request->numero_suffixe);
+
+        // C. On enlève le "0" du début s'il y en a un
+        // Ex: "061234..." devient "61234..."
+        $suffixeSansZero = ltrim($suffixeNettoye, '0');
+
+        // D. Assemblage Final : "+33" + "61234..."
+        $numeroComplet = $request->indicatif . $suffixeSansZero;
+
+        // E. Vérification de longueur (sécurité)
+        if (strlen($numeroComplet) < 8 || strlen($numeroComplet) > 16) {
+            return back()->withErrors(['numero_suffixe' => 'Le numéro semble invalide.']);
+        }
+
+        // F. Sauvegarde
         $user->update([
-            'numero_telephone_user_connecte' => $request->numero_telephone_user_connecte,
+            'numero_telephone_user_connecte' => $numeroComplet,
             'mfa_active' => true 
         ]);
 
-        return back()->with('success', 'Sécurité activée ! Vous recevrez un code par SMS à la prochaine connexion.');
+        return back()->with('success', 'Sécurité activée sur le numéro : ' . $numeroComplet);
     }
 
-    // 2. Afficher la page "Entrez le code" (Quand on essaie de se connecter)
+    // 2. Afficher la page du code (Inchangé)
     public function showMfaForm()
     {
-        // Si on n'a pas commencé de connexion, on renvoie au login
         if (!session()->has('mfa_user_id')) {
-            return redirect('/login');
+            return redirect('/connexion');
         }
         return view('auth.mfa_verify');
     }
 
-    // 3. Vérifier le code reçu
+    // 3. Vérifier le code (Inchangé)
     public function verifyMfa(Request $request)
     {
         $request->validate(['code' => 'required|numeric']);
 
-        // On récupère l'ID de l'utilisateur qui attend
         $userId = session('mfa_user_id');
         $user = User_connecte::find($userId);
 
         if (!$user) {
-            return redirect('/login')->with('error', 'Session expirée, recommencez.');
+            return redirect('/connexion')->with('error', 'Session expirée.');
         }
 
-        // Vérification : Est-ce le bon code ? Est-il encore valide (temps) ?
         if ($user->mfa_code === $request->code && Carbon::now()->lessThan($user->mfa_expiration)) {
-            
-            // C'est gagné ! On connecte l'utilisateur
             Auth::login($user);
-            
-            // On nettoie la session et la base
             session()->forget('mfa_user_id');
             $user->update(['mfa_code' => null, 'mfa_expiration' => null]);
-
-            return redirect('/')->with('success', 'Connexion sécurisée réussie !');
+            return redirect('/')->with('success', 'Connexion réussie !');
         }
 
-        return back()->with('error', 'Code invalide ou expiré.');
+        return back()->with('error', 'Code invalide.');
     }
 }

@@ -11,7 +11,7 @@
             title: 'Assistant Fifa',
             mainColor: '#0056b3',
             bubbleBackground: '#0056b3',
-                
+            bubbleAvatarUrl: '{{ asset("assets/help.png") }}',
             // On s'assure que window.location.pathname est bien lu
             userId: '{{ Auth::id() ?? "guest" }}|' + window.location.pathname,
                 

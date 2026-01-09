@@ -157,13 +157,7 @@
                     <label class="filter-label">Sous-Catégorie</label>
                     <select name="sous_categorie" class="filter-input" style="min-width: 180px;">
                         <option value="">Toutes</option>
-                        @foreach($sous_categories as $sub)
-                            <option 
-                                value="{{ $sub->id_categorie }}" 
-                                {{ request('sous_categorie') == $sub->id_categorie ? 'selected' : '' }}>
-                                {{ $sub->label_categorie }}
-                            </option>
-                        @endforeach
+  
                     </select>
                 </div>
 
@@ -221,6 +215,7 @@
 <div class="product-grid">
     @if(isset($products) && count($products) > 0)
         @foreach($products as $product)
+        
             <article class="card">
                 
                 <a href="{{ route('product.detail', $product->id_produit) }}" class="card-img">
@@ -248,6 +243,7 @@
                     <span class="card-price">{{ number_format($product->prix_base, 2) }} €</span>
                 </div>
             </article>
+       
         @endforeach
     @else
         <div style="grid-column: 1/-1; text-align:center; padding: 40px; background:#f0f0f0; border-radius: 8px;">
@@ -259,140 +255,19 @@
  <div class="history-sidebar">
     <h2>Vus récemment</h2>
     <div class="history-list">
-        @forelse($recentProducts as $recent)
-            <div class="history-item">
-                <a href="{{ route('product.detail', $recent->id_produit) }}" class="history-link">
-                    
-                    <img src="../assets/photo_produit/{{ $recent->id_produit }}.webp"
-                         alt="{{ $recent->label_produit }}"
-                         class="history-img">
-                    <div class="history-body">     
-                        <h4 class="history-label">
-                            {{ $recent->label_produit }}
-                        </h4>
-    
-                        <div class="history-price">
-                            {{ number_format($recent->prix_base, 2) }} €
-                        </div>
-                    </div>
-                </a>
-            </div>
-        @empty
-            <p class="history-empty">
-                Aucun article consulté pour le moment.
-            </p>
-        @endforelse
+        
+
+
     </div>
 </div>
         </main>
-        
-<footer>
+        <footer>
     <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
         <span>|</span>
     <a href="/privacy_policy"> Conditions d'utilisation </a>
         <span>|</span>
      <a href="/privacy_policy"> Respect de la vie privée </a> 
 </footer>
-
-<button onclick="toggleHelpModal()" style="position: fixed; bottom: 20px; left: 20px; background-color: #2563eb; color: white; width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 99999; display: flex; align-items: center; justify-content: center;">
-    ?
-</button>
-
-{{-- Fenêtre Modale d'Aide --}}
-<div id="helpModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center;">
-    
-    <div style="background: white; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; border-radius: 12px; padding: 0; box-shadow: 0 20px 25px rgba(0,0,0,0.2); position: relative;">
-        
-        <div style="background: #2563eb; color: white; padding: 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center;">
-            <h2 style="margin: 0; font-size: 1.5rem;"><i class="fa-solid fa-circle-question"></i> Guide du FIFA Store</h2>
-            <button onclick="toggleHelpModal()" style="background: transparent; border: none; color: white; font-size: 24px; cursor: pointer;">&times;</button>
-        </div>
-
-        <div style="padding: 25px;">
-            
-            <div style="margin-bottom: 25px;">
-                <h3 style="color: #1e40af; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; margin-top: 0; display: flex; align-items: center;">
-                    <i class="fa-solid fa-magnifying-glass" style="margin-right: 10px;"></i> Trouver son maillot
-                </h3>
-                <ul style="font-size: 14px; color: #4b5563; padding-left: 20px; line-height: 1.6;">
-                    <li><strong>Filtres :</strong> Utilisez le menu de gauche pour trier par Nation, Catégorie ou Budget.</li>
-                    <li><strong>Astuce :</strong> Sélectionnez d'abord une <em>Catégorie</em> et appliquez-la pour voir apparaître les <em>Sous-catégories</em>.</li>
-                    <li><strong>Important :</strong> N'oubliez pas de cliquer sur <span style="background:#eee; padding: 2px 5px; border-radius:4px; font-size: 12px; color:#333;">Appliquer</span> pour confirmer vos filtres.</li>
-                </ul>
-            </div>
-
-            <div style="margin-bottom: 25px;">
-                <h3 style="color: #1e40af; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; display: flex; align-items: center;">
-                    <i class="fa-solid fa-star" style="margin-right: 10px;"></i> Nos Exclusivités
-                </h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div style="background: #f3f4f6; padding: 10px; border-radius: 8px;">
-                        <strong style="color: #1f2937; font-size: 14px;">🗳️ Espace Vote</strong>
-                        <p style="font-size: 13px; color: #6b7280; margin: 5px 0 10px 0;">Élisez le joueur de l'année.</p>
-                        <a href="{{ route('vote.page') }}" style="font-size: 13px; color: #2563eb; text-decoration: underline; font-weight: bold;">Accéder au vote &rarr;</a>
-                    </div>
-                    <div style="background: #f3f4f6; padding: 10px; border-radius: 8px;">
-                        <strong style="color: #1f2937; font-size: 14px;">💼 Compte Pro</strong>
-                        <p style="font-size: 13px; color: #6b7280; margin: 5px 0 10px 0;">Offres pour les clubs.</p>
-                        <a href="/creer_un_compte_professionnel_1" style="font-size: 13px; color: #2563eb; text-decoration: underline; font-weight: bold;">Devenir Partenaire &rarr;</a>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 25px;">
-                <h3 style="color: #1e40af; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; display: flex; align-items: center;">
-                    <i class="fa-solid fa-box-open" style="margin-right: 10px;"></i> Mes Commandes
-                </h3>
-                <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
-                    @auth
-                        Vous êtes connecté. Vous pouvez suivre l'état de vos achats directement ici :<br>
-                        <a href="{{ route('commande.liste') }}" style="display: inline-block; margin-top: 8px; background-color: #2563eb; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 13px;">
-                            <i class="fa-solid fa-truck-fast"></i> Suivre mes commandes
-                        </a>
-                    @else
-                        Pour passer commande ou suivre un colis, vous devez vous connecter.<br>
-                        <a href="/connexion" style="color: #2563eb; text-decoration: underline; font-weight: bold;">Se connecter maintenant</a>
-                    @endauth
-                </p>
-            </div>
-
-            <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 15px;">
-                <h4 style="margin: 0 0 10px 0; color: #1e40af; font-size: 15px;">❓ Une question sans réponse ?</h4>
-                <p style="font-size: 13px; color: #4b5563; margin-bottom: 0;">
-                    Notre équipe support est disponible. 
-                    <a href="mailto:olivier.brunel@etu.univ-smb.fr" style="color: #2563eb; text-decoration: underline; font-weight: bold;">Contactez le support</a>
-                </p>
-            </div>
-
-        </div>
-
-        <div style="padding: 15px; text-align: right; background: #f9fafb; border-radius: 0 0 12px 12px; display: flex; justify-content: space-between; align-items: center;">
-            <a href="/privacy_policy" style="font-size: 12px; color: #9ca3af; text-decoration: none;">Politique de confidentialité</a>
-            
-            <button onclick="toggleHelpModal()" style="padding: 10px 20px; background: #4b5563; color: white; border: none; border-radius: 6px; cursor: pointer;">
-                Fermer
-            </button>
-        </div>
-    </div>
-</div>
-
-<script>
-    function toggleHelpModal() {
-        const modal = document.getElementById('helpModal');
-        if (modal.style.display === 'none' || modal.style.display === '') {
-            modal.style.display = 'flex'; // Affiche en mode Flexbox pour centrer
-        } else {
-            modal.style.display = 'none';
-        }
-    }
-    
-    // Fermer si on clique en dehors de la boîte blanche
-    window.onclick = function(event) {
-        const modal = document.getElementById('helpModal');
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    }
-</script>
+        @include('botman')
     </body>
 </html>
