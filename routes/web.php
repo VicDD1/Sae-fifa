@@ -20,11 +20,16 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\RGPDController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
+    Route::post('/anonymize-donnees', [RGPDController::class, 'anonymize'])->name('rgpd.anonymize');
+});
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');
   })->name('cookies.manage');
-  /*
 /*
 |--------------------------------------------------------------------------
 | Web Routes
