@@ -12,17 +12,17 @@
     </head>
     <body>
 
-    <header>
+   <header>
         <nav>
             <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
-            
+            <a href="/produits">Fifa Store</a>
 
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
-            
-            <a href="/blog">L'Actu </a>
+            <a href="/players">Les joueurs</a>
+            <a href="/blog">L'Actu</a>
 
             @auth
                 @php
@@ -67,13 +67,14 @@
             @auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-            <div class="nav-right-group">
                 <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
                  <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
 
             </div>
             @endif
-
+            @if (Auth::user()->id_user_connecte === 35)
+                <a class="account_creation" href="/gestion-rgpd">Espace DPO </a>
+            @endif
                 
             @endauth
             @auth

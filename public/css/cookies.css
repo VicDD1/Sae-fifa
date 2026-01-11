@@ -56,8 +56,9 @@ nav a:hover {
 
 /* --- Banner & Overlay --- */
 .cookie-banner {
+    display: none;
     position: fixed;
-    bottom: 20px;
+    bottom: 0;
     left: 20px;
     right: 20px;
     background: var(--dark-bg);
