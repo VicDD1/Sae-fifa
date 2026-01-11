@@ -149,6 +149,7 @@ nav a[style*="font-weight: bold;"] {
             padding: 40px;
             padding-top: 0;
             margin-bottom: 0;
+            z-index: 999;
         }
 
         .login-box {
@@ -368,4 +369,21 @@ nav a[style*="font-weight: bold;"] {
         .suggestion-item:hover {
             background-color: #f0f0f0;
         }
+        #botmanWidgetRoot div .desktop-closed-message-avatar img {
+    width: 420% !important;        
+    height: 420% !important;       
+    max-width: none !important;   
+    padding: 0 !important;         
+    object-fit: contain !important;
+
+    transform: scale(1.9);        
+}
+
+/* Ensure the button container remains a perfect circle */
+.desktop-closed-message-avatar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-size: cover !important;
+}
         
