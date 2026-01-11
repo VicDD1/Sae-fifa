@@ -254,3 +254,8 @@ Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
 Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
     ->middleware('auth')
     ->name('blog.comment.store');
+
+    // Route pour supprimer un commentaire (il faut être connecté)
+Route::delete('/blog/comment/{id}', [BlogController::class, 'destroyComment'])
+    ->middleware('auth')
+    ->name('blog.comment.destroy');

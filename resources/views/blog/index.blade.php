@@ -226,8 +226,9 @@
             @forelse($blogs as $blog)
                 <article class="news-card">
                     <a href="{{ route('blog.show', $blog->idblog) }}" class="card-img-wrapper">
-                        <img src="{{ $blog->image_path ? asset($blog->image_path) : 'https://digitalhub.fifa.com/transform/09d7367c-333e-4363-8eb0-a54865aa454b/FIFA-World-Cup-Trophy-Generic?io=transform:fill,width:768,height:432&quality=75' }}" 
-                             alt="{{ $blog->titre }}">
+                        <img src="{{ Str::startsWith(trim($blog->image_path), ['http', 'https']) ? $blog->image_path : asset($blog->image_path) }}" 
+                            alt="{{ $blog->titre }}"
+                            style="width: 100%; height: 100%; object-fit: cover;">
                     </a>
                     
                     <div class="card-content">
