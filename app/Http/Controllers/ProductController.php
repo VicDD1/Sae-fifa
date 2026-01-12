@@ -291,16 +291,72 @@ public function incomplet()
         'categories'
     ));
 }
-public function modify()
+public function modify($id)
 {
+    $product = Produit::with(['tailles', 'couleurs', 'photo'])->findOrFail($id);
+
     $categories = Categorie_Produit::all();
     $nations    = Nation::all();
     $tailles    = Taille::all();
     $coloris    = Colori::all();
 
-    return view('products_validate', compact('categories', 'nations', 'tailles', 'coloris'));
-
+    return view('products_validate', compact(
+        'product',
+        'categories',
+        'nations',
+        'tailles',
+        'coloris'
+    ));
 }
+public function validateProduct(Request $request, $id)
+{
+    // 1️⃣ Sécurité : produit existant
+    $product = Produit::findOrFail($id);
 
+    // 2️⃣ Validation (même si readonly → on ne fait pas confiance au front)
+    $request->validate([
+        'nom_produit'         => 'required|string|max:50',
+        'prix_base'           => 'required|numeric|min:0',
+        'description_produit' => 'nullable|string|max:500',
+        'id_categorie'        => 'required|exists:categorie_produit,id_categorie',
+        'id_nation'           => 'required|exists:nation,id_nation',
+        'tailles'             => 'required|array|min:1',
+        'tailles.*'           => 'exists:taille,id_taille',
+        'couleurs'            => 'required|array|min:1',
+        'couleurs.*'          => 'exists:colori,id_colori',
+        'quantite'            => 'required|integer|min:0',
+    ]);
+
+
+    $product->label_produit       = $request->nom_produit;
+    $product->prix_base           = $request->prix_base;
+    $product->description_produit = $request->description_produit;
+    $product->id_categorie        = $request->id_categorie;
+    $product->id_nation           = $request->id_nation;
+
+
+
+    $product->save();
+
+ 
+    Variante_produit::where('id_produit', $product->id_produit)->delete();
+
+
+    foreach ($request->tailles as $idTaille) {
+        foreach ($request->couleurs as $idColori) {
+            Variante_produit::create([
+                'id_produit'      => $product->id_produit,
+                'id_taille'       => $idTaille,
+                'id_colori'       => $idColori,
+                'quantitee_stock' => $request->quantite,
+            ]);
+        }
+    }
+
+   
+    return redirect()
+        ->route('product.index')
+        ->with('success', 'Produit validé et enregistré avec succès ✅');
+}
 
 }

@@ -31,46 +31,57 @@
                             </ul>
                         </div>
                     @endif
-
-<form action="{{ route('product.validate') }}" method="POST" enctype="multipart/form-data">
-                        @csrf 
+                    <form action="{{ route('product.validate', $product->id_produit) }}" method="POST">
+                    @csrf
 
                         <div class="row">
                             <div class="col-md-6 border-end">
                                 <h5 class="text-primary mb-3">Informations Générales</h5>
                                 
                                 <div class="mb-3">
-                                    <label class="form-label">Nom du produit *</label>
-                                    <input type="text" class="form-control" name="nom_produit" required value="{{ old('nom_produit') }}" placeholder="Ex: Maillot France 2024">
+                                    <label class="form-label" >Nom du produit *</label>
+                                    <input type="text" class="form-control" name="label_produit" required value="{{ old('label_produit', $product->label_produit) }}" readonly>
                                 </div>
+                                <input type="hidden"
+       name="nom_produit"
+       value="{{ $product->label_produit }}">
 
                                 <div class="mb-3">
                                     <label class="form-label">Prix de base (€) *</label>
-                                    <input type="number" class="form-control" name="prix_base" required value="{{ old('prix_base') }}" placeholder="Ex: 80">
+                                    <input type="number" class="form-control" name="prix_base" required value="{{ old('prix_base', $product->prix_base) }}" placeholder="Ex: 80">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Catégorie *</label>
-<select class="form-select" name="id_categorie" required>
-        <option value="">-- Choisir une catégorie --</option>
-        
-        @foreach($categories as $categorie)
-            <option value="{{ $categorie->id_categorie }}">
-                {{ $categorie->label_categorie }} 
-            </option>
-        @endforeach
-        
-    </select>
+                                    <select class="form-select" disabled>
+@foreach($categories as $categorie)
+    <option value="{{ $categorie->id_categorie }}"
+        {{ $product->id_categorie == $categorie->id_categorie ? 'selected' : '' }}>
+        {{ $categorie->label_categorie }}
+    </option>
+@endforeach
+</select>
+
+<input type="hidden"
+       name="id_categorie"
+       value="{{ $product->id_categorie }}">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Nation *</label>
-                                    <select class="form-select" name="id_nation" required>
-                                        <option value="">-- Choisir une nation --</option>
-                                        @foreach($nations as $nation)
-                                            <option value="{{ $nation->id_nation }}">{{ $nation->nom_nation }}</option>
-                                        @endforeach
-                                    </select>
+                                    <select class="form-select" disabled>
+@foreach($nations as $nation)
+    <option value="{{ $nation->id_nation }}"
+        {{ $product->id_nation == $nation->id_nation ? 'selected' : '' }}>
+        {{ $nation->nom_nation }}
+    </option>
+@endforeach
+</select>
+
+<input type="hidden"
+       name="id_nation"
+       value="{{ $product->id_nation }}">
+
                                 </div>
                             </div>
 
@@ -80,47 +91,51 @@
                                 <div class="row">
                                     <div class="col-6 mb-3">
                                         <label class="form-label">Taille *</label>
-<select class="form-select" name="id_taille" required>
-@foreach($tailles as $taille)
-                <label>
-                    <input 
-                        type="checkbox"
-                        name="tailles[]"
-                        value="{{ $taille->id_taille }}"
-                        {{ is_array(old('tailles')) && in_array($taille->id_taille, old('tailles')) ? 'checked' : '' }}
-                    >
-                    {{ $taille->label_taille }}
-                </label>
-            @endforeach
+                                    <select class="form-select" name="id_taille" disabled   >
+                                    @foreach($tailles as $taille)
+    <input type="checkbox"
+           disabled
+           {{ $product->tailles->contains('id_taille', $taille->id_taille) ? 'checked' : '' }}>
+    {{ $taille->label_taille }}
+@endforeach
+
+@foreach($product->tailles as $taille)
+    <input type="hidden" name="tailles[]" value="{{ $taille->id_taille }}">
+@endforeach
                         </select>
                                     </div>
                                     <div class="col-6 mb-3">
                                         <label class="form-label">Quantité stock *</label>
-                                        <input type="number" class="form-control" name="quantite" required min="1" value="{{ old('quantite') }}">
+                                        <input type="number" class="form-control" name="quantite" required min="1" value="{{ old('quantite', $product->quantite) }}" >
+                                        
+<input type="hidden"
+       name="quantite"
+       value="{{ $stock ?? 0 }}">
                                     </div>
                                 </div>
+                                
 
                                 <div class="mb-3">
                                     <label class="form-label">Colori *</label>
-                                    <select class="form-select" name="id_colori" required>
-                                        @foreach($coloris as $couleur)
-                                        <label>
-                                            <input 
-                                                type="checkbox"
-                                                name="couleurs[]"
-                                                value="{{ $couleur->id_colori }}"
-                                                {{ is_array(old('couleurs')) && in_array($couleur->id_colori, old('couleurs')) ? 'checked' : '' }}
-                                            >
+                                    <select class="form-select" hidden disabled>
+                                    @foreach($coloris as $couleur)
+                                            <input type="checkbox" disabled {{ $product->couleurs->contains('id_colori', $couleur->id_colori) ? 'checked' : '' }}>
                                             {{ $couleur->label_colori }}
-                                        </label>
                                     @endforeach
-                        </select>   
-                                </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Photo du produit *</label>
-                                    <input type="file" class="form-control" name="photo" accept="image/*" required>
-                                    <small class="text-muted">Format: jpg, png, jpeg (max 2Mo)</small>
+                                    @foreach($product->couleurs as $couleur)
+                                            <input type="hidden" name="couleurs[]" value="{{ $couleur->id_colori }}">
+                                    @endforeach
+                                        </select>   
+                                                </div>
+
+                                                <div class="mb-3">
+                                                                            <label class="form-label">Photo du produit *</label>
+                                                                            @if($product->photo)
+                                            <img src="{{ asset($product->photo->code_photo) }}" width="150">
+                                            <input type="hidden" name="photo_existante" value="{{ $product->photo->code_photo }}">
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
@@ -129,12 +144,18 @@
 
                         <div class="mb-4">
                             <label class="form-label">Description détaillée</label>
-                            <textarea class="form-control" name="description_produit" rows="3" placeholder="Description du produit...">{{ old('description_produit') }}</textarea>
+                            <textarea class="form-control"
+                                name="description_produit"
+                                rows="3" readonly>{{ old('description_produit', $product->description_produit) }}</textarea>
+
                         </div>
 
                         <div class="d-flex justify-content-between">
                             <a href="/" class="btn btn-outline-secondary">Annuler</a>
-                            <button type="submit" class="btn btn-success btn-lg px-5">Enregistrer le produit</button>
+                            <button type="submit" class="btn btn-success">
+        Enregistrer le produit
+    </button>
+</form>
                         </div>
                     </form>
                 </div>

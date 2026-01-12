@@ -19,6 +19,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
+use App\Http\Controllers\BlogController;
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');
@@ -53,6 +54,8 @@ Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
 Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap']);
 Route::get('/produits_en_cours',[ProductController::class,'incomplet']);
 Route::get('/produit_en_cours/{id}', [ProductController::class, 'modify'])->name('product.modify');
+Route::post('/produit/{id}/valider', [ProductController::class, 'validateProduct'])
+    ->name('product.validate');
 Route::view('/parametre_compte', 'account_modification');
 Route::view('/se_connecter', 'account_connection');
 Route::view('/privacy_policy', 'privacy_policy');
@@ -73,24 +76,12 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product
 
 
 
-
+Route::get('/produits', [ProductController::class, 'index'])
+    ->name('products.index');
 
 Route::get('/creer_categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');
 Route::post('/categorie_store', [Categorie_ProduitControler::class, 'store'])->name('categorie.store');
 
-<<<<<<< HEAD
-Route::get('/creer_un_produit', [MakeProductController::class, 'create'])
-    ->name('make_product.create');
-
-// Traiter le formulaire (sauvegarde en base)
-Route::post('/creer_un_produit', [MakeProductController::class, 'store'])
-    ->name('make_product.store');
-    Route::post('/valider_un_produit', [ProductController::class, 'validate'])
-    ->name('product.validate');
-
-
-=======
->>>>>>> d124426908c8ba8760027d2dd2e74c3cf2227c40
 Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
 Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')
