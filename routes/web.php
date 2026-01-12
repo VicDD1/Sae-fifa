@@ -19,6 +19,8 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
+use App\Http\Controllers\StripeController;
+
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RGPDController;
 
@@ -248,6 +250,20 @@ Route::get('/login/mfa', [MfaController::class, 'showMfaForm'])
 // 3. Pour valider le code et se connecter
 Route::post('/login/mfa', [MfaController::class, 'verifyMfa'])
     ->name('mfa.verify');
+
+/* ------------------------------
+   Stripe Payment
+------------------------------ */
+Route::middleware('auth')->group(function () {
+    Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent'])
+        ->name('stripe.createPaymentIntent');
+    Route::post('/stripe/confirm-payment', [StripeController::class, 'confirmPayment'])
+        ->name('stripe.confirmPayment');
+    Route::get('/stripe/saved-cards', [StripeController::class, 'getSavedCards'])
+        ->name('stripe.savedCards');
+    Route::post('/stripe/pay-with-saved-card', [StripeController::class, 'payWithSavedCard'])
+        ->name('stripe.payWithSavedCard');
+});
 
 
 // -- SECTION BLOG --
