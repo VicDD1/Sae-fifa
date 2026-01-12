@@ -14,6 +14,7 @@
 
 <body>
 
+<div class="commande-container">
     <header>
         <nav>
             <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
@@ -398,5 +399,6 @@
             loadSavedCards();
         });
     </script>
+</div>
 </body>
 </html>
