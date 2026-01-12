@@ -21,11 +21,21 @@ use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
 use App\Http\Controllers\StripeController;
 
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\RGPDController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
+    Route::post('/anonymize-donnees', [RGPDController::class, 'anonymize'])->name('rgpd.anonymize');
+});
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');
   })->name('cookies.manage');
-  /*
+
+
+  Route::get('/delete', [ProfileController::class, 'delete'])->name('user.delete');
+  Route::get('/anonymize', [ProfileController::class, 'anonime'])->name('user.anonime');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -255,3 +265,17 @@ Route::middleware('auth')->group(function () {
         ->name('stripe.payWithSavedCard');
 });
 
+
+// -- SECTION BLOG --
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
+
+// Route protégée (il faut être connecté pour commenter)
+Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
+    ->middleware('auth')
+    ->name('blog.comment.store');
+
+    // Route pour supprimer un commentaire (il faut être connecté)
+Route::delete('/blog/comment/{id}', [BlogController::class, 'destroyComment'])
+    ->middleware('auth')
+    ->name('blog.comment.destroy');

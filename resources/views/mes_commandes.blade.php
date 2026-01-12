@@ -10,14 +10,15 @@
 
 <body>
 
-<header>
-    <nav>
-        <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
-        <a href="/produits">Fifa Store</a>
+
+     <header>
+        <nav>
+            <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
+            <a href="/produits">Fifa Store</a>
+
 
         <a href="{{ route('vote.page') }}">Vote</a>
-        
-        <a href="https://www.fifa.com/fr/news" target="_blank">L'Actu </a>
+       
 
         @auth
             @php
@@ -25,6 +26,8 @@
                 $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
             @endphp
         @endauth
+            
+            <a href="/blog">L'Actu </a>
 
         @guest
             @php $totalQuantite = 0; @endphp
@@ -88,12 +91,25 @@
                 <a href="/proposer_un_produit" class="account_creation">
                     <p>faire une demande de produit</p>
                 </a>
-            @endif
-        @endauth
-    </nav>
-</header>
+                @endif
+            @endauth
 
-<div class="commande-container">
+            @auth
+                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
+                    <a href="/creer_un_compte_professionnel_1" class="account_creation">
+                        <p>Compte professionnel</p>
+                    </a>
+                @endif
+
+                @if ((Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) && Auth::user()->professionnel)
+                    <a href="/proposer_un_produit" class="account_creation">
+                        <p>faire une demande de produit</p>
+                    </a>
+                @endif
+            @endauth
+        </nav>
+    </header>
+    <div class="commande-container">
     @if($commandes->isEmpty())
         <p class="commande-empty">Vous n'avez encore passé aucune commande.</p>
     @else
@@ -150,7 +166,8 @@
     @endif
 
     </div>
-
+    
+    @include('botman')
 <script>
     document.querySelectorAll('.toggle-commande').forEach(header => {
         header.addEventListener('click', () => {
@@ -165,6 +182,5 @@
         });
     });
 </script>
-@include('botman')
 </body>
 </html>
