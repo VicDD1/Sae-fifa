@@ -193,7 +193,7 @@ class BotManController extends Controller
     {
         $bot->reply("Bonjour ! Voici votre guide complet pour utiliser toutes les fonctionnalités du site :");
         $bot->reply("📂 NAVIGATION (Vos onglets dans l'ordre) :");
-        $bot->reply("1. Accueil | 2. Fifa Store | 3. Vote | 4. Les joueurs | 5. Les Articles | 6. Mon Panier.");
+        $bot->reply("1. Accueil | 2. Fifa Store | 3. Vote | 4. Les joueurs | 5. Les Articles | 6. L'Actu | 7. Mon Panier.");
         $bot->reply("- Pour revenir au début du site, vous pouvez dire : accueil.");
         $bot->reply("🔍 RECHERCHE DE PRODUITS :");
         $bot->reply("- Chercher un produit : dites 'chercher maillot' ou 'je veux acheter un ballon'");

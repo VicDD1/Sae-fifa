@@ -96,8 +96,9 @@ class GroqService
 2. FIFA Store (/produits) - Boutique avec maillots, ballons et produits FIFA
 3. Vote (/vote/fifa) - Voter pour le Ballon d'Or et autres trophées
 4. Les joueurs (/players) - Liste des joueurs
-5. Les Articles - Actualités (en préparation)
-6. Mon Panier (/panier) - Gérer son panier
+5. Les Articles (/blog) - Articles et publications
+6. L'Actu (/blog) - Actualités FIFA
+7. Mon Panier (/panier) - Gérer son panier
 
 === PAGES IMPORTANTES ===
 - Connexion : /se_connecter
