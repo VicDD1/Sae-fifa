@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
 
 
   Route::get('/delete', [ProfileController::class, 'delete'])->name('user.delete');
+  Route::get('/anonymize', [ProfileController::class, 'anonime'])->name('user.anonime');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

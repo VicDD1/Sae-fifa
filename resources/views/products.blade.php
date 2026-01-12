@@ -210,7 +210,7 @@
                 <a href="{{ url()->current() }}" class="btn-reset">Effacer</a>
 @auth
     @if(Auth::user()->id_user_connecte === 13)
-                <a href="{{ route('products.create') }}" class="btn-create">Créer un produit</a>
+                <a href="{{ route('make_product.create') }}" class="btn-create">Créer un produit</a>
 
                 <a href="{{ route('categorie.create') }}" class="btn-create" style="background-color: #6c757d; margin-left: 5px;">
                     Ajouter une Catégorie

@@ -83,22 +83,53 @@ class ProfileController extends Controller
             return back()->withErrors(['error' => 'Erreur système : Impossible de supprimer le compte pour le moment.']);
         }
     
-        // 2. Démarrer la transaction
-        DB::transaction(function () use ($userToDelete, $archiveUser) {
+        // Assurez-vous d'avoir bien récupéré l'utilisateur archive avant
+DB::transaction(function () use ($userToDelete, $archiveUser) {
+    $oldUserId = $userToDelete->id_user_connecte;
+    $newUserId = $archiveUser->id_user_connecte;
+
+    // 1. Récupérer ou créer le profil acheteur de l'archive
+    $archiveAcheteur = DB::table('acheteur')->where('id_user_connecte', $newUserId)->first();
     
-            // A. LE TRANSFERT (Le cœur de ta méthode)
-            // On prend toutes les commandes de l'utilisateur actuel
-            // Et on remplace son ID par celui de l'utilisateur Archive
-            $userToDelete->orders()->update(['id_user_connecte' => $archiveUser->id]);
+    if (!$archiveAcheteur) {
+        // On récupère le nouvel ID acheteur créé
+        $newAcheteurId = DB::table('acheteur')->insertGetId([
+            'id_user_connecte' => $newUserId,
+            'telephone_acheteur' => '0000000000',
+            'adresse_livraison' => 'Archive'
+        ], 'id_acheteur');
+    } else {
+        $newAcheteurId = $archiveAcheteur->id_acheteur;
+    }
+
+    // 2. TRANSFÉRER LES DONNÉES À CLÉS COMPOSÉES (User + Acheteur)
     
-            // Optionnel : Transférer d'autres trucs (ex: Commentaires, Tickets support...)
-            // $userToDelete->comments()->update(['user_id' => $archiveUser->id]);
+    // Transférer les Commandes
+    DB::table('commande')
+        ->where('id_user_connecte', $oldUserId)
+        ->update([
+            'id_user_connecte' => $newUserId,
+            'id_acheteur'      => $newAcheteurId
+        ]);
+
+    // Transférer le Panier (C'est l'étape qui manquait !)
+    DB::table('panier')
+        ->where('id_user_connecte', $oldUserId)
+        ->update([
+            'id_user_connecte' => $newUserId,
+            'id_acheteur'      => $newAcheteurId
+        ]);
+
+    // 3. TRANSFÉRER LE RESTE (Uniquement User ID)
+    DB::table('commentaire')->where('id_user_connecte', $oldUserId)->update(['id_user_connecte' => $newUserId]);
+    DB::table('voter')->where('id_user_connecte', $oldUserId)->update(['id_user_connecte' => $newUserId]);
+
+    // 4. NETTOYAGE ET SUPPRESSION
+    // Maintenant que les commandes ET les paniers sont rattachés à l'archive...
+    DB::table('acheteur')->where('id_user_connecte', $oldUserId)->delete(); // Plus de violation ici !
     
-            // B. LA SUPPRESSION
-            // Maintenant qu'il n'a plus rien, on peut le supprimer proprement.
-            $userToDelete->delete();
-        });
-    
+    $userToDelete->delete();
+    });
         // 3. Déconnexion et redirection
         Auth::logout();
         $request->session()->invalidate();
@@ -106,7 +137,58 @@ class ProfileController extends Controller
     
         return redirect('/')->with('status', 'Votre compte a été supprimé avec succès.');
     }
-    public function anonime(){
-        //
+    public function anonime(Request $request){
+        // Récupérer l'utilisateur connecté
+    $user = Auth::user();
+
+    try {
+        DB::transaction(function () use ($user) {
+            $userId = $user->id_user_connecte;
+
+            // 1. ANONYMISATION des données personnelles
+            // On utilise update sur l'instance $user pour déclencher les éventuels observateurs Eloquent
+            $user->update([
+                'prenom_user_connecte'            => 'Anonyme',
+                'courriel_user_connecte'          => 'anonyme_' . $userId . '@example.com',
+                'date_de_naissance_user_connecte' => '1900-01-01',
+                'pays_de_naissance_user_connecte' => 'Inconnu',
+                'surnom_user_connecte'            => null,
+                'numero_telephone_user_connecte'  => '0000000000',
+                'password_user_connecte'          => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(32)), 
+                'mfa_active'                      => 0,
+                'mfa_code'                        => null,
+                'updated_at'                      => now()
+            ]);
+
+            // 2. GESTION DES DONNÉES DE NAVIGATION (Paniers non validés)
+            // On récupère les IDs liés à cet utilisateur
+            $acheteurIds = DB::table('acheteur')->where('id_user_connecte', $userId)->pluck('id_acheteur');
+            $panierIds   = DB::table('panier')->whereIn('id_acheteur', $acheteurIds)->pluck('id_panier');
+            
+            if ($panierIds->isNotEmpty()) {
+                // On supprime les paniers en cours qui contiennent des infos de session
+                DB::table('ligne_panier')->whereIn('id_panier', $panierIds)->delete();
+                DB::table('panier')->whereIn('id_acheteur', $acheteurIds)->delete();
+            }
+
+            // 3. NETTOYAGE DES INTERACTIONS SOCIALES
+            // On supprime les votes pour préserver l'anonymat des opinions
+            DB::table('voter')->where('id_user_connecte', $userId)->delete();
+
+            // Note : On ne touche pas à la table 'commande' ni 'acheteur' ici 
+            // pour garder l'historique comptable (CA), mais l'utilisateur est maintenant "Anonyme".
+        });
+
+        // 4. DÉCONNEXION (Obligatoire car le mot de passe a changé)
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'Votre compte a été anonymisé avec succès. Vous ne pouvez plus vous connecter.');
+
+    } catch (\Exception $e) {
+        // En production, préférez Log::error($e->getMessage())
+        return back()->with('error', "Une erreur est survenue lors de l'anonymisation.");
+    }
     }
 }

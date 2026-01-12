@@ -165,7 +165,7 @@
                     <a href="/parametre_compte" style="text-decoration: none;">
                         <button type="button" class="btn-login" style="background-color: #045694; cursor: pointer;">MODIFIER MES INFOS</button>
                     </a>
-                    <a href="/mon-profil" style="text-decoration: none;">
+                    <a href="/anonymize" style="text-decoration: none;">
                         <button type="button" class="btn-anonyme" style="background-color: #ff8000;cursor:pointer;">ANONYMISER MES INFOS</button>
                     </a>
                 </form>
