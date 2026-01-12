@@ -80,19 +80,8 @@
             @endif
         @endauth
 
-        @auth
-            @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
-                <a href="/creer_un_compte_professionnel_1" class="account_creation">
-                    <p>Compte professionnel</p>
-                </a>
-            @endif
-
-            @if ((Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) && Auth::user()->professionnel)
-                <a href="/proposer_un_produit" class="account_creation">
-                    <p>faire une demande de produit</p>
-                </a>
-                @endif
-            @endauth
+      
+           
 
             @auth
                 @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
