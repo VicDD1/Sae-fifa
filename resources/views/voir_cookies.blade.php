@@ -11,7 +11,7 @@
             <a href="{{ route('vote.page') }}">Vote</a>
 
             
-            <a href="https://www.fifa.com/fr/news" target="_blank">L'Actu </a>
+            <a href="/blog">L'Actu </a>
 
             @auth
                 @php
@@ -91,67 +91,127 @@
 
 
 
-<div class="container" style="max-width: 800px; margin: 50px auto; padding: 20px; font-family: sans-serif;">
-    <h1 style="color: #0b2640;">Gestion de vos préférences cookies</h1>
-    <p style="color: #5b6e78; line-height: 1.6;">
-        Vous pouvez à tout moment modifier vos choix concernant les traceurs utilisés sur ce site. 
-        Actuellement, seuls les cookies nécessaires au fonctionnement sont actifs.
+    <div class="container">
+    <h1 class="page-title">Gestion de vos préférences cookies</h1>
+    <p class="page-intro">
+        Gérez ici vos consentements. Les modifications sont appliquées immédiatement après enregistrement.
     </p>
 
-    <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
-
-    <div class="prefs" style="width: 100%; box-shadow: none; border: 1px solid #eee;">
+    <div class="prefs">
         <div class="prefs__body">
-            <div class="prefs__row">
-                <details class="prefs__details" open>
-                    <summary>
-                        <div>
-                            <strong>Cookies actuellement présents</strong>
-                            <div class="small">Voici la liste des cookies détectés sur votre navigateur pour ce domaine.</div>
-                        </div>
-                        <span class="badge">Analyse dynamique</span>
-                    </summary>
-                    <div class="cookie-list">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Expiration</th>
-                                    <th>Nature</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dynamic-cookie-list">
-                                </tbody>
-                        </table>
-                    </div>
-                </details>
+            
+            <div class="section-essential">
+                <h3 class="section-title">1. Audit en temps réel</h3>
+                <p class="section-desc">Traceurs actuellement détectés sur votre navigateur pour ce domaine.</p>
+
+                <div class="cookie-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Expiration</th>
+                                <th>Nature</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dynamic-cookie-list">
+                            <tr>
+                                <td colspan="3" class="loading-text">Chargement de l'analyse...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            <hr class="section-divider">
+
+            <div class="section-optional">
+                <h3 class="section-title">2. Personnalisation</h3>
+                <p class="section-desc">Autorisez ou refusez les cookies non essentiels.</p>
+
+                <div class="prefs__row_choice">
+                    <div class="prefs__desc">
+                        <strong>Cookie de décoration (Démo)</strong>
+                        <div class="small">Active le cookie factice "biscuits au chocolat".</div>
+                    </div>
+                    <button type="button" id="pageCookieToggle" class="toggle">
+                        <div class="knob"></div>
+                    </button>
+                </div>
+            </div>
+
         </div>
 
-        <div class="prefs__footer" style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-start;">
-            <button id="resetConsentBtn" class="btn btn-primary">Réinitialiser mes choix</button>
-            <a href="/" class="btn btn-ghost-dark" style="text-decoration: none; display: flex; align-items: center;">Retour à l'accueil</a>
+        <div class="prefs__footer">
+            <button id="savePagePrefsBtn" class="btn btn-primary">Enregistrer les modifications</button>
+            <button id="resetConsentBtn" class="btn btn-ghost">Réinitialiser mes choix</button>
+            <a href="/" class="back-link">&larr; Retour à l'accueil</a>
         </div>
     </div>
+    
 </div>
 
 <script src="{{ asset('js/script.js') }}"></script>
 
 <script>
-    // Petit script supplémentaire spécifique à cette page
     document.addEventListener('DOMContentLoaded', () => {
-        // Force l'affichage de la liste au chargement
+        // 1. Initialisation de la liste (Audit)
         if (typeof updateDynamicCookieList === "function") {
             updateDynamicCookieList();
         }
 
-        // Bouton pour réinitialiser
+        // 2. Gestion de l'interrupteur (Toggle) sur cette page
+        const pageToggle = document.getElementById('pageCookieToggle');
+        let isDecoActive = false;
+
+        // VERIFICATION INITIALE : On regarde si le cookie existe vraiment
+        // pour mettre l'interrupteur dans la bonne position au chargement de la page
+        if (document.cookie.includes('site_decoration_preference')) {
+            isDecoActive = true;
+            pageToggle.classList.add('on');
+        }
+
+        // Interaction au clic
+        if (pageToggle) {
+            pageToggle.onclick = () => {
+                isDecoActive = !isDecoActive;
+                pageToggle.classList.toggle('on', isDecoActive);
+            };
+        }
+
+        // 3. Bouton "Enregistrer les modifications"
+        const saveBtn = document.getElementById('savePagePrefsBtn');
+        if (saveBtn) {
+            saveBtn.onclick = () => {
+                // On met à jour le localStorage
+                // Note : on garde "accepted: true" car l'utilisateur est en train de paramétrer
+                localStorage.setItem("cookieConsent", JSON.stringify({
+                    accepted: true,
+                    deco: isDecoActive,
+                    date: new Date().toISOString()
+                }));
+
+                // On appelle ta fonction globale (dans script.js) pour créer/détruire le cookie
+                if (typeof toggleFakeCookie === "function") {
+                    toggleFakeCookie(isDecoActive);
+                }
+
+                // On rafraîchit la liste visuelle pour montrer le changement immédiat
+                updateDynamicCookieList();
+
+                alert("Vos préférences ont été mises à jour !");
+            };
+        }
+
+        // 4. Bouton "Tout réinitialiser" (Déjà existant)
         const resetBtn = document.getElementById('resetConsentBtn');
         if (resetBtn) {
             resetBtn.onclick = () => {
                 localStorage.removeItem('cookieConsent');
-                alert('Vos préférences ont été réinitialisées. Le bandeau s\'affichera au prochain chargement.');
-                window.location.href = '/'; // Redirection vers l'accueil
+                // On force la suppression du cookie déco aussi
+                if (typeof toggleFakeCookie === "function") toggleFakeCookie(false);
+                
+                alert('Préférences effacées. Le bandeau réapparaîtra.');
+                window.location.href = '/'; 
             };
         }
     });

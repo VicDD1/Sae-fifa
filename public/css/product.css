@@ -294,6 +294,7 @@ h1 {
 
 /* Liste avec défilement vertical */
 .history-list {
+    
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -304,6 +305,7 @@ h1 {
 
 /* Carte produit individuelle */
 .history-item {
+    margin-top: 10px;
     width: 100%;
     border: 1px solid black;
     border-radius: 8px;
