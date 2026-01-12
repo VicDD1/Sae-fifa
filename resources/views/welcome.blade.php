@@ -96,11 +96,7 @@
                     </a>
                 @endif
 
-                @if ((Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) && Auth::user()->professionnel)
-                    <a href="/proposer_un_produit" class="account_creation">
-                        <p>faire une demande de produit</p>
-                    </a>
-                @endif
+                
             @endauth
         </nav>
     </header>
@@ -111,9 +107,6 @@
         </div>
     @endif
     @auth
-    @if (Auth::user()->id_user_connecte === 13)
-    <a href="/creer_un_produit"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> creation de produit</div></a>
-    @endif
     @if (Auth::user()->id_user_connecte === 11)
     <a href="/produits_en_cours"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> voir les produits en cours de creation</div></a>
     @endif
