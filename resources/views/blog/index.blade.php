@@ -141,7 +141,7 @@
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
-            <a href="/players">Les joueurs</a>
+           
             <a href="/blog">L'Actu</a>
 
             @auth

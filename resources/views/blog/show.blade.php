@@ -267,7 +267,7 @@
             <a href="/">Accueil</a>
             <a href="/produits">Fifa Store</a>
             <a href="{{ route('vote.page') }}">Vote</a>
-            <a href="/players">Les joueurs</a>
+            
             <a href="/blog">L'Actu</a>
 
             @auth
