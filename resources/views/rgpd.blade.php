@@ -8,7 +8,7 @@
 <body>
     <header>
         <nav>
-            <a href="/">Accueil</a>
+            <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
             <a href="/produits">Fifa Store</a>
 
 
@@ -16,7 +16,7 @@
             <a href="{{ route('vote.page') }}">Vote</a>
 
             <a href="/players">Les joueurs</a>
-            <a href="https://www.fifa.com/fr/news" target="_blank">Les Articles</a>
+            <a href="/blog">L'Actu</a>
 
             @auth
                 @php
@@ -40,6 +40,7 @@
                         <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
                             {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
                         </span>
+                        <img style="text-decoration: none; display: flex; align-items: center; width:40px;" src="{{asset('assets/iconEdit.png')}}" alt="voir mes informations"></img>
                     </a>
 
                     <form action="/logout" method="POST" style="display:inline;">
@@ -57,15 +58,13 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
-@auth
+            @auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-                <a class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-                <a class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
+                <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+                 <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
 
-            <?php
-            var_dump(Auth::user()->id_user_connecte)
-            ?>    
+            </div>
             @endif
             @if (Auth::user()->id_user_connecte === 35)
                 <a class="account_creation" href="/gestion-rgpd">Espace DPO </a>
@@ -73,9 +72,11 @@
                 
             @endauth
             @auth
+                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
                 <a href="{{ route('commande.liste') }}" class="btn btn-primary">
                     Mes commandes
                 </a>
+                @endif
             @endauth
 
             @auth
@@ -85,7 +86,7 @@
                     </a>
                 @endif
 
-                @if (Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11)
+                @if ((Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) && Auth::user()->professionnel)
                     <a href="/proposer_un_produit" class="account_creation">
                         <p>faire une demande de produit</p>
                     </a>
@@ -93,6 +94,7 @@
             @endauth
         </nav>
     </header>
+    
     <div class="rgpd-container" style="max-width: 1000px; margin: auto; padding: 20px;">
     <h1>Gestion des données (DPO)</h1>
 

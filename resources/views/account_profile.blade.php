@@ -165,7 +165,15 @@
                     <a href="/parametre_compte" style="text-decoration: none;">
                         <button type="button" class="btn-login" style="background-color: #045694; cursor: pointer;">MODIFIER MES INFOS</button>
                     </a>
+                    <a href="/anonymize" style="text-decoration: none;">
+                        <button type="button" class="btn-anonyme" style="background-color: #ff8000;cursor:pointer;">ANONYMISER MES INFOS</button>
+                    </a>
                 </form>
+                <div id="rgpd">
+                    <a href="/delete" style="text-decoration: none;">
+                        <button type="button" class="btn-suprimer" style="background-color: #ff0000;cursor:pointer;">SUPPRIMER MES INFOS</button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@
 
 <body>
 
-<div class="commande-container">
+
      <header>
         <nav>
             <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
@@ -99,6 +99,7 @@
             @endauth
         </nav>
     </header>
+    <div class="commande-container">
     @if($commandes->isEmpty())
         <p class="commande-empty">Vous n'avez encore passé aucune commande.</p>
     @else
@@ -155,7 +156,8 @@
     @endif
 
     </div>
-
+    
+    @include('botman')
 <script>
     document.querySelectorAll('.toggle-commande').forEach(header => {
         header.addEventListener('click', () => {
@@ -170,6 +172,5 @@
         });
     });
 </script>
-@include('botman')
 </body>
 </html>

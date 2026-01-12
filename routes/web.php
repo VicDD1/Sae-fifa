@@ -30,6 +30,10 @@ Route::middleware('auth')->group(function () {
   Route::get('/cookies', function () {
       return view('voir_cookies');
   })->name('cookies.manage');
+
+
+  Route::get('/delete', [ProfileController::class, 'delete'])->name('user.delete');
+  Route::get('/anonymize', [ProfileController::class, 'anonime'])->name('user.anonime');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

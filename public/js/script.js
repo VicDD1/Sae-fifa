@@ -96,8 +96,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Affichage automatique du bandeau
     const banner = document.getElementById("cookieBanner");
+    // On vérifie si l'utilisateur N'A PAS encore choisi
     if (!localStorage.getItem(STORAGE_KEY) && banner) {
-        banner.style.display = "block";
+        // S'il n'a pas choisi, on force l'affichage
+        // Note : Utilise "flex" si ton CSS utilise flexbox pour aligner le contenu, sinon "block"
+        banner.style.display = "flex"; 
     }
 
     // 3. Liaison des boutons (avec sécurité si les IDs n'existent pas sur la page)
