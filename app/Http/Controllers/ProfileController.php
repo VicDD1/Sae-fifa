@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\User_connecte;
 class ProfileController extends Controller
 {
     
@@ -68,5 +70,43 @@ class ProfileController extends Controller
         $user->save();
 
         return redirect('/')->with('success', 'Votre profil a bien été mis à jour !');
+    }
+    public function delete(Request $request){
+        $userToDelete = $request->user();
+
+        // 1. Récupérer l'utilisateur "Fourre-tout"
+        // On le cherche par son email fixe (défini dans le Seeder plus haut)
+        $archiveUser = User_connecte::where('courriel_user_connecte', 'Suppri@gmail.com')->first();
+    
+        if (!$archiveUser) {
+            // Sécurité : Si le compte archive n'existe pas, on bloque tout !
+            return back()->withErrors(['error' => 'Erreur système : Impossible de supprimer le compte pour le moment.']);
+        }
+    
+        // 2. Démarrer la transaction
+        DB::transaction(function () use ($userToDelete, $archiveUser) {
+    
+            // A. LE TRANSFERT (Le cœur de ta méthode)
+            // On prend toutes les commandes de l'utilisateur actuel
+            // Et on remplace son ID par celui de l'utilisateur Archive
+            $userToDelete->orders()->update(['id_user_connecte' => $archiveUser->id]);
+    
+            // Optionnel : Transférer d'autres trucs (ex: Commentaires, Tickets support...)
+            // $userToDelete->comments()->update(['user_id' => $archiveUser->id]);
+    
+            // B. LA SUPPRESSION
+            // Maintenant qu'il n'a plus rien, on peut le supprimer proprement.
+            $userToDelete->delete();
+        });
+    
+        // 3. Déconnexion et redirection
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    
+        return redirect('/')->with('status', 'Votre compte a été supprimé avec succès.');
+    }
+    public function anonime(){
+        //
     }
 }
