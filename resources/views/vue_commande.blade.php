@@ -162,14 +162,29 @@
             <h2 class="subtitle">Mode de livraison</h2>
 
             <div class="input-group">
-                <select name="mode_livraison" required>
+                <select name="mode_livraison" id="mode_livraison" required>
                     @foreach($modes as $m)
-                        <option value="{{ $m->id_mode_livraison }}">
+                        <option value="{{ $m->id_mode_livraison }}" data-type="{{ strtolower($m->type_livraison) }}">
                             {{ $m->type_livraison }} ({{ number_format($m->prix_mode_livraison, 2) }} €)
                         </option>
-
                     @endforeach
                 </select>
+            </div>
+
+            <!-- Section Point Relais -->
+            <div id="point-relais-section" style="display: none;">
+                <h2 class="subtitle">Choisir un point relais</h2>
+                <p style="color: #888; font-size: 0.9em; margin-bottom: 10px;">
+                    <i class="fa-solid fa-info-circle"></i> Remplissez d'abord votre ville et code postal pour voir les points relais disponibles.
+                </p>
+                <button type="button" id="btn-charger-relais" class="btn-secondary" style="margin-bottom: 15px;">
+                    <i class="fa-solid fa-rotate"></i> Charger les points relais
+                </button>
+                <div id="points-relais-list" class="points-relais-container">
+                    <!-- Les points relais seront générés ici -->
+                </div>
+                <input type="hidden" name="point_relais_nom" id="point_relais_nom">
+                <input type="hidden" name="point_relais_adresse" id="point_relais_adresse">
             </div>
 
             <h2 class="subtitle">Méthode de paiement</h2>
@@ -221,6 +236,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const suggestionsBox = document.getElementById("suggestions_cmd");
     const villeInput = document.getElementById("ville_cmd");
     const cpInput = document.getElementById("cp_cmd");
+    const modeLivraisonSelect = document.getElementById("mode_livraison");
+    const pointRelaisSection = document.getElementById("point-relais-section");
+    const btnChargerRelais = document.getElementById("btn-charger-relais");
+    const pointsRelaisList = document.getElementById("points-relais-list");
+    const pointRelaisNomInput = document.getElementById("point_relais_nom");
+    const pointRelaisAdresseInput = document.getElementById("point_relais_adresse");
 
     let debounce;
 
@@ -281,6 +302,67 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!adresseInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
             suggestionsBox.innerHTML = "";
             suggestionsBox.style.display = "none";
+        }
+    });
+
+    // Fonction pour vérifier si le mode est un point relais
+    function isPointRelais(type) {
+        if (!type) return false;
+        const normalized = type.toLowerCase().trim();
+        return normalized.includes("relais") || normalized.includes("point relais");
+    }
+
+    // Vérifier au chargement initial si le mode sélectionné est "Point Relais"
+    const initialOption = modeLivraisonSelect.options[modeLivraisonSelect.selectedIndex];
+    const initialType = initialOption.getAttribute("data-type");
+    if (isPointRelais(initialType)) {
+        pointRelaisSection.style.display = "block";
+    }
+
+    modeLivraisonSelect.addEventListener("change", () => {
+        const selectedOption = modeLivraisonSelect.options[modeLivraisonSelect.selectedIndex];
+        const type = selectedOption.getAttribute("data-type");
+
+        if (isPointRelais(type)) {
+            pointRelaisSection.style.display = "block";
+        } else {
+            pointRelaisSection.style.display = "none";
+            pointsRelaisList.innerHTML = "";
+            pointRelaisNomInput.value = "";
+            pointRelaisAdresseInput.value = "";
+        }
+    });
+
+    btnChargerRelais.addEventListener("click", () => {
+        const ville = villeInput.value.trim();
+        const cp = cpInput.value.trim();
+
+        if (!ville || !cp) {
+            alert("Veuillez remplir la ville et le code postal pour charger les points relais.");
+            return;
+        }
+
+        pointsRelaisList.innerHTML = "";
+
+        for (let i = 1; i <= 5; i++) {
+            const pointRelais = {
+                nom: `Point Relais ${i}`,
+                adresse: `${i} Rue Exemple, ${cp} ${ville}`
+            };
+
+            const div = document.createElement("div");
+            div.className = "point-relais-item";
+            div.textContent = `${pointRelais.nom} - ${pointRelais.adresse}`;
+
+            div.addEventListener("click", () => {
+                document.querySelectorAll(".point-relais-item").forEach(item => item.classList.remove("selected"));
+                div.classList.add("selected");
+
+                pointRelaisNomInput.value = pointRelais.nom;
+                pointRelaisAdresseInput.value = pointRelais.adresse;
+            });
+
+            pointsRelaisList.appendChild(div);
         }
     });
 });
