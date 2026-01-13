@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Actualités Officielles | FIFA ID</title>
-    {{-- On garde ton header existant --}}
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="{{ asset('css/product.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
