@@ -24,6 +24,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RGPDController;
 use App\Http\Controllers\Theme_VoteController;
+use App\Http\Controllers\HomeController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
@@ -42,7 +43,7 @@ Route::middleware('auth')->group(function () {
 | Web Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn() => view('welcome'));
+Route::get('/', [HomeController::class, 'index']);
 Route::get('/se_connecter', fn() => view('account_connection'));
 Route::get('/vote', fn() => view('vote_fifa'));
 Route::get('/privacy_policy', fn() => view('privacy_policy'));
@@ -57,10 +58,6 @@ Route::get('/produit/stock', [ProductController::class, 'getStock']);
 /* ------------------------------
    Pages statiques & simples
 ------------------------------ */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
 Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap']);
