@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
 
 <body class="antialiased">
@@ -21,12 +22,7 @@
         <nav>
             <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
             <a href="/produits">Fifa Store</a>
-
-
-            <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
-
-            
             <a href="/blog">L'Actu</a>
 
             @auth
@@ -138,7 +134,104 @@
     <a href="/produits_en_cours"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> voir les produits en cours de creation</div></a>
     @endif
     @endauth
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>Bienvenue sur FIFA</h1>
+        <p>Découvrez notre collection exclusive de maillots, équipements et accessoires officiels</p>
+        <a href="/produits" class="btn-hero">
+            <i class="fa-solid fa-shopping-bag"></i> Découvrir la boutique
+        </a>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features-section">
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fa-solid fa-truck-fast"></i>
+                <h3>Livraison Rapide</h3>
+                <p>Recevez vos commandes en 2-5 jours ouvrés partout en France</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>Paiement Sécurisé</h3>
+                <p>Vos transactions sont protégées par un cryptage SSL</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-medal"></i>
+                <h3>Produits Officiels</h3>
+                <p>Tous nos articles sont 100% authentiques et licenciés FIFA</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTS SECTION -->
+    <section class="products-section">
+        <h2 class="section-title"><span>⚽</span> Nos Produits Vedettes</h2>
+        
+        <div class="products-grid">
+            @forelse($produits ?? [] as $produit)
+                <a href="{{ route('product.detail', $produit->id_produit) }}" style="text-decoration: none;">
+                    <article class="product-card">
+                        @if($produit->photo)
+                            <img src="{{ asset($produit->photo->code_photo) }}" alt="{{ $produit->label_produit }}">
+                        @else
+                            <img src="{{ asset('assets/photo_produit/' . $produit->id_produit . '.webp') }}" 
+                                 alt="{{ $produit->label_produit }}"
+                                 onerror="this.src='https://via.placeholder.com/300x200?text=FIFA+Store'">
+                        @endif
+                        <div class="card-body">
+                            <h3 class="card-title">{{ $produit->label_produit }}</h3>
+                            <span class="card-price">{{ number_format($produit->prix_base, 2) }} €</span>
+                        </div>
+                    </article>
+                </a>
+            @empty
+                <p style="grid-column: 1/-1; text-align: center; color: #666;">Aucun produit disponible pour le moment.</p>
+            @endforelse
+        </div>
+
+        <a href="/produits" class="btn-voir-tout">
+            Voir tous les produits <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </section>
+
+    <!-- ARTICLES SECTION -->
+    <section class="articles-section">
+        <h2 class="section-title"><span>📰</span> Dernières Actualités</h2>
+        
+        <div class="articles-grid">
+            @forelse($articles ?? [] as $article)
+                <article class="article-card">
+                    <img src="{{ Str::startsWith(trim($article->image_path ?? ''), ['http', 'https']) ? $article->image_path : asset($article->image_path ?? 'assets/default-blog.jpg') }}" 
+                         alt="{{ $article->titre }}"
+                         onerror="this.src='https://via.placeholder.com/400x200?text=FIFA+News'">
+                    <div class="article-body">
+                        <div class="article-date">
+                            <i class="fa-regular fa-calendar"></i> 
+                            {{ $article->created_at ? $article->created_at->format('d M Y') : 'Récent' }}
+                        </div>
+                        <h3 class="article-title">{{ $article->titre }}</h3>
+                        <p class="article-excerpt">{{ Str::limit($article->resume ?? $article->description, 120) }}</p>
+                        <a href="{{ route('blog.show', $article->idblog) }}" class="btn-lire">
+                            Lire l'article <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            @empty
+                <p style="grid-column: 1/-1; text-align: center; color: #666;">Aucune actualité disponible pour le moment.</p>
+            @endforelse
+        </div>
+
+        @if(isset($articles) && count($articles) > 0)
+            <a href="/blog" class="btn-voir-tout" style="background-color: #001431;">
+                Voir toutes les actualités <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        @endif
+    </section>
+
     @include('cookies')
+
 <footer>
     <a href="{{ route('cookies.manage') }}">Gérer mes cookies</a>
         <span>|</span>
