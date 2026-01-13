@@ -76,11 +76,10 @@
             @endguest
             @auth
 
-            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11 || Auth::user()->id_user_connecte === 13)
                 <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-                 <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
-
-            </div>
+                <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
+                <a href="{{ route('theme_vote.store') }}" class="account_creation" style="color: #00ff87; font-weight: bold;">+ Créer Votation</a>
             @endif
             @if (Auth::user()->id_user_connecte === 35)
                 <a class="account_creation" href="/gestion-rgpd">Espace DPO </a>
@@ -102,12 +101,30 @@
                     </a>
                 @endif
 
-                @if ((Auth::user()->id_user_connecte !== 12 || Auth::user()->id_user_connecte !== 11) && Auth::user()->professionnel)
-                    <a href="/proposer_un_produit" class="account_creation">
-                        <p>faire une demande de produit</p>
-                    </a>
-                @endif
+                
             @endauth
+
+@if (Auth::user()->id_user_connecte == 13)
+    <div style="display: flex; align-items: center; gap: 10px; margin-left: 15px;">
+        
+        <a href="{{ route('service_vente.commandes') }}" class="account_creation">
+            <p>Expédition</p>
+        </a>
+
+        <a href="{{ route('expedition.demain') }}" class="account_creation" style="background-color: #fff7ed; border: 1px solid #d97706;">
+            <i class="fa-solid fa-calendar-check" style="color: #d97706;"></i>
+        </a>
+
+        <a href="{{ route('expedition.historique') }}" class="account_creation" style="background-color: #f3f4f6; border: 1px solid #9ca3af;" title="Historique">
+            <i class="fa-solid fa-clock-rotate-left" style="color: #4b5563;"></i>
+        </a>
+        <a href="{{ route('expedition.domicile_proche') }}" class="account_creation" style="background-color: #e0f2fe; border: 1px solid #0ea5e9;" title="Domicile Urgent">
+            <i class="fa-solid fa-house-chimney-user" style="color: #0369a1;"></i>
+        </a>
+
+    </div>
+@endif
+
         </nav>
     </header>
 
@@ -117,9 +134,6 @@
         </div>
     @endif
     @auth
-    @if (Auth::user()->id_user_connecte === 13)
-    <a href="/creer_un_produit"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> creation de produit</div></a>
-    @endif
     @if (Auth::user()->id_user_connecte === 11)
     <a href="/produits_en_cours"><div style="background-color:rgb(164, 163, 202); color: #155724; padding: 15px; text-align: left;"> voir les produits en cours de creation</div></a>
     @endif

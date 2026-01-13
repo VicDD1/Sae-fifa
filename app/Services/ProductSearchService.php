@@ -135,7 +135,7 @@ class ProductSearchService
             
             $stockStatus = $stockTotal > 0 ? "✅ En stock ({$stockTotal})" : "❌ Rupture de stock";
             $result .= "   {$stockStatus}\n";
-            $result .= "   <a href='/produits/{$produit->id_produit}'>Voir le produit</a>\n\n";
+            $result .= "   <a href='/produit/{$produit->id_produit}'>Voir le produit</a>\n\n";
         }
 
         return $result;

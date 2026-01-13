@@ -58,4 +58,8 @@ class Commande extends Model
     {
         return $this->hasMany(Reglement::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User_connecte::class, 'id_user_connecte');
+    }
 }

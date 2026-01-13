@@ -22,7 +22,10 @@ use App\Http\Controllers\MfaController;
 use App\Http\Controllers\StripeController;
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ExpeditionController;
 use App\Http\Controllers\RGPDController;
+use App\Http\Controllers\Theme_VoteController;
+
 use App\Http\Controllers\GestionCommandeController;
 
 Route::middleware('auth')->group(function () {
@@ -104,7 +107,7 @@ Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 /* ------------------------------
    Produits
 ------------------------------ */
-Route::get('/produits', [ProductController::class, 'index']);
+Route::get('/produit', [ProductController::class, 'index']);
 Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
 
@@ -120,7 +123,31 @@ Route::get('/produits', [ProductController::class, 'index'])->name('product.inde
 Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')
 ->name('product.detail');
+/* ------------------------------
+   EXPÉDITION (Service Vente)
+------------------------------ */
+Route::get('/service-vente/commandes', [ExpeditionController::class, 'index'])
+    ->middleware('auth')
+    ->name('service_vente.commandes');
 
+Route::post('/service-vente/commandes/{id}/valider', [ExpeditionController::class, 'validerEnlevement'])
+    ->middleware('auth')
+    ->name('expedition.valider');
+
+    // Route pour les livraisons "Autre" de demain
+Route::get('/service-vente/livraisons-demain', [App\Http\Controllers\ExpeditionController::class, 'livraisonsDemain'])
+    ->middleware('auth')
+    ->name('expedition.demain');
+
+    // Route pour voir l'historique des commandes déjà envoyées
+Route::get('/service-vente/historique', [App\Http\Controllers\ExpeditionController::class, 'historique'])
+    ->middleware('auth')
+    ->name('expedition.historique');
+
+    // Route pour les livraisons "Domicile" de la prochaine demi-journée
+Route::get('/service-vente/livraisons-domicile-proche', [App\Http\Controllers\ExpeditionController::class, 'livraisonsDomicileProche'])
+    ->middleware('auth')
+    ->name('expedition.domicile_proche');
 Route::get('/produits/creer', [ProductController::class, 'create'])->name('make_product.create');
 Route::post('/produits', [ProductController::class, 'store'])->name('make_product.store');
 Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
@@ -305,3 +332,29 @@ Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
 Route::delete('/blog/comment/{id}', [BlogController::class, 'destroyComment'])
     ->middleware('auth')
     ->name('blog.comment.destroy');
+
+/* ------------------------------
+   GESTION DES THEMES DE VOTE (Service Vente)
+   User Story 1 : Créer un thème de vote
+   User Story 2 : Associer des joueurs à un thème
+------------------------------ */
+Route::get('/themes-vote', [Theme_VoteController::class, 'index'])
+    ->name('theme_vote.index');
+
+Route::get('/themes-vote/creer', [Theme_VoteController::class, 'create'])
+    ->name('theme_vote.create');
+
+Route::post('/themes-vote', [Theme_VoteController::class, 'store'])
+    ->name('theme_vote.store');
+
+Route::get('/themes-vote/{id}', [Theme_VoteController::class, 'show'])
+    ->name('theme_vote.show');
+
+Route::post('/themes-vote/{id}/joueurs', [Theme_VoteController::class, 'associerJoueurs'])
+    ->name('theme_vote.associer_joueurs');
+
+Route::delete('/themes-vote/{idTheme}/joueurs/{idJoueur}', [Theme_VoteController::class, 'retirerJoueur'])
+    ->name('theme_vote.retirer_joueur');
+
+Route::delete('/themes-vote/{id}', [Theme_VoteController::class, 'destroy'])
+    ->name('theme_vote.destroy');
