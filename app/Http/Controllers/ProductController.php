@@ -310,22 +310,29 @@ public function modify($id)
 }
 public function validateProduct(Request $request, $id)
 {
-    // 1️⃣ Sécurité : produit existant
+  
     $product = Produit::findOrFail($id);
 
-    // 2️⃣ Validation (même si readonly → on ne fait pas confiance au front)
     $request->validate([
         'nom_produit'         => 'required|string|max:50',
         'prix_base'           => 'required|numeric|min:0',
         'description_produit' => 'nullable|string|max:500',
         'id_categorie'        => 'required|exists:categorie_produit,id_categorie',
-        'id_nation'           => 'required|exists:nation,id_nation',
+        'id_nation'           => 'exists:nation,id_nation',
         'tailles'             => 'required|array|min:1',
         'tailles.*'           => 'exists:taille,id_taille',
         'couleurs'            => 'required|array|min:1',
         'couleurs.*'          => 'exists:colori,id_colori',
-        'quantite'            => 'required|integer|min:0',
-    ]);
+        'quantite'            => 'integer',
+    ],[
+'nom_produit.required' => 'le nom de ce produit est vide, le produit ne peux pas etre validé',
+'id_categorie.required' => "ce produit n'a pas de categorie, il ne peut pas etre validé",
+
+'tailles.required'=> "ce produit n'a pas de taille, il ne peut pas etre validé",
+'couleurs.required'=> "ce produit n'a pas de couleurs, il ne peut pas etre validé",
+
+    ]
+);
 
 
     $product->label_produit       = $request->nom_produit;
