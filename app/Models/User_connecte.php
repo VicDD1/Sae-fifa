@@ -12,7 +12,7 @@ class User_connecte extends Authenticatable
 
     protected $primaryKey = 'id_user_connecte';
 
-    public $timestamps = false;
+    public $timestamps = true;
     public $incrementing = true;
     protected $keyType = 'int';
     
@@ -28,7 +28,8 @@ class User_connecte extends Authenticatable
         'numero_telephone_user_connecte',
         'mfa_active',
         'mfa_code',
-        'mfa_expiration'
+        'mfa_expiration',
+        'stripe_customer_id',
     ];
     public function getAuthPassword()
     {
