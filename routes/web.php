@@ -20,6 +20,7 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ExpeditionController;
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');
@@ -72,8 +73,31 @@ Route::get('/produits', [ProductController::class, 'index']);
 Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
 
+/* ------------------------------
+   EXPÉDITION (Service Vente)
+------------------------------ */
+Route::get('/service-vente/commandes', [ExpeditionController::class, 'index'])
+    ->middleware('auth')
+    ->name('service_vente.commandes');
 
+Route::post('/service-vente/commandes/{id}/valider', [ExpeditionController::class, 'validerEnlevement'])
+    ->middleware('auth')
+    ->name('expedition.valider');
 
+    // Route pour les livraisons "Autre" de demain
+Route::get('/service-vente/livraisons-demain', [App\Http\Controllers\ExpeditionController::class, 'livraisonsDemain'])
+    ->middleware('auth')
+    ->name('expedition.demain');
+
+    // Route pour voir l'historique des commandes déjà envoyées
+Route::get('/service-vente/historique', [App\Http\Controllers\ExpeditionController::class, 'historique'])
+    ->middleware('auth')
+    ->name('expedition.historique');
+
+    // Route pour les livraisons "Domicile" de la prochaine demi-journée
+Route::get('/service-vente/livraisons-domicile-proche', [App\Http\Controllers\ExpeditionController::class, 'livraisonsDomicileProche'])
+    ->middleware('auth')
+    ->name('expedition.domicile_proche');
 
 
 Route::get('/creer_categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');

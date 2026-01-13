@@ -98,6 +98,28 @@
 
                 
             @endauth
+
+@if (Auth::user()->id_user_connecte == 13)
+    <div style="display: flex; align-items: center; gap: 10px; margin-left: 15px;">
+        
+        <a href="{{ route('service_vente.commandes') }}" class="account_creation">
+            <p>Expédition</p>
+        </a>
+
+        <a href="{{ route('expedition.demain') }}" class="account_creation" style="background-color: #fff7ed; border: 1px solid #d97706;">
+            <i class="fa-solid fa-calendar-check" style="color: #d97706;"></i>
+        </a>
+
+        <a href="{{ route('expedition.historique') }}" class="account_creation" style="background-color: #f3f4f6; border: 1px solid #9ca3af;" title="Historique">
+            <i class="fa-solid fa-clock-rotate-left" style="color: #4b5563;"></i>
+        </a>
+        <a href="{{ route('expedition.domicile_proche') }}" class="account_creation" style="background-color: #e0f2fe; border: 1px solid #0ea5e9;" title="Domicile Urgent">
+            <i class="fa-solid fa-house-chimney-user" style="color: #0369a1;"></i>
+        </a>
+
+    </div>
+@endif
+
         </nav>
     </header>
 
