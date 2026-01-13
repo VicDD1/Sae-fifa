@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Mes commandes</title>
-<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="{{ asset('css/mes_commandes.css') }}">
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
-
 </head>
 
 <body>
@@ -18,71 +17,71 @@
             <a href="/produits">Fifa Store</a>
 
 
-            <!-- CORRECTION : lien Vote propre -->
-            <a href="{{ route('vote.page') }}">Vote</a>
+        <a href="{{ route('vote.page') }}">Vote</a>
+       
 
+        @auth
+            @php
+                $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
+                $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
+            @endphp
+        @endauth
             
             <a href="/blog">L'Actu </a>
 
-            @auth
-                @php
-                    $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
-                    $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
-                @endphp
-            @endauth
+        @guest
+            @php $totalQuantite = 0; @endphp
+        @endguest
 
-            @guest
-                @php $totalQuantite = 0; @endphp
-            @endguest
+        <a href="{{ route('panier.index') }}" style="margin-left: 15px; font-weight: bold;">
+            <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
+        </a>
 
-            <a href="{{ route('panier.index') }}" style="margin-left: 15px; font-weight: bold;">
-                <i class="fa-solid fa-cart-shopping"></i> Mon Panier ({{ $totalQuantite }})
-            </a>
-
-            @auth
-                <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
-                    
-                    <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
-                        <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
-                            {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
-                        </span>
-                        <img style="text-decoration: none; display: flex; align-items: center; width:40px;" src="{{asset('assets/iconEdit.png')}}" alt="voir mes informations"></img>
-                    </a>
-
-                    <form action="/logout" method="POST" style="display:inline;">
-                        @csrf
-                        <button type="submit" title="Se déconnecter" style="background: none; border: none; cursor: pointer; color: #ffcccc;">
-                            <i class="fa-solid fa-power-off"></i>
-                        </button>
-                    </form>
-
-                </div>
-            @endauth
-
-            @guest
-                <a href="/connexion" class="account_creation" title="Se connecter">
-                    <img src="{{ asset('assets/icone.png') }}" alt="Compte">
+        @auth
+            <div style="display: inline-flex; align-items: center; margin-left: 20px; color: white;">
+                
+                <a href="/mon-profil" style="text-decoration: none; display: flex; align-items: center;">
+                    <span style="margin-right: 10px; font-weight: bold; border-bottom: 2px solid #00ff87;">
+                        {{ Auth::user()->prenom_user_connecte ?? Auth::user()->surnom_user_connecte }}
+                    </span>
+                    <img style="text-decoration: none; display: flex; align-items: center; width:40px;" src="{{asset('assets/iconEdit.png')}}" alt="voir mes informations"></img>
                 </a>
-            @endguest
-            @auth
 
+                <form action="/logout" method="POST" style="display:inline;">
+                    @csrf
+                    <button type="submit" title="Se déconnecter" style="background: none; border: none; cursor: pointer; color: #ffcccc;">
+                        <i class="fa-solid fa-power-off"></i>
+                    </button>
+                </form>
+
+            </div>
+        @endauth
+
+        @guest
+            <a href="/connexion" class="account_creation" title="Se connecter">
+                <img src="{{ asset('assets/icone.png') }}" alt="Compte">
+            </a>
+        @endguest
+
+        @auth
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
             <div class="nav-right-group">
                 <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-                 <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
-
+                <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
             </div>
             @endif
+        @endauth
 
-                
-            @endauth
-            @auth
-                @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
-                <a href="{{ route('commande.liste') }}" class="btn btn-primary">
-                    Mes commandes
-                </a>
-                @endif
-            @endauth
+        @auth
+            @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
+            <a href="{{ route('commande.liste') }}" class="btn btn-primary">
+                Mes commandes
+            </a>
+            @endif
+        @endauth
+
+      
+           
 
             @auth
                 @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)

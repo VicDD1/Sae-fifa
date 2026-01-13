@@ -19,6 +19,8 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
+use App\Http\Controllers\StripeController;
+
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RGPDController;
 
@@ -62,7 +64,9 @@ Route::get('/', function () {
 Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
 Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap']);
 Route::get('/produits_en_cours',[ProductController::class,'incomplet']);
-
+Route::get('/produit_en_cours/{id}', [ProductController::class, 'modify'])->name('product.modify');
+Route::post('/produit/{id}/valider', [ProductController::class, 'validateProduct'])
+    ->name('product.validate');
 Route::view('/parametre_compte', 'account_modification');
 Route::view('/se_connecter', 'account_connection');
 Route::view('/privacy_policy', 'privacy_policy');
@@ -83,7 +87,8 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product
 
 
 
-
+Route::get('/produits', [ProductController::class, 'index'])
+    ->name('products.index');
 
 Route::get('/creer_categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');
 Route::post('/categorie_store', [Categorie_ProduitControler::class, 'store'])->name('categorie.store');
@@ -249,6 +254,20 @@ Route::get('/login/mfa', [MfaController::class, 'showMfaForm'])
 Route::post('/login/mfa', [MfaController::class, 'verifyMfa'])
     ->name('mfa.verify');
 
+/* ------------------------------
+   Stripe Payment
+------------------------------ */
+Route::middleware('auth')->group(function () {
+    Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent'])
+        ->name('stripe.createPaymentIntent');
+    Route::post('/stripe/confirm-payment', [StripeController::class, 'confirmPayment'])
+        ->name('stripe.confirmPayment');
+    Route::get('/stripe/saved-cards', [StripeController::class, 'getSavedCards'])
+        ->name('stripe.savedCards');
+    Route::post('/stripe/pay-with-saved-card', [StripeController::class, 'payWithSavedCard'])
+        ->name('stripe.payWithSavedCard');
+});
+
 
 // -- SECTION BLOG --
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
@@ -258,3 +277,8 @@ Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
 Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
     ->middleware('auth')
     ->name('blog.comment.store');
+
+    // Route pour supprimer un commentaire (il faut être connecté)
+Route::delete('/blog/comment/{id}', [BlogController::class, 'destroyComment'])
+    ->middleware('auth')
+    ->name('blog.comment.destroy');
