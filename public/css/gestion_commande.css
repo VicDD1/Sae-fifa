@@ -1,0 +1,57 @@
+/* --- Tes styles existants --- */
+body {
+    background-color: #eef2fb;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #045694;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 30px;
+}
+
+nav a {
+    color: #eef2fb;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 6px 14px;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+nav a:hover {
+    background-color: #02456f;
+}
+
+.account_creation {
+    display: flex;
+    align-items: center;
+}
+
+/* --- Styles spécifiques à la gestion (Story 1, 2, 4) --- */
+.container-admin {
+    padding: 40px;
+}
+
+.table-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* On garde les couleurs des badges pour les User Stories */
+.badge-accepte { background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px; }
+.badge-refus { background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; }
+.badge-reserve { background-color: #ffc107; color: black; padding: 5px 10px; border-radius: 4px; }
