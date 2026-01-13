@@ -527,6 +527,7 @@
                 </div>
             @endforeach
         </div>
+        @include('botman')
     </main>
 
     {{-- LA MODALE (Cachée par défaut) --}}

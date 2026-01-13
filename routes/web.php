@@ -26,6 +26,7 @@ use App\Http\Controllers\ExpeditionController;
 use App\Http\Controllers\RGPDController;
 use App\Http\Controllers\Theme_VoteController;
 
+use App\Http\Controllers\GestionCommandeController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
@@ -39,6 +40,28 @@ Route::middleware('auth')->group(function () {
 
   Route::get('/delete', [ProfileController::class, 'delete'])->name('user.delete');
   Route::get('/anonymize', [ProfileController::class, 'anonime'])->name('user.anonime');
+
+/*
+|--------------------------------------------------------------------------
+| Routes Gestion commande
+|--------------------------------------------------------------------------
+*/
+// On protège le groupe avec le middleware 'auth' pour être sûr que l'utilisateur est connecté
+Route::middleware(['auth'])->prefix('siege')->group(function () {
+
+    // STORY 2 & 5 : La page d'accueil du service commande (Liste)
+    Route::get('/commandes', [GestionCommandeController::class, 'index'])
+        ->name('siege.commandes.index');
+
+    // STORY 1, 2, 4 : Action de mise à jour du statut
+    // On utilise une seule route POST qui recevra le type d'action (accepter/refuser/reserve)
+    Route::post('/commandes/{id}/update-statut', [GestionCommandeController::class, 'updateStatut'])
+        ->name('siege.commandes.update');
+
+    // STORY 5 : La vue spécifique pour le rapport Qualité Express
+    Route::get('/commandes/rapport-express', [GestionCommandeController::class, 'rapportQualite'])
+        ->name('siege.commandes.qualite');
+});
 /*
 |--------------------------------------------------------------------------
 | Web Routes
