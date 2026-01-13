@@ -34,6 +34,11 @@
                     $panier = \App\Models\Panier::where('id_user_connecte', Auth::id())->first();
                     $totalQuantite = $panier ? $panier->lignes->sum('quantitee') : 0;
                 @endphp
+                @if(Auth::user()->id_user_connecte === 62)
+                    <a href="{{ route('siege.commandes.index') }}" style="border-bottom: 2px solid #00ff87; font-weight: bold;">
+                        service commande
+                    </a>
+                @endif
             @endauth
 
             @guest

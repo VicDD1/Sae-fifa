@@ -23,6 +23,9 @@ class Commande extends Model
         'date_paiement',
         'mode_paiement',
         'statut_paiement',
+        'statut_livraison',
+        'commentaire_sav',
+        'date_livraison_reelle',
     ];
 
     /* Relations possibles : */
