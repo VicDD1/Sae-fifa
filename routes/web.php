@@ -23,6 +23,7 @@ use App\Http\Controllers\StripeController;
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RGPDController;
+use App\Http\Controllers\Theme_VoteController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
@@ -79,7 +80,7 @@ Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 /* ------------------------------
    Produits
 ------------------------------ */
-Route::get('/produits', [ProductController::class, 'index']);
+Route::get('/produit', [ProductController::class, 'index']);
 Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
 
@@ -279,3 +280,29 @@ Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
 Route::delete('/blog/comment/{id}', [BlogController::class, 'destroyComment'])
     ->middleware('auth')
     ->name('blog.comment.destroy');
+
+/* ------------------------------
+   GESTION DES THEMES DE VOTE (Service Vente)
+   User Story 1 : Créer un thème de vote
+   User Story 2 : Associer des joueurs à un thème
+------------------------------ */
+Route::get('/themes-vote', [Theme_VoteController::class, 'index'])
+    ->name('theme_vote.index');
+
+Route::get('/themes-vote/creer', [Theme_VoteController::class, 'create'])
+    ->name('theme_vote.create');
+
+Route::post('/themes-vote', [Theme_VoteController::class, 'store'])
+    ->name('theme_vote.store');
+
+Route::get('/themes-vote/{id}', [Theme_VoteController::class, 'show'])
+    ->name('theme_vote.show');
+
+Route::post('/themes-vote/{id}/joueurs', [Theme_VoteController::class, 'associerJoueurs'])
+    ->name('theme_vote.associer_joueurs');
+
+Route::delete('/themes-vote/{idTheme}/joueurs/{idJoueur}', [Theme_VoteController::class, 'retirerJoueur'])
+    ->name('theme_vote.retirer_joueur');
+
+Route::delete('/themes-vote/{id}', [Theme_VoteController::class, 'destroy'])
+    ->name('theme_vote.destroy');
