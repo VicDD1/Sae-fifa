@@ -13,8 +13,10 @@
         "guzzlehttp/guzzle": "^7.2",
         "icehouse-ventures/laravel-chartjs": "^4.2",
         "laravel/framework": "^10.10",
+        "laravel/pulse": "^1.4",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "stripe/stripe-php": "^19.1",
         "twilio/sdk": "^8.10"
     },
     "require-dev": {
