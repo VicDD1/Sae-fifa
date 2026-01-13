@@ -251,7 +251,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('products.index')->with('success', 'Produit créé avec succès !');
+        return redirect()->route('product.index')->with('success', 'Produit créé avec succès !');
     }
 
     public function incomplet()
@@ -337,7 +337,4 @@ public function validateProduct(Request $request, $id)
         ->route('product.index')
         ->with('success', 'Produit validé et enregistré avec succès ✅');
 }
-
-    
-    }
 }
