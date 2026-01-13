@@ -13,74 +13,126 @@
             <li class="tab-link current" data-tab="all-sales">Ventes Totales</li>
             <li class="tab-link" data-tab="by-category">Ventes par Catégorie</li>
         </ul>
-
+        
         <div id="all-sales" class="tab-content current">
             <div class="chart-container">
                 <x-chartjs-component :chart="$chart" />
             </div>
         </div>
-
+        
         <div id="by-category" class="tab-content">
             <div class="chart-container">
-<x-chartjs-component :chart="$chartByCategory" :options="[
-    'plugins' => [
-        'legend' => [
-            'display' => false // turn off canvas legend
-        ],
-    ],
-    'responsive' => true,
-    'maintainAspectRatio' => false,
-
-]" class="chart-category" />
-<div id="category-legend" class="custom-legend"></div>
+                <x-chartjs-component :chart="$chartByCategory" class="chart-category" />
+                <div id="category-legend"></div>
             </div>
         </div>
     </div>
 
     <script>
+    let chartInstance = null;
+    
+    function buildCategoryLegend() {
+        // Find the canvas
+        let chartEl = document.querySelector('#by-category canvas');
+        if (!chartEl) {
+            chartEl = document.querySelector('.chart-category canvas');
+        }
+        if (!chartEl) {
+            chartEl = document.querySelector('canvas[id*="MonthlySalesByCategory"]');
+        }
+        
+        const legendContainer = document.getElementById('category-legend');
+        
+        if (!chartEl || !legendContainer) {
+            return;
+        }
+        
+        // Get the chart instance
+        chartInstance = Chart.getChart(chartEl);
+        
+        if (chartInstance && chartInstance.data && chartInstance.data.datasets) {
+            // Clear existing content
+            legendContainer.innerHTML = '';
+            
+            // Build legend items
+            chartInstance.data.datasets.forEach((dataset, index) => {
+                const color = dataset.borderColor || dataset.backgroundColor;
+                
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+                item.dataset.index = index;
+                
+                // Set initial state based on dataset visibility
+                if (dataset.hidden) {
+                    item.classList.add('legend-item-hidden');
+                }
+                
+                const colorBox = document.createElement('span');
+                colorBox.className = 'legend-color';
+                colorBox.style.background = color;
+                
+                const label = document.createElement('span');
+                label.className = 'legend-label';
+                label.textContent = dataset.label;
+                
+                item.appendChild(colorBox);
+                item.appendChild(label);
+                
+                // Add click handler to toggle visibility
+                item.addEventListener('click', function() {
+                    const datasetIndex = parseInt(this.dataset.index);
+                    const meta = chartInstance.getDatasetMeta(datasetIndex);
+                    
+                    // Toggle visibility
+                    meta.hidden = !meta.hidden;
+                    
+                    // Update legend item appearance
+                    if (meta.hidden) {
+                        this.classList.add('legend-item-hidden');
+                    } else {
+                        this.classList.remove('legend-item-hidden');
+                    }
+                    
+                    // Update the chart
+                    chartInstance.update();
+                });
+                
+                legendContainer.appendChild(item);
+            });
+        }
+    }
+    
+    // Tab switching
     document.querySelectorAll('.tab-link').forEach(link => {
         link.addEventListener('click', function() {
-            const tab = this.dataset.tab;
+            const tabId = this.dataset.tab;
+            
+            // Switch tabs
             document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('current'));
             document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('current'));
-            document.getElementById(tab).classList.add('current');
+            document.getElementById(tabId).classList.add('current');
             this.classList.add('current');
+            
+            // Build legend for category tab
+            if (tabId === 'by-category') {
+                setTimeout(buildCategoryLegend, 100);
+                setTimeout(buildCategoryLegend, 300);
+            }
         });
     });
-    </script>
-   <script>
-document.querySelectorAll('.tab-link').forEach(link => {
-    link.addEventListener('click', function() {
-        const tabId = this.dataset.tab;
-        
-        // 1. Switch tabs
-        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('current'));
-        document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('current'));
-        document.getElementById(tabId).classList.add('current');
-        this.classList.add('current');
-
-        // 2. If we switched to the category tab, build the legend
-        if (tabId === 'by-category') {
-            const chartEl = document.querySelector('.chart-category canvas');
-            const legendContainer = document.getElementById('category-legend');
-            
-            // Wait a tiny bit for the tab transition to finish
-            setTimeout(() => {
-                const chart = Chart.getChart(chartEl);
-                if (chart && chart.data.datasets) {
-                    legendContainer.innerHTML = chart.data.datasets.map((dataset) => {
-                        const color = dataset.borderColor || dataset.backgroundColor;
-                        return `
-                            <div class="legend-item">
-                                <span class="legend-color" style="background:${color}"></span>
-                                <span class="legend-label">${dataset.label}</span>
-                            </div>`;
-                    }).join('');
-                }
-            }, 100);
-        }
+    
+    // Build on page load
+    window.addEventListener('load', () => {
+        setTimeout(buildCategoryLegend, 500);
     });
-});
-</script>
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(buildCategoryLegend, 500);
+        });
+    } else {
+        setTimeout(buildCategoryLegend, 500);
+    }
+    </script>
 </body>
 </html>
