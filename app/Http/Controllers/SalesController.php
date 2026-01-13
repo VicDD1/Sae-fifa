@@ -179,7 +179,7 @@ foreach ($grouped as $catId => $rows) {
 
 
     
- public function showSalesMap()
+    public function showSalesMap()
     {
         return view('localisation'); // your Blade file
     }
@@ -187,14 +187,20 @@ foreach ($grouped as $catId => $rows) {
     /**
      * API JSON (used by fetch)
      */
-public function getSalesLocalisation()
-{
-    // Basic test query
-    return \DB::table('devfifa.reglement')
-        ->join('devfifa.commande', 'reglement.id_commande', '=', 'commande.id_commande')
-        ->join('devfifa.adresse', 'commande.id_adresse', '=', 'adresse.id_adresse')
-        ->select('adresse.ville_adresse', 'adresse.latitude', 'adresse.longitude', 'reglement.montant_regle')
-        ->get();
-}
+    public function getSalesLocalisation()
+    {
+        $sales = DB::table('devfifa.reglement')
+            ->join('devfifa.commande', 'reglement.id_commande', '=', 'commande.id_commande')
+            ->join('devfifa.adresse', 'commande.id_adresse', '=', 'adresse.id_adresse')
+            ->select(
+                'adresse.ville_adresse',
+                'adresse.latitude',
+                'adresse.longitude',
+                'reglement.montant_regle'
+            )
+            ->get();
+    
+        return response()->json($sales);
+    }
 
 }
