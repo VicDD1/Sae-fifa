@@ -252,7 +252,8 @@ class CommandeController extends Controller
             return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
         }
 
-        $commandes = Commande::where('id_user_connecte', Auth::id())
+        $commandes = Commande::with(['modeLivraison', 'adresse', 'lignes.produit'])
+            ->where('id_user_connecte', Auth::id())
             ->orderBy('date_commande', 'desc')
             ->get();
 

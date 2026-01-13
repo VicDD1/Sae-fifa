@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <a href="{{ route('vote.page') }}">Vote</a>
 
             
-            <a href="https://www.fifa.com/fr/news" target="_blank">L'Actu </a>
+            <a href="/blog">L'Actu </a>
 
             @auth
                 @php
@@ -346,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     @error('telephone_professionnel')
                     <div class="error-message">{{ $message }}</div>
                     @enderror
-                    <label class="input-label">Numero de telephone</label>
+                    <label class="input-label">Numero de telephone </label>
                 </div>
 
                 <button type="submit" class="btn-login">POURSUIVRE</button>
