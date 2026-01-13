@@ -64,7 +64,9 @@ Route::get('/', function () {
 Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
 Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap']);
 Route::get('/produits_en_cours',[ProductController::class,'incomplet']);
-
+Route::get('/produit_en_cours/{id}', [ProductController::class, 'modify'])->name('product.modify');
+Route::post('/produit/{id}/valider', [ProductController::class, 'validateProduct'])
+    ->name('product.validate');
 Route::view('/parametre_compte', 'account_modification');
 Route::view('/se_connecter', 'account_connection');
 Route::view('/privacy_policy', 'privacy_policy');
@@ -85,7 +87,8 @@ Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product
 
 
 
-
+Route::get('/produits', [ProductController::class, 'index'])
+    ->name('products.index');
 
 Route::get('/creer_categorie', [Categorie_ProduitControler::class, 'create'])->name('categorie.create');
 Route::post('/categorie_store', [Categorie_ProduitControler::class, 'store'])->name('categorie.store');

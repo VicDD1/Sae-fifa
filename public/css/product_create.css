@@ -104,6 +104,12 @@ textarea.form-control {
     color: #333;
     border-color: #bbb;
 }
+input[readonly],
+select:disabled,
+textarea[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
 
 /* =========================================
    RESPONSIVE (MOBILE)
