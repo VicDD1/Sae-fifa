@@ -218,7 +218,7 @@
         
             <article class="card">
                 
-                <a href="{{ route('product.detail', $product->id_produit) }}" class="card-img">
+                <a href="{{ route('product.modify', $product->id_produit) }}" class="card-img">
                     {{-- DEBUT DE LA MODIFICATION --}}
                     @if($product->photo)
                         {{-- Si une photo existe en base, on utilise son chemin --}}
@@ -234,7 +234,7 @@
                 </a>
 
                 <div class="card-body">
-                    <a href="{{ route('product.detail', $product->id_produit) }}" style="text-decoration:none; color:inherit;">
+                    <a href="{{ route('product.modify', $product->id_produit) }}" style="text-decoration:none; color:inherit;">
                         <h2 class="card-title">{{ $product->label_produit }}</h2>
                     </a>
                     
@@ -252,9 +252,7 @@
         </div>
     @endif
     </div>
- <div class="history-sidebar">
-    <h2>Vus récemment</h2>
-    <div class="history-list">
+
         
 
 

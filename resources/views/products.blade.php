@@ -12,17 +12,17 @@
     </head>
     <body>
 
-    <header>
+   <header>
         <nav>
             <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
-            
+            <a href="/produits">Fifa Store</a>
 
 
             <!-- CORRECTION : lien Vote propre -->
             <a href="{{ route('vote.page') }}">Vote</a>
 
-            
-            <a href="/blog">L'Actu </a>
+        
+            <a href="/blog">L'Actu</a>
 
             @auth
                 @php
@@ -67,13 +67,14 @@
             @auth
 
             @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-            <div class="nav-right-group">
                 <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
                  <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
 
             </div>
             @endif
-
+            @if (Auth::user()->id_user_connecte === 35)
+                <a class="account_creation" href="/gestion-rgpd">Espace DPO </a>
+            @endif
                 
             @endauth
             @auth
@@ -209,7 +210,7 @@
                 <a href="{{ url()->current() }}" class="btn-reset">Effacer</a>
 @auth
     @if(Auth::user()->id_user_connecte === 13)
-                <a href="{{ route('products.create') }}" class="btn-create">Créer un produit</a>
+                <a href="{{ route('make_product.create') }}" class="btn-create">Créer un produit</a>
 
                 <a href="{{ route('categorie.create') }}" class="btn-create" style="background-color: #6c757d; margin-left: 5px;">
                     Ajouter une Catégorie
@@ -293,6 +294,8 @@
         <span>|</span>
      <a href="/privacy_policy"> Respect de la vie privée </a> 
 </footer>
+
+@include('botman')
 
 <button onclick="toggleHelpModal()" style="position: fixed; bottom: 20px; left: 20px; background-color: #2563eb; color: white; width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 99999; display: flex; align-items: center; justify-content: center;">
     ?

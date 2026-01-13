@@ -20,7 +20,7 @@ class RGPDController extends Controller
         if ($dateChoisie) {
             // Puisque created_at existe maintenant, on l'utilise !
             // On exclut les IDs 11, 12 (admins) et 35 (DPO) pour ne pas les supprimer par erreur
-            $users = User_connecte::where('created_at', '<', $dateChoisie)
+            $users = User_connecte::where('updated_at', '<', $dateChoisie)
                                 ->whereNotIn('id_user_connecte', [11, 12, 35])
                                 ->get();
         }
