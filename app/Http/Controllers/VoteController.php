@@ -54,7 +54,7 @@ class VoteController extends Controller
     if ($aDejaVote) {
         return redirect()->route('vote.page')->with(
             'erreur_vote',
-            "Casse-toi à l'alim me chercher un flashon digne des plus grands 🤣 (t'as déjà voté pour cette catégorie !)"
+            "(t'as déjà voté pour cette catégorie !)"
         );
     }
 

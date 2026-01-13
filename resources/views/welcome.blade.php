@@ -99,7 +99,7 @@
 
                 
             @endauth
-
+            @auth
 @if (Auth::user()->id_user_connecte == 13)
     <div style="display: flex; align-items: center; gap: 10px; margin-left: 15px;">
         
@@ -120,7 +120,7 @@
 
     </div>
 @endif
-
+@endauth
         </nav>
     </header>
 

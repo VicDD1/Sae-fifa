@@ -106,8 +106,8 @@ class ProductSearchService
     {
         return Produit::with(['photo'])
             ->whereDoesntHave('variantes', function($query) {
-                $query->where('quantite_stock', '>', 0)
-                      ->orWhere('quantitee_stock', '>', 0);
+                $query->where('variante_produit.quantitee_stock', '>', 0)
+                      ->orWhere('variante_produit.quantitee_stock', '>', 0);
             })
             ->limit($limit)
             ->get();
