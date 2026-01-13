@@ -263,6 +263,7 @@
                 </div>
             @endforelse
         </div>
+        @include('botman')
     </main>
 </body>
 </html>
