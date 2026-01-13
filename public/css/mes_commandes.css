@@ -1,4 +1,12 @@
 /* ===== PAGE GLOBALE ===== */
+body {
+    background-color: #eef2fb;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* ===== HEADER FIXE ===== */
 header {
     position: fixed;
     top: 0;
@@ -12,7 +20,6 @@ header {
     z-index: 1000;
 }
 
-
 nav {
     display: flex;
     align-items: center;
@@ -20,13 +27,7 @@ nav {
     padding: 0 30px;
     gap: 20px;
 }
-footer{
-    position: absolute;
-    bottom: 20px;
-    left: 30%;
-    align-content: center;
-    text-align: center;
-}
+
 nav a {
     color: #eef2fb;
     text-decoration: none;
@@ -40,69 +41,22 @@ nav a:hover {
     background-color: #02456f;
 }
 
-
-
-body {
-    background-color: #eef2fb;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-/* ===== CONTAINER COMMANDES ===== */
-
-.commande-container {
-    max-width: 1000px;
-    margin: 40px auto 80px;
-    margin-top: 200px;
-    padding: 0 20px;
-}
-
-body{
-    background-color: #eef2fb;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-
-header{
-    background-color: #045694;
-    height: 85px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
-nav{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 0 30px;
-    gap: 20px;
-}
-
-nav a{
-    color: #eef2fb;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 6px 14px;
-    border-radius: 5px;
-    transition: 0.2s;
-}
-
-nav a:hover{
-    background-color: #02456f;
+footer {
+    position: absolute;
+    bottom: 20px;
+    left: 30%;
+    align-content: center;
+    text-align: center;
 }
 
 /* Alignement droite */
-.account_creation{
+.account_creation {
     margin-left: auto;
     display: flex;
     align-items: center;
 }
 
-.account_creation img{
+.account_creation img {
     height: 50px;
     width: 50px;
     border-radius: 50%;
@@ -140,6 +94,28 @@ nav a[style*="font-weight: bold;"] {
     gap: 6px;
 }
 
+.btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: #00aaff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0088cc;
+}
+
+/* ===== CONTAINER COMMANDES ===== */
+.commande-container {
+    max-width: 1000px;
+    margin: 40px auto 80px;
+    margin-top: 120px;
+    padding: 0 20px;
+}
 
 .commande-title {
     font-size: 32px;

@@ -96,6 +96,8 @@ class CommandeController extends Controller
             'telephone' => 'required|string|max:20',
             'paiement'  => 'required|string',
             'mode_livraison' => 'required|integer|exists:mode_livraison,id_mode_livraison',
+            'point_relais_nom' => 'nullable|string|max:255',
+            'point_relais_adresse' => 'nullable|string|max:255',
         ];
 
         if ($request->carte_existante === 'nouvelle') {
@@ -103,6 +105,13 @@ class CommandeController extends Controller
             $rules['card_number'] = 'required|string|max:16';
             $rules['expiry']      = 'required|string|max:5';
             $rules['cvv']         = 'required|string|max:3';
+        }
+
+        // Vérifier si le mode est "relais" et exiger un point relais
+        $mode = Mode_livraison::find($request->mode_livraison);
+        if ($mode && strtolower($mode->type_livraison) === 'relais') {
+            $rules['point_relais_nom'] = 'required|string|max:255';
+            $rules['point_relais_adresse'] = 'required|string|max:255';
         }
 
         $request->validate($rules);
@@ -152,6 +161,8 @@ class CommandeController extends Controller
             'telephone' => 'required|string|max:20',
             'paiement'  => 'required|string',
             'mode_livraison' => 'required|integer|exists:mode_livraison,id_mode_livraison',
+            'point_relais_nom' => 'nullable|string|max:255',
+            'point_relais_adresse' => 'nullable|string|max:255',
 
             // peut être 'nouvelle' ou un id de carte
             'carte_existante' => 'nullable',
@@ -166,6 +177,13 @@ class CommandeController extends Controller
             $rules['card_number'] = 'required|string|max:16';
             $rules['expiry']      = 'required|string|max:5';
             $rules['cvv']         = 'required|string|max:3';
+        }
+
+        // Vérifier si le mode est "relais" et exiger un point relais
+        $mode = Mode_livraison::find($request->mode_livraison);
+        if ($mode && strtolower($mode->type_livraison) === 'relais') {
+            $rules['point_relais_nom'] = 'required|string|max:255';
+            $rules['point_relais_adresse'] = 'required|string|max:255';
         }
 
         $request->validate($rules);
@@ -219,15 +237,17 @@ class CommandeController extends Controller
 
         // ---- Commande ----
         $commande = Commande::create([
-            'id_adresse'        => $adresse->id_adresse,
-            'id_user_connecte'  => Auth::id(),
-            'id_acheteur'       => $acheteur->id_acheteur,
-            'id_mode_livraison' => $mode->id_mode_livraison,
-            'date_commande'     => now(),
-            'montant_total'     => $total_final,
-            'date_paiement'     => now(),
-            'mode_paiement'     => $request->paiement,
-            'statut_paiement'   => 'En attente',
+            'id_adresse'          => $adresse->id_adresse,
+            'id_user_connecte'    => Auth::id(),
+            'id_acheteur'         => $acheteur->id_acheteur,
+            'id_mode_livraison'   => $mode->id_mode_livraison,
+            'point_relais_nom'    => $request->point_relais_nom,
+            'point_relais_adresse'=> $request->point_relais_adresse,
+            'date_commande'       => now(),
+            'montant_total'       => $total_final,
+            'date_paiement'       => now(),
+            'mode_paiement'       => $request->paiement,
+            'statut_paiement'     => 'En attente',
         ]);
 
         // ---- Lignes commandes ----

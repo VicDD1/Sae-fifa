@@ -19,12 +19,23 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MfaController;
+use App\Http\Controllers\StripeController;
+
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\RGPDController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
+    Route::post('/anonymize-donnees', [RGPDController::class, 'anonymize'])->name('rgpd.anonymize');
+});
   Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
   Route::get('/cookies', function () {
       return view('voir_cookies');
   })->name('cookies.manage');
-  /*
+
+
+  Route::get('/delete', [ProfileController::class, 'delete'])->name('user.delete');
+  Route::get('/anonymize', [ProfileController::class, 'anonime'])->name('user.anonime');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -240,6 +251,20 @@ Route::get('/login/mfa', [MfaController::class, 'showMfaForm'])
 Route::post('/login/mfa', [MfaController::class, 'verifyMfa'])
     ->name('mfa.verify');
 
+/* ------------------------------
+   Stripe Payment
+------------------------------ */
+Route::middleware('auth')->group(function () {
+    Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent'])
+        ->name('stripe.createPaymentIntent');
+    Route::post('/stripe/confirm-payment', [StripeController::class, 'confirmPayment'])
+        ->name('stripe.confirmPayment');
+    Route::get('/stripe/saved-cards', [StripeController::class, 'getSavedCards'])
+        ->name('stripe.savedCards');
+    Route::post('/stripe/pay-with-saved-card', [StripeController::class, 'payWithSavedCard'])
+        ->name('stripe.payWithSavedCard');
+});
+
 
 // -- SECTION BLOG --
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
@@ -249,3 +274,8 @@ Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
 Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
     ->middleware('auth')
     ->name('blog.comment.store');
+
+    // Route pour supprimer un commentaire (il faut être connecté)
+Route::delete('/blog/comment/{id}', [BlogController::class, 'destroyComment'])
+    ->middleware('auth')
+    ->name('blog.comment.destroy');

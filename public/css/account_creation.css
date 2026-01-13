@@ -386,4 +386,34 @@ nav a[style*="font-weight: bold;"] {
     justify-content: center !important;
     background-size: cover !important;
 }
-        
+
+.rgpd{
+    margin-top: 50px;
+}
+
+.btn-anonyme{
+    color: white;
+    border: none;
+    border-radius: 25px; 
+    padding: 14px 35px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+
+.btn-suprimer{
+    color: white;
+    border: none;
+    border-radius: 25px; 
+    padding: 14px 35px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 10px;
+}
