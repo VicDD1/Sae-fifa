@@ -1,0 +1,136 @@
+/* General Container */
+.container {
+    max-width: 90vw;
+    margin: 40px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 20px;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.tab-link {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.3s ease;
+    background-color: #f7f7f7;
+    color: #555;
+}
+
+.tab-link:hover {
+    background-color: #e2e2e2;
+}
+
+.tab-link.current {
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-bottom: none;
+    font-weight: bold;
+    color: #111;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.current {
+    display: block;
+}
+
+/* Chart Container */
+.chart-container {
+    width: 100%;
+    height: 60vh;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.chartjs-legend ul {
+    display: flex !important;
+    flex-wrap: wrap;        /* multiple rows if many items */
+    justify-content: flex-start; /* left-align */
+    gap: 12px;              /* spacing between items */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.chartjs-legend li {
+    display: flex;
+    align-items: center;
+    gap: 6px;              /* space between color dot and text */
+    margin: 0;
+}
+/* Container for the whole legend */
+.custom-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centers the legend block */
+    gap: 10px 0;             /* Vertical gap between rows */
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.custom-legend .legend-item {
+    display: flex;
+    align-items: center;
+    /* This is the key: Adjust the width based on your longest label */
+    flex: 0 0 25%;           /* 4 items per row (25% each) */
+    min-width: 180px;        /* Prevents squishing on small screens */
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.custom-legend .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;      /* Rounded squares look professional */
+    margin-right: 8px;
+    display: inline-block;
+    flex-shrink: 0;          /* Prevents the color box from shrinking */
+}
+
+.custom-legend .legend-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.custom-legend {
+    display: grid;
+    /* This creates 4 columns of equal width */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px;
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0; /* Keeps the box from getting squished */
+}
+
+.legend-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
