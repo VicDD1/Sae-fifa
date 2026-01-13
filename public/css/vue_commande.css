@@ -243,3 +243,70 @@ nav a[style*="font-weight: bold;"] {
     justify-content: center !important;
     background-size: cover !important;
 }
+
+/* Styles pour les points relais */
+.points-relais-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.point-relais-item {
+    padding: 15px;
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.point-relais-item:hover {
+    background: #e8f4fc;
+    border-color: #045694;
+}
+
+.point-relais-item.selected {
+    background: #d4edff;
+    border-color: #045694;
+    box-shadow: 0 0 0 3px rgba(4, 86, 148, 0.2);
+}
+
+.point-relais-item.selected::before {
+    content: "✓ ";
+    color: #045694;
+    font-weight: bold;
+}
+
+.btn-secondary {
+    padding: 10px 20px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+#point-relais-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background: white;
+}

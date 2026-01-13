@@ -16,6 +16,8 @@ class Commande extends Model
         'id_user_connecte',
         'id_acheteur',
         'id_mode_livraison',
+        'point_relais_nom',
+        'point_relais_adresse',
         'date_commande',
         'montant_total',
         'date_paiement',
