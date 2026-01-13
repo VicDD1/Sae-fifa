@@ -71,11 +71,10 @@
             @endguest
             @auth
 
-            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11 || Auth::user()->id_user_connecte === 13)
                 <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-                 <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
-
-            </div>
+                <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
+                <a href="{{ route('theme_vote.store') }}" class="account_creation" style="color: #00ff87; font-weight: bold;">+ Créer Votation</a>
             @endif
             @if (Auth::user()->id_user_connecte === 35)
                 <a class="account_creation" href="/gestion-rgpd">Espace DPO </a>
