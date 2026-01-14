@@ -118,3 +118,218 @@ footer{
     justify-content: center !important;
     background-size: cover !important;
 }
+
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #045694 0%, #001431 100%);
+    color: white;
+    padding: 80px 30px;
+    text-align: center;
+}
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+.hero .btn-hero {
+    display: inline-block;
+    background-color: #00ff87;
+    color: #001431;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.hero .btn-hero:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 255, 135, 0.3);
+}
+
+/* Section Titles */
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #001431;
+    margin: 50px 0 30px;
+    font-weight: 700;
+}
+.section-title span {
+    color: #045694;
+}
+
+/* Products Grid */
+.products-section {
+    padding: 20px 30px 50px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+.product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.product-card .card-body {
+    padding: 20px;
+}
+.product-card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #001431;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.product-card .card-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #045694;
+}
+.btn-voir-tout {
+    display: block;
+    text-align: center;
+    margin: 40px auto 0;
+    background-color: #045694;
+    color: white;
+    padding: 15px 50px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    width: fit-content;
+    transition: background-color 0.3s;
+}
+.btn-voir-tout:hover {
+    background-color: #02456f;
+}
+
+/* Articles Section */
+.articles-section {
+    background-color: #f8fafc;
+    padding: 20px 30px 60px;
+}
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.article-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s;
+}
+.article-card:hover {
+    transform: translateY(-5px);
+}
+.article-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.article-card .article-body {
+    padding: 25px;
+}
+.article-card .article-date {
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+.article-card .article-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #001431;
+    margin-bottom: 15px;
+}
+.article-card .article-excerpt {
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+.article-card .btn-lire {
+    color: #045694;
+    font-weight: bold;
+    text-decoration: none;
+}
+.article-card .btn-lire:hover {
+    text-decoration: underline;
+}
+
+/* Features Section */
+.features-section {
+    padding: 60px 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+.feature-card {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.feature-card i {
+    font-size: 3rem;
+    color: #045694;
+    margin-bottom: 20px;
+}
+.feature-card h3 {
+    font-size: 1.2rem;
+    color: #001431;
+    margin-bottom: 10px;
+}
+.feature-card p {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+/* Footer adjustment */
+footer {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    background-color: #001431;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+footer a {
+    color: #00ff87;
+    text-decoration: none;
+}
+footer span {
+    color: #6b7280;
+    margin: 0 10px;
+}
