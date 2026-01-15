@@ -108,7 +108,9 @@ class ProductController extends Controller
             }
         }
 
-        $products = Produit::whereNotNull('prix_base')->get();
+        $products = Produit::whereNotNull('prix_base')
+                   ->where('prix_base', '!=', 0)
+                   ->get();
 
         $historyIds = session()->get('recent_products', []);
         $recentProducts = collect();
@@ -256,20 +258,33 @@ class ProductController extends Controller
 
     public function incomplet()
     {
-        $products = Produit::whereNull('prix_base')->get();
-
+        // Get the products with null price (same as your original code)
+        $products = Produit::where(function ($query) {
+            $query->whereNull('prix_base')
+                  ->orWhere('prix_base', 0);
+        })->get();
+        // Get nations
         $nations = Nation::whereIn('id_nation', function ($query) {
             $query->select('id_nation')->from('produit')->whereNotNull('id_nation');
         })->orderBy('nom_nation')->get();
-
-    return view('productsImcomplete', compact(
-        'products',
-        'nations',
-        'tailles',
-        'couleurs',
-        'categories'
-    ));
-}
+    
+        // Get tailles (sizes) 
+        $tailles = Taille::all();  // Add this line to get all sizes
+    
+        // Get couleurs (colors)
+        $couleurs = Colori::all();  // You can also use where or other filters if needed
+    
+        // Get categories
+        $categories = Categorie_Produit::all();
+    
+        return view('productsImcomplete', compact(
+            'products',
+            'nations',
+            'tailles',  // Pass tailles to the view
+            'couleurs',
+            'categories'
+        ));
+    }
 public function modify($id)
 {
     $product = Produit::with(['tailles', 'couleurs', 'photo'])->findOrFail($id);
