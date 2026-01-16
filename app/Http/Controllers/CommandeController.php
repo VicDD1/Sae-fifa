@@ -288,5 +288,24 @@ class CommandeController extends Controller
         return view('succes_commande');
     }
 
+    public function listeComplete()
+{
+    // Sécurité : On vérifie que l'utilisateur est bien un admin ou membre du staff
+    // (Adaptez l'ID 12/11 selon vos rôles comme vu précédemment)
+    if (Auth::user()->id_user_connecte !== 12 && Auth::user()->id_user_connecte !== 11) {
+        return redirect('/')->with('error', 'Accès interdit');
+    }
+
+    // Récupération de toutes les commandes
+    // 'with' permet d'optimiser la requête pour récupérer les infos du client en même temps
+    // 'latest' trie par date décroissante (les plus récentes en premier)
+    $commandes = Commande::with('user')
+                ->latest('created_at')
+                ->paginate(20); // Affiche 20 commandes par page
+
+    return view('admin.commandes.index', compact('commandes'));
+}
+    
+
 
 }

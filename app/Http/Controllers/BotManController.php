@@ -161,13 +161,13 @@ class BotManController extends Controller
         }
         
         // Détection de demande de produits en stock
-        if (preg_match('/(quoi|qu\'est-ce|produits?|articles?).*(en stock|disponible)/i', $message) ||
-            preg_match('/(en stock|disponible).*(quoi|produits?|articles?)/i', $message)) {
+        if (preg_match('/(quoi|qu\'est-ce|produit?|articles?).*(en stock|disponible)/i', $message) ||
+            preg_match('/(en stock|disponible).*(quoi|produit?|articles?)/i', $message)) {
             $products = $productSearchService->getProductsInStock(10);
-            return "📦 Voici les produits actuellement en stock :\n\n" . $productSearchService->formatSearchResultsForChat($products);
+            return "📦 Voici les produit actuellement en stock :\n\n" . $productSearchService->formatSearchResultsForChat($products);
         }
         
-        return null; // Pas de requête DB détectée, passer à l'IA
+        return null;
     }
 
     /**

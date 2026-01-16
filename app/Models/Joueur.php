@@ -32,4 +32,20 @@ class Joueur extends Model
         'first_selection',
         'nb_selection'
     ];
+
+    /**
+     * Relation : thèmes de vote auxquels ce joueur participe
+     */
+    public function themes()
+    {
+        return $this->belongsToMany(Theme_vote::class, 'joueur_theme', 'id_joueur', 'id_theme');
+    }
+
+    /**
+     * Nom complet du joueur
+     */
+    public function getNomCompletAttribute(): string
+    {
+        return $this->prenom . ' ' . $this->nom;
+    }
 }

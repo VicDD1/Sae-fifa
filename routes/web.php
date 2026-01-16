@@ -22,7 +22,12 @@ use App\Http\Controllers\MfaController;
 use App\Http\Controllers\StripeController;
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ExpeditionController;
 use App\Http\Controllers\RGPDController;
+use App\Http\Controllers\Theme_VoteController;
+use App\Http\Controllers\HomeController;
+
+use App\Http\Controllers\GestionCommandeController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
@@ -36,12 +41,34 @@ Route::middleware('auth')->group(function () {
 
   Route::get('/delete', [ProfileController::class, 'delete'])->name('user.delete');
   Route::get('/anonymize', [ProfileController::class, 'anonime'])->name('user.anonime');
+
+/*
+|--------------------------------------------------------------------------
+| Routes Gestion commande
+|--------------------------------------------------------------------------
+*/
+// On protège le groupe avec le middleware 'auth' pour être sûr que l'utilisateur est connecté
+Route::middleware(['auth'])->prefix('siege')->group(function () {
+
+    // STORY 2 & 5 : La page d'accueil du service commande (Liste)
+    Route::get('/commandes', [GestionCommandeController::class, 'index'])
+        ->name('siege.commandes.index');
+
+    // STORY 1, 2, 4 : Action de mise à jour du statut
+    // On utilise une seule route POST qui recevra le type d'action (accepter/refuser/reserve)
+    Route::post('/commandes/{id}/update-statut', [GestionCommandeController::class, 'updateStatut'])
+        ->name('siege.commandes.update');
+
+    // STORY 5 : La vue spécifique pour le rapport Qualité Express
+    Route::get('/commandes/rapport-express', [GestionCommandeController::class, 'rapportQualite'])
+        ->name('siege.commandes.qualite');
+});
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn() => view('welcome'));
+Route::get('/', [HomeController::class, 'index']);
 Route::get('/se_connecter', fn() => view('account_connection'));
 Route::get('/vote', fn() => view('vote_fifa'));
 Route::get('/privacy_policy', fn() => view('privacy_policy'));
@@ -56,10 +83,6 @@ Route::get('/produit/stock', [ProductController::class, 'getStock']);
 /* ------------------------------
    Pages statiques & simples
 ------------------------------ */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/statistiques_de_ventes', [SalesController::class, 'index']);
 Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap']);
@@ -81,7 +104,7 @@ Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 /* ------------------------------
    Produits
 ------------------------------ */
-Route::get('/produits', [ProductController::class, 'index']);
+Route::get('/produit', [ProductController::class, 'index']);
 Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
 
@@ -97,7 +120,31 @@ Route::get('/produits', [ProductController::class, 'index'])->name('product.inde
 Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')
 ->name('product.detail');
+/* ------------------------------
+   EXPÉDITION (Service Vente)
+------------------------------ */
+Route::get('/service-vente/commandes', [ExpeditionController::class, 'index'])
+    ->middleware('auth')
+    ->name('service_vente.commandes');
 
+Route::post('/service-vente/commandes/{id}/valider', [ExpeditionController::class, 'validerEnlevement'])
+    ->middleware('auth')
+    ->name('expedition.valider');
+
+    // Route pour les livraisons "Autre" de demain
+Route::get('/service-vente/livraisons-demain', [App\Http\Controllers\ExpeditionController::class, 'livraisonsDemain'])
+    ->middleware('auth')
+    ->name('expedition.demain');
+
+    // Route pour voir l'historique des commandes déjà envoyées
+Route::get('/service-vente/historique', [App\Http\Controllers\ExpeditionController::class, 'historique'])
+    ->middleware('auth')
+    ->name('expedition.historique');
+
+    // Route pour les livraisons "Domicile" de la prochaine demi-journée
+Route::get('/service-vente/livraisons-domicile-proche', [App\Http\Controllers\ExpeditionController::class, 'livraisonsDomicileProche'])
+    ->middleware('auth')
+    ->name('expedition.domicile_proche');
 Route::get('/produits/creer', [ProductController::class, 'create'])->name('make_product.create');
 Route::post('/produits', [ProductController::class, 'store'])->name('make_product.store');
 Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
@@ -282,3 +329,29 @@ Route::post('/blog/{id}/comment', [BlogController::class, 'storeComment'])
 Route::delete('/blog/comment/{id}', [BlogController::class, 'destroyComment'])
     ->middleware('auth')
     ->name('blog.comment.destroy');
+
+/* ------------------------------
+   GESTION DES THEMES DE VOTE (Service Vente)
+   User Story 1 : Créer un thème de vote
+   User Story 2 : Associer des joueurs à un thème
+------------------------------ */
+Route::get('/themes-vote', [Theme_VoteController::class, 'index'])
+    ->name('theme_vote.index');
+
+Route::get('/themes-vote/creer', [Theme_VoteController::class, 'create'])
+    ->name('theme_vote.create');
+
+Route::post('/themes-vote', [Theme_VoteController::class, 'store'])
+    ->name('theme_vote.store');
+
+Route::get('/themes-vote/{id}', [Theme_VoteController::class, 'show'])
+    ->name('theme_vote.show');
+
+Route::post('/themes-vote/{id}/joueurs', [Theme_VoteController::class, 'associerJoueurs'])
+    ->name('theme_vote.associer_joueurs');
+
+Route::delete('/themes-vote/{idTheme}/joueurs/{idJoueur}', [Theme_VoteController::class, 'retirerJoueur'])
+    ->name('theme_vote.retirer_joueur');
+
+Route::delete('/themes-vote/{id}', [Theme_VoteController::class, 'destroy'])
+    ->name('theme_vote.destroy');
