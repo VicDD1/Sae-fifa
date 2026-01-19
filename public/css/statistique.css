@@ -55,11 +55,13 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+
+/* Built-in Chart.js Legend (for first tab) */
 .chartjs-legend ul {
     display: flex !important;
-    flex-wrap: wrap;        /* multiple rows if many items */
-    justify-content: flex-start; /* left-align */
-    gap: 12px;              /* spacing between items */
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 12px;
     padding: 0;
     margin: 0;
     list-style: none;
@@ -68,69 +70,109 @@
 .chartjs-legend li {
     display: flex;
     align-items: center;
-    gap: 6px;              /* space between color dot and text */
+    gap: 6px;
     margin: 0;
 }
-/* Container for the whole legend */
-.custom-legend {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Centers the legend block */
-    gap: 10px 0;             /* Vertical gap between rows */
-    margin-bottom: 20px;
-    padding: 10px;
+
+/* Custom Legend - Compact Horizontal Grid */
+#category-legend {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 6px 10px !important;
+    margin-top: 15px !important;
+    padding: 10px 15px !important;
+    background: #fafafa !important;
+    border-radius: 6px !important;
+    border: 1px solid #e5e5e5 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
-.custom-legend .legend-item {
-    display: flex;
-    align-items: center;
-    /* This is the key: Adjust the width based on your longest label */
-    flex: 0 0 25%;           /* 4 items per row (25% each) */
-    min-width: 180px;        /* Prevents squishing on small screens */
-    font-size: 0.85rem;
-    color: #666;
+#category-legend .legend-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 0.8rem !important;
+    color: #444 !important;
+    padding: 4px 8px !important;
+    background: white !important;
+    border-radius: 4px !important;
+    transition: all 0.2s !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    cursor: pointer !important;
+    user-select: none !important;
 }
 
-.custom-legend .legend-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;      /* Rounded squares look professional */
-    margin-right: 8px;
-    display: inline-block;
-    flex-shrink: 0;          /* Prevents the color box from shrinking */
+#category-legend .legend-item:hover {
+    background-color: #f0f0f0 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 }
 
-.custom-legend .legend-label {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.custom-legend {
-    display: grid;
-    /* This creates 4 columns of equal width */
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 10px;
-    margin-top: 20px;
-    padding: 15px;
-    background: #fff;
+#category-legend .legend-item:active {
+    transform: translateY(0) !important;
 }
 
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
+/* Hidden state when dataset is toggled off */
+#category-legend .legend-item-hidden {
+    opacity: 0.4 !important;
+    background-color: #f5f5f5 !important;
 }
 
-.legend-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-    flex-shrink: 0; /* Keeps the box from getting squished */
+#category-legend .legend-item-hidden .legend-color {
+    opacity: 0.5 !important;
 }
 
-.legend-label {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+#category-legend .legend-item-hidden .legend-label {
+    text-decoration: line-through !important;
+    color: #999 !important;
+}
+
+#category-legend .legend-color {
+    width: 12px !important;
+    height: 12px !important;
+    border-radius: 2px !important;
+    flex-shrink: 0 !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    display: inline-block !important;
+}
+
+#category-legend .legend-label {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.2 !important;
+    flex: 1 !important;
+}
+
+/* Responsive adjustments - more columns on larger screens */
+@media (min-width: 1400px) {
+    #category-legend {
+        grid-template-columns: repeat(8, 1fr) !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    #category-legend {
+        grid-template-columns: repeat(5, 1fr) !important;
+    }
+}
+
+@media (max-width: 900px) {
+    #category-legend {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #category-legend {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #category-legend {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
 }

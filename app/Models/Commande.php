@@ -23,6 +23,9 @@ class Commande extends Model
         'date_paiement',
         'mode_paiement',
         'statut_paiement',
+        'statut_livraison',
+        'commentaire_sav',
+        'date_livraison_reelle',
     ];
 
     /* Relations possibles : */
@@ -54,5 +57,9 @@ class Commande extends Model
         public function reglements()
     {
         return $this->hasMany(Reglement::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User_connecte::class, 'id_user_connecte');
     }
 }

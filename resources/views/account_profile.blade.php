@@ -155,12 +155,19 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="input-label">Numéro de téléphone</label>
+                        <input type="text" class="custom-input" value="{{ $user->numero_telephone_user_connecte }}" readonly style="background-color: #f9f9f9; color: #555;">
+                    </div>
+
+                    <div class="form-group">
                         <label class="input-label">Mot de passe</label>
                         <div style="position: relative;">
                             <input type="password" class="custom-input" value="FakePassword123" readonly style="background-color: #f9f9f9; color: #555;">
                             <i class="fa-solid fa-lock password-icon"></i>
                         </div>
                     </div>
+
+                    
 
                     <a href="/parametre_compte" style="text-decoration: none;">
                         <button type="button" class="btn-login" style="background-color: #045694; cursor: pointer;">MODIFIER MES INFOS</button>

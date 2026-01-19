@@ -22,9 +22,12 @@ use App\Http\Controllers\MfaController;
 use App\Http\Controllers\StripeController;
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ExpeditionController;
 use App\Http\Controllers\RGPDController;
 use App\Http\Controllers\Theme_VoteController;
 use App\Http\Controllers\HomeController;
+
+use App\Http\Controllers\GestionCommandeController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/gestion-rgpd', [RGPDController::class, 'index'])->name('rgpd.gestion');
@@ -38,6 +41,28 @@ Route::middleware('auth')->group(function () {
 
   Route::get('/delete', [ProfileController::class, 'delete'])->name('user.delete');
   Route::get('/anonymize', [ProfileController::class, 'anonime'])->name('user.anonime');
+
+/*
+|--------------------------------------------------------------------------
+| Routes Gestion commande
+|--------------------------------------------------------------------------
+*/
+// On protège le groupe avec le middleware 'auth' pour être sûr que l'utilisateur est connecté
+Route::middleware(['auth'])->prefix('siege')->group(function () {
+
+    // STORY 2 & 5 : La page d'accueil du service commande (Liste)
+    Route::get('/commandes', [GestionCommandeController::class, 'index'])
+        ->name('siege.commandes.index');
+
+    // STORY 1, 2, 4 : Action de mise à jour du statut
+    // On utilise une seule route POST qui recevra le type d'action (accepter/refuser/reserve)
+    Route::post('/commandes/{id}/update-statut', [GestionCommandeController::class, 'updateStatut'])
+        ->name('siege.commandes.update');
+
+    // STORY 5 : La vue spécifique pour le rapport Qualité Express
+    Route::get('/commandes/rapport-express', [GestionCommandeController::class, 'rapportQualite'])
+        ->name('siege.commandes.qualite');
+});
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -95,7 +120,31 @@ Route::get('/produits', [ProductController::class, 'index'])->name('product.inde
 Route::get('/produit/{id}', [ProductController::class, 'detail'])
 ->whereNumber('id')
 ->name('product.detail');
+/* ------------------------------
+   EXPÉDITION (Service Vente)
+------------------------------ */
+Route::get('/service-vente/commandes', [ExpeditionController::class, 'index'])
+    ->middleware('auth')
+    ->name('service_vente.commandes');
 
+Route::post('/service-vente/commandes/{id}/valider', [ExpeditionController::class, 'validerEnlevement'])
+    ->middleware('auth')
+    ->name('expedition.valider');
+
+    // Route pour les livraisons "Autre" de demain
+Route::get('/service-vente/livraisons-demain', [App\Http\Controllers\ExpeditionController::class, 'livraisonsDemain'])
+    ->middleware('auth')
+    ->name('expedition.demain');
+
+    // Route pour voir l'historique des commandes déjà envoyées
+Route::get('/service-vente/historique', [App\Http\Controllers\ExpeditionController::class, 'historique'])
+    ->middleware('auth')
+    ->name('expedition.historique');
+
+    // Route pour les livraisons "Domicile" de la prochaine demi-journée
+Route::get('/service-vente/livraisons-domicile-proche', [App\Http\Controllers\ExpeditionController::class, 'livraisonsDomicileProche'])
+    ->middleware('auth')
+    ->name('expedition.domicile_proche');
 Route::get('/produits/creer', [ProductController::class, 'create'])->name('make_product.create');
 Route::post('/produits', [ProductController::class, 'store'])->name('make_product.store');
 Route::get('/produits', [ProductController::class, 'index'])->name('product.index');

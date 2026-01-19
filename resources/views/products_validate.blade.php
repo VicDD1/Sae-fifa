@@ -106,7 +106,7 @@
                                     </div>
                                     <div class="col-6 mb-3">
                                         <label class="form-label">Quantité stock *</label>
-                                        <input type="number" class="form-control" name="quantite" required min="1" value="{{ old('quantite', $product->quantite) }}" >
+                                        <input type="number" class="form-control" name="quantite" required min="0" value="{{ old('quantite', $product->quantite) }}" >
                                         
 <input type="hidden"
        name="quantite"

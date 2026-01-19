@@ -167,7 +167,7 @@ class BotManController extends Controller
             return "📦 Voici les produit actuellement en stock :\n\n" . $productSearchService->formatSearchResultsForChat($products);
         }
         
-        return $productSearchService->getProductsInStock(10); 
+        return null;
     }
 
     /**
