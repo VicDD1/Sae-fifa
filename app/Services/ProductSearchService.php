@@ -60,7 +60,7 @@ class ProductSearchService
         $totalStock = 0;
 
         foreach ($produit->variantes as $variante) {
-            $quantite = $variante->quantite_stock ?? $variante->quantitee_stock ?? 0;
+            $quantite = $variante->quantitee_stock ?? 0;
             $totalStock += $quantite;
             
             $taille = $variante->taille->label_taille ?? 'Taille unique';
@@ -92,8 +92,7 @@ class ProductSearchService
     {
         return Produit::with(['photo', 'variantes'])
             ->whereHas('variantes', function($query) {
-                $query->where('quantite_stock', '>', 0)
-                      ->orWhere('quantitee_stock', '>', 0);
+                $query->where('quantitee_stock', '>', 0);
             })
             ->limit($limit)
             ->get();
@@ -106,8 +105,7 @@ class ProductSearchService
     {
         return Produit::with(['photo'])
             ->whereDoesntHave('variantes', function($query) {
-                $query->where('quantite_stock', '>', 0)
-                      ->orWhere('quantitee_stock', '>', 0);
+                $query->where('quantitee_stock', '>', 0);
             })
             ->limit($limit)
             ->get();
@@ -130,7 +128,7 @@ class ProductSearchService
             
             // Vérifier le stock
             $stockTotal = $produit->variantes->sum(function($v) {
-                return $v->quantite_stock ?? $v->quantitee_stock ?? 0;
+                return $v->quantitee_stock ?? 0;
             });
             
             $stockStatus = $stockTotal > 0 ? "✅ En stock ({$stockTotal})" : "❌ Rupture de stock";

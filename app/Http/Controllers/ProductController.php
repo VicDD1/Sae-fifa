@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Produit;
 use App\Models\Nation;
 use App\Models\Taille;
@@ -11,51 +12,58 @@ use App\Models\Photo;
 use App\Models\Stock;
 use App\Models\Categorie_Produit;
 use App\Models\Variante_produit;
+
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        // --- 1. CHARGEMENT DES DONNÉES POUR LES LISTES DÉROULANTES ---
+        // --- 1. CHARGEMENT DES DONNÉES AVEC CACHE (60 minutes) ---
 
-        // NATIONS (inchangé)
-        $nations = Nation::whereIn('id_nation', function ($query) {
-            $query->select('id_nation')->from('produit')->whereNotNull('id_nation');
-        })->orderBy('nom_nation')->get();
+        // NATIONS (avec cache)
+        $nations = Cache::remember('nations_with_products', 3600, function () {
+            return Nation::whereIn('id_nation', function ($query) {
+                $query->select('id_nation')->from('produit')->whereNotNull('id_nation');
+            })->orderBy('nom_nation')->get();
+        });
 
-        // CATEGORIES (Parents uniquement : ceux qui n'ont pas de parent défini dans 'sous_categorie')
-        $categories = Categorie_Produit::whereNull('sous_categorie')
-            ->orderBy('label_categorie')
-            ->get();
+        // CATEGORIES (avec cache)
+        $categories = Cache::remember('categories_parent', 3600, function () {
+            return Categorie_Produit::whereNull('sous_categorie')
+                ->orderBy('label_categorie')
+                ->get();
+        });
 
-        // TAILLES (inchangé)
-        $tailles = Taille::whereIn('id_taille', function ($query) {
-            $query->select('id_taille')->from('variante_produit')->whereNotNull('id_taille');
-        })->orderBy('label_taille')->get();
+        // TAILLES (avec cache)
+        $tailles = Cache::remember('tailles_with_products', 3600, function () {
+            return Taille::whereIn('id_taille', function ($query) {
+                $query->select('id_taille')->from('variante_produit')->whereNotNull('id_taille');
+            })->orderBy('label_taille')->get();
+        });
 
-        // COULEURS (inchangé)
-        $couleurs = Colori::orderBy('id_colori')->get();
-        
-
+        // COULEURS (avec cache)
+        $couleurs = Cache::remember('couleurs_all', 3600, function () {
+            return Colori::orderBy('id_colori')->get();
+        });
 
         $idProduit = $request->id_produit;
         $idTaille  = $request->id_taille;
         $idColori  = $request->id_colori;
         
-        // On ne charge les sous-catégories que si une catégorie parent est sélectionnée
-        $sous_categories = collect(); // On démarre avec une collection vide
-
+        // Sous-catégories (uniquement si parent sélectionné)
+        $sous_categories = collect();
         if ($request->filled('id_categorie')) {
-            // C'est ici que l'on applique votre logique SQL :
             $sous_categories = Categorie_Produit::where('sous_categorie', $request->id_categorie)
                 ->orderBy('label_categorie')
                 ->get();
         }
 
-
-        // --- 2. REQUÊTE PRODUITS ---
+        // --- 2. REQUÊTE PRODUITS OPTIMISÉE ---
         
-        $query = Produit::query();
-        $query->select('produit.*')->distinct();
+        $query = Produit::query()
+            ->with(['photo', 'couleurs', 'tailles']) // EAGER LOADING
+            ->whereNotNull('prix_base')
+            ->select('produit.*')
+            ->distinct();
 
         // RECHERCHE TEXTUELLE
         if ($request->filled('search')) {
@@ -71,17 +79,16 @@ class ProductController extends Controller
         }
 
         if ($request->filled('id_categorie')) {
-            
             if (!$request->filled('sous_categorie')) {
                 $idsEnfants = Categorie_Produit::where('sous_categorie', $request->id_categorie)
-                    ->pluck('id_categorie') // On ne prend que la colonne ID
+                    ->pluck('id_categorie')
                     ->toArray();
                 $tousLesIds = array_merge([$request->id_categorie], $idsEnfants);
                 $query->whereIn('produit.id_categorie', $tousLesIds);
             }
         }
 
-        // FILTRE SOUS-CATEGORIE (Enfant)
+        // FILTRE SOUS-CATEGORIE
         if ($request->filled('sous_categorie')) {
             $query->where('produit.id_categorie', $request->sous_categorie);
         }
@@ -112,61 +119,61 @@ class ProductController extends Controller
             }
         }
 
-        //$products = $query->get();
-        $products = Produit::whereNotNull('prix_base')->get();
+        // PAGINATION (24 produits par page)
+        $products = $query->paginate(24)->withQueryString();
 
+        // Produits récemment consultés
         $historyIds = session()->get('recent_products', []);
         $recentProducts = collect();
             
         if (!empty($historyIds)) {
-            // On construit la chaîne CASE WHEN pour PostgreSQL
             $orderByCase = 'CASE ';
             foreach ($historyIds as $index => $id) {
                 $orderByCase .= "WHEN id_produit = " . (int)$id . " THEN " . $index . " ";
             }
             $orderByCase .= 'END';
         
-            $recentProducts = Produit::whereIn('id_produit', $historyIds)
+            $recentProducts = Produit::with('photo')
+                ->whereIn('id_produit', $historyIds)
                 ->orderByRaw($orderByCase)
                 ->get();
         }
 
-
-        return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories','recentProducts'));
+        return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories', 'recentProducts'));
     }
+
     public function detail(Request $request, $id)
     {
         $history = session()->get('recent_products', []);
         if (($key = array_search($id, $history)) !== false) unset($history[$key]);
-            array_unshift($history, $id);
+        array_unshift($history, $id);
         session()->put('recent_products', array_slice($history, 0, 10));
-        // Charger le produit demandé
-        $product = Produit::with(['couleurs', 'tailles'])->findOrFail($id);
-        //stocks
-        $stock = null;
 
+        // EAGER LOADING pour éviter N+1
+        $product = Produit::with(['couleurs', 'tailles', 'photo'])->findOrFail($id);
+        
+        $stock = null;
         $idTaille = $request->id_taille ?? ($product->tailles->first()->id_taille ?? null);
         $idColori = $request->id_colori ?? ($product->couleurs->first()->id_colori ?? null);
-
 
         if ($idTaille && $idColori) {
             $stock = Variante_produit::where('id_produit', $product->id_produit)
                 ->where('id_taille', $idTaille)
                 ->where('id_colori', $idColori)
                 ->value('quantitee_stock');
-            }       
+        }       
 
-        // Trouver des produits similaires :
-        // même catégorie ou même sous-catégorie, mais exclure le produit lui-même
-        $similarProducts = Produit::where(function ($q) use ($product) {
-                $q->where('id_categorie', $product->id_categorie);
-            })
+        // Produits similaires avec eager loading et limite
+        $similarProducts = Produit::with('photo')
+            ->where('id_categorie', $product->id_categorie)
             ->where('id_produit', '!=', $product->id_produit)
+            ->whereNotNull('prix_base')
             ->limit(10)
             ->get();
 
-        return view('product_detail', compact('product', 'similarProducts','stock'));
+        return view('product_detail', compact('product', 'similarProducts', 'stock'));
     }
+
     public function getStock(Request $request)
     {
         $idProduit = $request->id_produit;
@@ -198,7 +205,7 @@ class ProductController extends Controller
     }
 
     // Traite le formulaire
-public function store(Request $request)
+    public function store(Request $request)
     {
         // 1. Validation
         $request->validate([
