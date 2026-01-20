@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/account_creation.css">
 </head>
 <body>
+
     <header>
         <nav>
             <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
