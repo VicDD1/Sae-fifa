@@ -170,6 +170,14 @@
         </div>
     @endif
     </div>
+    
+    {{-- PAGINATION --}}
+    @if(isset($products) && $products->hasPages())
+        <div style="display: flex; justify-content: center; margin: 30px 0;">
+            {{ $products->links() }}
+        </div>
+    @endif
+
  <div class="history-sidebar">
     <h2>Vus récemment</h2>
     <div class="history-list">

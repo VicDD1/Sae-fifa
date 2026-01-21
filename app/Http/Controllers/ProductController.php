@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Produit;
 use App\Models\Nation;
 use App\Models\Taille;
@@ -16,6 +17,36 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+<<<<<<< HEAD
+        // --- 1. CHARGEMENT DES DONNÉES AVEC CACHE (60 minutes) ---
+
+        // NATIONS (avec cache)
+        $nations = Cache::remember('nations_with_products', 3600, function () {
+            return Nation::whereIn('id_nation', function ($query) {
+                $query->select('id_nation')->from('produit')->whereNotNull('id_nation');
+            })->orderBy('nom_nation')->get();
+        });
+
+        // CATEGORIES (avec cache)
+        $categories = Cache::remember('categories_parent', 3600, function () {
+            return Categorie_Produit::whereNull('sous_categorie')
+                ->orderBy('label_categorie')
+                ->get();
+        });
+
+        // TAILLES (avec cache)
+        $tailles = Cache::remember('tailles_with_products', 3600, function () {
+            return Taille::whereIn('id_taille', function ($query) {
+                $query->select('id_taille')->from('variante_produit')->whereNotNull('id_taille');
+            })->orderBy('label_taille')->get();
+        });
+
+        // COULEURS (avec cache)
+        $couleurs = Cache::remember('couleurs_all', 3600, function () {
+            return Colori::orderBy('id_colori')->get();
+        });
+
+=======
         // --- 1. CHARGEMENT DES DONNÉES POUR LES LISTES DÉROULANTES ---
 
         // NATIONS
@@ -36,23 +67,36 @@ class ProductController extends Controller
         // COULEURS
         $couleurs = Colori::orderBy('id_colori')->get();
         
+>>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
         $idProduit = $request->id_produit;
         $idTaille  = $request->id_taille;
         $idColori  = $request->id_colori;
         
+<<<<<<< HEAD
+        // Sous-catégories (uniquement si parent sélectionné)
+        $sous_categories = collect();
+=======
         // Sous-catégories
         $sous_categories = collect(); 
 
+>>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
         if ($request->filled('id_categorie')) {
             $sous_categories = Categorie_Produit::where('sous_categorie', $request->id_categorie)
                 ->orderBy('label_categorie')
                 ->get();
         }
 
+<<<<<<< HEAD
+        // --- 2. REQUÊTE PRODUITS OPTIMISÉE ---
+=======
         // --- 2. REQUÊTE PRODUITS ---
+>>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
         
-        $query = Produit::query();
-        $query->select('produit.*')->distinct();
+        $query = Produit::query()
+            ->with(['photo', 'couleurs', 'tailles']) // EAGER LOADING
+            ->whereNotNull('prix_base')
+            ->select('produit.*')
+            ->distinct();
 
         // RECHERCHE TEXTUELLE
         if ($request->filled('search')) {
@@ -108,8 +152,14 @@ class ProductController extends Controller
             }
         }
 
+<<<<<<< HEAD
+        // PAGINATION (24 produits par page)
+        $products = $query->paginate(24)->withQueryString();
+=======
         $products = Produit::whereNotNull('prix_base')->get();
+>>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
 
+        // Produits récemment consultés
         $historyIds = session()->get('recent_products', []);
         $recentProducts = collect();
             
@@ -120,25 +170,37 @@ class ProductController extends Controller
             }
             $orderByCase .= 'END';
         
-            $recentProducts = Produit::whereIn('id_produit', $historyIds)
+            $recentProducts = Produit::with('photo')
+                ->whereIn('id_produit', $historyIds)
                 ->orderByRaw($orderByCase)
                 ->get();
         }
 
+<<<<<<< HEAD
+        return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories', 'recentProducts'));
+=======
         return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories','recentProducts'));
+>>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
     }
 
     public function detail(Request $request, $id)
     {
         $history = session()->get('recent_products', []);
         if (($key = array_search($id, $history)) !== false) unset($history[$key]);
-            array_unshift($history, $id);
+        array_unshift($history, $id);
         session()->put('recent_products', array_slice($history, 0, 10));
+<<<<<<< HEAD
+=======
         
         $product = Produit::with(['couleurs', 'tailles'])->findOrFail($id);
         
         $stock = null;
+>>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
 
+        // EAGER LOADING pour éviter N+1
+        $product = Produit::with(['couleurs', 'tailles', 'photo'])->findOrFail($id);
+        
+        $stock = null;
         $idTaille = $request->id_taille ?? ($product->tailles->first()->id_taille ?? null);
         $idColori = $request->id_colori ?? ($product->couleurs->first()->id_colori ?? null);
 
@@ -147,16 +209,23 @@ class ProductController extends Controller
                 ->where('id_taille', $idTaille)
                 ->where('id_colori', $idColori)
                 ->value('quantitee_stock');
-            }       
+        }       
 
+<<<<<<< HEAD
+        // Produits similaires avec eager loading et limite
+        $similarProducts = Produit::with('photo')
+            ->where('id_categorie', $product->id_categorie)
+=======
         $similarProducts = Produit::where(function ($q) use ($product) {
                 $q->where('id_categorie', $product->id_categorie);
             })
+>>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
             ->where('id_produit', '!=', $product->id_produit)
+            ->whereNotNull('prix_base')
             ->limit(10)
             ->get();
 
-        return view('product_detail', compact('product', 'similarProducts','stock'));
+        return view('product_detail', compact('product', 'similarProducts', 'stock'));
     }
 
     public function getStock(Request $request)
@@ -189,7 +258,11 @@ class ProductController extends Controller
         return view('products_create', compact('categories', 'nations', 'tailles', 'coloris'));
     }
 
+<<<<<<< HEAD
+    // Traite le formulaire
+=======
     // --- C'EST ICI QUE J'AI FAIT LES GROSSES MODIFICATIONS ---
+>>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
     public function store(Request $request)
     {
         // 1. Validation Mise à jour pour les Tableaux (Arrays)
