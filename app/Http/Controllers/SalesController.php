@@ -66,94 +66,92 @@ class SalesController extends Controller
 
         // --- 2. Monthly sales by category ---
         $monthlySalesByCategory = DB::table('commande')
-            ->leftJoin('ligne_commande', 'commande.id_commande', '=', 'ligne_commande.id_commande')
-            ->leftJoin('produit', 'ligne_commande.id_produit', '=', 'produit.id_produit')
-            ->leftJoin('categorie_produit', 'produit.id_categorie', '=', 'categorie_produit.id_categorie')
-            ->selectRaw('
-                EXTRACT(YEAR FROM commande.date_commande) as year,
-                EXTRACT(MONTH FROM commande.date_commande) as month,
-                produit.id_categorie as categorie_id,
-                SUM(COALESCE(produit.prix_base, 0) * COALESCE(ligne_commande.quantitee, 0)) as total_sales,
-                categorie_produit.label_categorie as nom_categorie
-            ')
-            ->whereNotNull('categorie_produit.label_categorie')  
-            ->groupByRaw('year, month, produit.id_categorie, categorie_produit.label_categorie')
-            ->orderByRaw('year, month')
-            ->get();
+    ->leftJoin('ligne_commande', 'commande.id_commande', '=', 'ligne_commande.id_commande')
+    ->leftJoin('produit', 'ligne_commande.id_produit', '=', 'produit.id_produit')
+    ->leftJoin('categorie_produit', 'produit.id_categorie', '=', 'categorie_produit.id_categorie')
+    ->selectRaw('
+        EXTRACT(YEAR FROM commande.date_commande) as year,
+        EXTRACT(MONTH FROM commande.date_commande) as month,
+        categorie_produit.label_categorie as categorie,
+        SUM(COALESCE(produit.prix_base, 0) * COALESCE(ligne_commande.quantitee, 0)) as total
+    ')
+    ->whereNotNull('categorie_produit.label_categorie')
+    ->groupByRaw('year, month, categorie_produit.label_categorie')
+    ->orderByRaw('year, month')
+    ->get();
+
     
-        $grouped = $monthlySalesByCategory->groupBy('categorie_id');
-        
-        $catDatasets = [];
-        $catColors = [
-            'rgba(75,192,192,1)',
-            'rgba(255,99,132,1)',
-            'rgba(54,162,235,1)',
-            'rgba(255,206,86,1)',
-            'rgba(153,102,255,1)',
-            'rgba(255,159,64,1)',
-        ];
+$years = $monthlySalesByCategory->pluck('year')->unique()->sort()->values();
 
-        $i = 0;
-        $labels = $monthlySalesByCategory
-            ->map(fn ($r) => sprintf('%04d-%02d', $r->year, $r->month))
-            ->unique()
-            ->sort()
-            ->values()
-            ->toArray();
-            
-        foreach ($grouped as $catId => $rows) {
-            $data = array_fill(0, count($labels), 0);
-            $catName = $rows->first()->nom_categorie;
-            
-            foreach ($rows as $row) {
-                $label = sprintf('%04d-%02d', $row->year, $row->month);
-                $index = array_search($label, $labels);
+$labels = collect(range(1, 12))
+    ->map(fn ($m) => Carbon::create()->month($m)->format('M'))
+    ->toArray();
 
-                if ($index !== false) {
-                    $data[$index] = (float) $row->total_sales;
-                }
-            }
+$chartDataByYear = [];
 
-            $catDatasets[] = [
-                'label' => $catName,
-                'data' => $data,
-                'borderColor' => $catColors[$i % count($catColors)],
-                'backgroundColor' => $catColors[$i % count($catColors)],
-                'tension' => 0.3,
-                'fill' => false,
-            ];
+foreach ($years as $year) {
+    $rows = $monthlySalesByCategory->where('year', $year);
+    $grouped = $rows->groupBy('categorie');
 
-            $i++;
+    $datasets = [];
+    $colors = [
+        'rgba(75,192,192,1)',
+        'rgba(255,99,132,1)',
+        'rgba(54,162,235,1)',
+        'rgba(255,206,86,1)',
+        'rgba(153,102,255,1)',
+        'rgba(255,159,64,1)',
+    ];
+
+    $i = 0;
+    foreach ($grouped as $category => $catRows) {
+        $data = array_fill(0, 12, 0);
+
+        foreach ($catRows as $row) {
+            $data[$row->month - 1] = (float) $row->total;
         }
+
+        $datasets[] = [
+            'label' => $category,
+            'data' => $data,
+            'borderColor' => $colors[$i % count($colors)],
+            'backgroundColor' => $colors[$i % count($colors)],
+            'tension' => 0.3,
+            'fill' => false,
+        ];
+        $i++;
+    }
+
+    $chartDataByYear[$year] = $datasets;
+}
     
         // IMPORTANT: Disable the built-in legend for the category chart
-        $chartByCategory = Chartjs::build()
-            ->name('MonthlySalesByCategory')
-            ->type('line')
-            ->labels($labels)
-            ->datasets($catDatasets)
-            ->options([
-                'responsive' => true,
-                'maintainAspectRatio' => false,
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Ventes mensuelles par catégorie',
-                    ],
-                    'legend' => [
-                        'display' => false,  // THIS IS THE KEY - DISABLE BUILT-IN LEGEND
-                    ],
-                ],
-                'scales' => [
-                    'y' => ['beginAtZero' => true],
-                ],
-            ]);
+        $initialYear = $years->first();
 
-        // Return both charts
-        return view('statistique', [
-            'chart' => $chart,
-            'chartByCategory' => $chartByCategory,
-        ]);
+$chartByCategory = Chartjs::build()
+    ->name('MonthlySalesByCategory')
+    ->type('line')
+    ->labels($labels)
+    ->datasets($chartDataByYear[$initialYear])
+    ->options([
+        'responsive' => true,
+        'maintainAspectRatio' => false,
+        'plugins' => [
+            'legend' => ['display' => false],
+            'title' => [
+                'display' => true,
+                'text' => 'Ventes mensuelles par catégorie',
+            ],
+        ],
+        'scales' => ['y' => ['beginAtZero' => true]],
+    ]);
+
+return view('statistique', [
+    'chart' => $chart,
+    'chartByCategory' => $chartByCategory,
+    'categoryDataByYear' => $chartDataByYear,
+    'categoryYears' => $years,
+]);
     }
     
     public function showSalesMap()
@@ -161,19 +159,20 @@ class SalesController extends Controller
         return view('localisation');
     }
 
-    public function getSalesLocalisation()
-    {
-        $sales = DB::table('devfifa.reglement')
-            ->join('devfifa.commande', 'reglement.id_commande', '=', 'commande.id_commande')
-            ->join('devfifa.adresse', 'commande.id_adresse', '=', 'adresse.id_adresse')
-            ->select(
-                'adresse.ville_adresse',
-                'adresse.latitude',
-                'adresse.longitude',
-                'reglement.montant_regle'
-            )
-            ->get();
-    
-        return response()->json($sales);
-    }
+public function getSalesLocalisation()
+{
+    $sales = DB::table('devfifa.reglement')
+        ->join('devfifa.commande', 'reglement.id_commande', '=', 'commande.id_commande')
+        ->join('devfifa.adresse', 'commande.id_adresse', '=', 'adresse.id_adresse')
+        ->select(
+            'adresse.ville_adresse',
+            'adresse.latitude',
+            'adresse.longitude',
+            'reglement.montant_regle',
+            DB::raw('EXTRACT(YEAR FROM reglement.date_reglement) as year')
+        )
+        ->get();
+
+    return response()->json($sales);
+}
 }
