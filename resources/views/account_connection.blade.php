@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/account_creation.css">
+    <link rel="stylesheet" href="css/account_creation.css"></link>
 </head>
 <body>
 @include('header')
@@ -20,11 +20,13 @@
                 <h1>Le football au bout des doigts.</h1>
                 <p>Inscrivez-vous pour accéder à la billetterie, jouer à des jeux et suivre les qualifications pour la Coupe du Monde de la FIFA 2026™!</p>
             </div>
-            <div></div> </div>
+            <div></div> 
+        </div>
 
         <div class="right-panel">
-        <div class="login-box">
+            <div class="login-box">
                 <h2 class="login-title">Se connecter</h2>
+                
                 @if(session('success'))
                     <div style="background-color: #d1fae5; color: #065f46; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; border: 1px solid #a7f3d0; font-size: 14px;">
                         ✅ {{ session('success') }}
@@ -32,7 +34,6 @@
                 @endif
 
                 <form action="/connexion" method="POST">
-                    
                     @csrf 
 
                     <div class="form-group">
@@ -53,11 +54,12 @@
                     </div>
 
                     <button type="submit" class="btn-login">SE CONNECTER</button>
+                    
                     <div style="margin-top: 15px; text-align: center;">
-                    <a href="{{ route('password.request') }}" style="color: #d9534f; text-decoration: underline;">
-                        Réinitialiser mon mot de passe 
-                    </a>
-</div>
+                        <a href="{{ route('password.request') }}" style="color: #d9534f; text-decoration: underline;">
+                            Réinitialiser mon mot de passe 
+                        </a>
+                    </div>
                 </form>
 
                 <div class="signup-area">
@@ -77,25 +79,11 @@
                 </footer>
     
             </div>
+        </div>
     </div>
-@include('botman')
-</body>
-<script>
-    document.querySelectorAll('.password-icon').forEach((icon) => {
-        icon.addEventListener('click', () => {
-            const input = icon.previousElementSibling; 
+    @include('botman')
 
-            if (input.type === "password") {
-                input.type = "text";
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
-            }
-                else {
-                input.type = "password";
-                icon.classList.remove("fa-eye");
-                icon.classList.add("fa-eye-slash");
-            }
-        });
-    });
-</script>
+   
+    <script src="js/login.js"></script>
+</body>
 </html>
