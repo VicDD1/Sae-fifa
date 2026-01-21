@@ -60,7 +60,7 @@ class ProductSearchService
         $totalStock = 0;
 
         foreach ($produit->variantes as $variante) {
-            $quantite = $variante->quantite_stock ?? $variante->quantitee_stock ?? 0;
+            $quantite = $variante->quantitee_stock ?? 0;
             $totalStock += $quantite;
             
             $taille = $variante->taille->label_taille ?? 'Taille unique';
@@ -92,6 +92,8 @@ class ProductSearchService
     {
         return Produit::with(['photo', 'variantes'])
             ->whereHas('variantes', function($query) {
+
+
                 $query->where('quantitee_stock', '>', 0)
                       ->orWhere('quantitee_stock', '>', 0);
             })
@@ -108,6 +110,7 @@ class ProductSearchService
             ->whereDoesntHave('variantes', function($query) {
                 $query->where('variante_produit.quantitee_stock', '>', 0)
                       ->orWhere('variante_produit.quantitee_stock', '>', 0);
+
             })
             ->limit($limit)
             ->get();
