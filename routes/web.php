@@ -75,9 +75,6 @@ Route::get('/players', fn() => view('players'));
 
 // Doublons / Variantes de vues
 Route::view('/parametre_compte', 'account_modification');
-Route::view('/se_connecter', 'account_connection');
-Route::view('/privacy_policy', 'privacy_policy');
-Route::view('/players', 'players');
 Route::view('/commande', 'vue_commande');
 
 
@@ -91,14 +88,10 @@ Route::get('/produits_en_cours',[ProductController::class,'incomplet']);
 Route::get('/produit_en_cours/{id}', [ProductController::class, 'modify'])->name('product.modify');
 Route::post('/produit/{id}/valider', [ProductController::class, 'validateProduct'])->name('product.validate');
 
-Route::get('/produit', [ProductController::class, 'index']);
 Route::get('/produit/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
-Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
-Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
-Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
 
-Route::get('/produit/{id}', [ProductController::class, 'detail'])->whereNumber('id')->name('product.detail');
+Route::get('/produits', [ProductController::class, 'index'])->name('product.index');
 
 Route::get('/produits/creer', [ProductController::class, 'create'])->name('make_product.create');
 Route::post('/produits', [ProductController::class, 'store'])->name('make_product.store');
@@ -121,7 +114,6 @@ Route::get('/localisation_des_ventes', [SalesController::class, 'showSalesMap'])
 | PARTIE : BOTMAN
 |--------------------------------------------------------------------------
 */
-Route::post('/botman', [App\Http\Controllers\BotManController::class, 'handle']);
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 
 
@@ -186,8 +178,6 @@ Route::get('/panier/update/{id_ligne}/{action}', [PanierController::class, 'upda
 Route::get('/mon-profil', [ProfileController::class, 'show'])->middleware('auth')->name('profile.show');
 Route::get('/parametre_compte', [ProfileController::class, 'edit'])->middleware('auth')->name('profile.edit');
 Route::post('/parametre_compte', [ProfileController::class, 'update'])->middleware('auth')->name('profile.update');
-Route::post('/parametre_compte', [ProfileController::class, 'update'])->middleware('auth')->name('profile.update');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -196,13 +186,6 @@ Route::post('/parametre_compte', [ProfileController::class, 'update'])->middlewa
 */
 Route::get('/proposer_un_produit', [ProduitProposeController::class, 'step1'])->name('registerProduct.step1');
 Route::post('/proposer_un_produit', [ProduitProposeController::class, 'step1Post'])->name('registerProduct.step1.post');
-
-Route::get('/proposer_un_produit', [ProduitProposeController::class, 'step1'])->name('registerProduct.step1');
-Route::post('/proposer_un_produit', [ProduitProposeController::class, 'step1Post'])->name('registerProduct.step1.post');
-
-Route::get('/proposer_un_produit', [ProduitProposeController::class, 'step1'])->name('registerProduct.step1');
-Route::post('/proposer_un_produit', [ProduitProposeController::class, 'step1Post'])->name('registerProduct.step1.post');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -222,7 +205,6 @@ Route::get('/mes_commandes', [CommandeController::class, 'liste'])->middleware('
 | PARTIE : VOTE FIFA
 |--------------------------------------------------------------------------
 */
-Route::get('/vote/fifa', [VoteController::class, 'votePage'])->name('vote.page');
 Route::get('/vote/fifa', [VoteController::class, 'votePage'])->name('vote.page');
 Route::post('/vote/submit', [VoteController::class, 'submit'])->middleware('auth')->name('vote.submit');
 Route::get('/vote/recap', [VoteController::class, 'recap'])->middleware('auth')->name('vote.recap');
