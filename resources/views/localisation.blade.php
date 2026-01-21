@@ -13,7 +13,8 @@
     </style>
 </head>
 <body>
-
+<label for="yearSelect"><strong>Year:</strong></label>
+<select id="yearSelect"></select>
 <h2>Sales by Location</h2>
 <div id="map"></div>
 
@@ -26,14 +27,41 @@
         attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
+    let allData = [];
+    let markersLayer = L.layerGroup().addTo(map);
+
     fetch('/api/sales/localisation')
         .then(res => res.json())
         .then(data => {
-            console.log("Total rows received:", data.length);
+            allData = data;
 
-            const bounds = L.latLngBounds([]);
+            // Get unique years
+            const years = [...new Set(data.map(d => d.year))].sort();
 
-            data.forEach(point => {
+            // Populate dropdown
+            const yearSelect = document.getElementById('yearSelect');
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            });
+
+            // Default: first year
+            drawMarkers(years[0]);
+
+            yearSelect.addEventListener('change', e => {
+                drawMarkers(e.target.value);
+            });
+        });
+
+    function drawMarkers(selectedYear) {
+        markersLayer.clearLayers();
+        const bounds = L.latLngBounds([]);
+
+        allData
+            .filter(p => p.year == selectedYear)
+            .forEach(point => {
                 if (!point.latitude || !point.longitude) return;
 
                 const lat = parseFloat(point.latitude);
@@ -42,27 +70,29 @@
 
                 if (isNaN(lat) || isNaN(lon)) return;
 
-                // Optional: color by amount
                 const color = amount > 1000 ? 'red' : '#ff7800';
 
-                L.circleMarker([lat, lon], {
-                    radius: Math.max(Math.sqrt(amount/100), 1), // minimum radius 5
+                const marker = L.circleMarker([lat, lon], {
+                    radius: Math.max(Math.sqrt(amount / 100), 4),
                     color: color,
                     fillOpacity: 0.7
                 })
-                .addTo(map)
-                .bindPopup(`Ville: ${point.ville_adresse}<br>Vente: ${amount.toFixed(2)} €`);
+                .bindPopup(`
+                    <strong>${point.ville_adresse}</strong><br>
+                    Year: ${point.year}<br>
+                    Sale: ${amount.toFixed(2)} €
+                `);
 
+                markersLayer.addLayer(marker);
                 bounds.extend([lat, lon]);
             });
 
-            if (bounds.isValid()) {
-                map.fitBounds(bounds); // auto-zoom and center
-            } else {
-                map.setView([46.5, 2.5], 6); // fallback
-            }
-        })
-        .catch(err => console.error("Error fetching sales data:", err));
+        if (bounds.isValid()) {
+            map.fitBounds(bounds);
+        } else {
+            map.setView([46.5, 2.5], 6);
+        }
+    }
 </script>
 
 </body>

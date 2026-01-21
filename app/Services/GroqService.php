@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class GroqService
 {
-    protected string $apiKey;
+    protected ?string $apiKey;
     protected string $baseUrl = 'https://api.groq.com/openai/v1/chat/completions';
     protected string $model = 'llama-3.3-70b-versatile';
 
     public function __construct()
     {
-        $this->apiKey = env('GROQ_API_KEY');
+        $this->apiKey = config('services.groq.api_key') ?? env('GROQ_API_KEY');
     }
 
     /**
