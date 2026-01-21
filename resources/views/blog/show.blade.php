@@ -4,269 +4,19 @@
     <meta charset="utf-8">
     <title>{{ $blog->titre }} | FIFA</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    
+  
     <link rel="stylesheet" href="{{ asset('css/product.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
-    <style>
-        /* === STYLE GLOBAL === */
-        body { background-color: #f0f2f5; font-family: 'Figtree', sans-serif; color: #333; }
-        
-        .main-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-
-        /* === ARTICLE === */
-        .article-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
-        }
-        
-        .article-hero {
-            position: relative;
-            height: 400px;
-        }
-        
-        .article-hero img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .article-hero-overlay {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: linear-gradient(to top, rgba(0,20,49,0.9), transparent);
-            padding: 40px;
-            color: white;
-        }
-
-        .article-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            line-height: 1.1;
-        }
-
-        .article-meta {
-            color: #00ff87;
-            font-weight: 600;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        .article-body {
-            padding: 40px;
-            font-size: 1.15rem;
-            line-height: 1.8;
-            color: #2c3e50;
-        }
-
-        /* === COMMENTAIRES === */
-        .comments-wrapper {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #001431;
-            margin-bottom: 30px;
-            border-left: 5px solid #00ff87;
-            padding-left: 15px;
-        }
-
-        /* Formulaire */
-        .comment-form textarea {
-            width: 100%;
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            resize: vertical;
-            color: #333;
-        }
-
-        .comment-form textarea:focus {
-            outline: none;
-            border-color: #045694;
-            background: white;
-        }
-
-        .btn-fifa {
-            background: #00ff87;
-            color: #001431;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 15px rgba(0, 255, 135, 0.3);
-        }
-
-        .btn-fifa:hover {
-            transform: scale(1.05);
-            background: #00e676;
-        }
-
-        /* Liste des avis */
-        .comment-item {
-            margin-bottom: 25px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 25px;
-        }
-
-        .comment-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .avatar-circle {
-            width: 40px;
-            height: 40px;
-            background: #001431;
-            color: #00ff87;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-right: 15px;
-        }
-
-        .user-info h4 { margin: 0; color: #001431; font-weight: 700; }
-        .user-info span { font-size: 0.8rem; color: #888; }
-
-        .comment-text {
-            color: #444;
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-left: 55px;
-        }
-
-        .actions { margin-left: 55px; margin-top: 10px; }
-        
-        .btn-reply-link {
-            background: none; border: none;
-            color: #045694; font-weight: 600; cursor: pointer;
-            font-size: 0.9rem; padding: 0;
-        }
-        .btn-reply-link:hover { text-decoration: underline; }
-
-        /* Réponses */
-        .replies-container {
-            margin-left: 55px;
-            margin-top: 15px;
-            border-left: 3px solid #e0e0e0;
-            padding-left: 20px;
-        }
-
-        .reply-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-
-        .login-prompt {
-            background: #001431;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .login-prompt a { color: #00ff87; font-weight: bold; }
-
-        /* === MODALE DE CONFIRMATION === */
-        .modal-overlay {
-            display: none; /* Caché par défaut */
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 20, 49, 0.8); /* Fond bleu nuit transparent */
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-box {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border-top: 5px solid #ff4d4d;
-        }
-
-        .modal-box h3 { margin-top: 0; color: #001431; }
-        .modal-box p { color: #555; margin-bottom: 25px; }
-
-        .modal-actions { display: flex; justify-content: space-around; gap: 10px; }
-
-        .btn-modal-cancel {
-            background: #e0e0e0; color: #333;
-            padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold;
-        }
-        .btn-modal-confirm {
-            background: #ff4d4d; color: white;
-            padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold;
-        }
-        .btn-modal-confirm:hover { background: #cc0000; }
-
-        /* === BOUTON RETOUR === */
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            color: #001431; /* Bleu nuit */
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-bottom: 20px; /* Espace sous le bouton */
-            transition: color 0.3s;
-        }
-        
-        /* Le cercle blanc autour de la flèche */
-        .btn-back i {
-            background: white;
-            width: 40px; 
-            height: 40px;
-            border-radius: 50%; /* Rond parfait */
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            margin-right: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Ombre légère */
-            transition: all 0.3s ease;
-            color: #001431;
-        }
-
-        /* Effet au survol : La flèche devient verte et recule */
-        .btn-back:hover i {
-            background: #00ff87; /* Vert FIFA */
-            transform: translateX(-5px); /* Petite animation vers la gauche */
-            box-shadow: 0 4px 15px rgba(0, 255, 135, 0.4);
-        }
-
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+  
+    <link rel="stylesheet" href="{{ asset('css/blog_show.css') }}">
 </head>
 <body>
-<header>
+    <header>
         <nav>
-            <a href="/"> <img style="text-decoration: none; display: flex;  width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
+            <a href="/"> <img style="text-decoration: none; display: flex; width:120px;" src="{{ asset('assets/logoBlanc.png') }}" alt="Retourner à l'accueil"></a>
             <a href="/produits">Fifa Store</a>
             <a href="{{ route('vote.page') }}">Vote</a>
             
@@ -309,18 +59,16 @@
                     <img src="{{ asset('assets/icone.png') }}" alt="Compte">
                 </a>
             @endguest
+
             @auth
-
-            @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
-            <div class="nav-right-group">
-                <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
-                 <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
-
-            </div>
-            @endif
-
-                
+                @if (Auth::user()->id_user_connecte === 12 || Auth::user()->id_user_connecte === 11)
+                <div class="nav-right-group">
+                    <a style="margin-left: auto;" class="account_creation" href="/statistiques_de_ventes"><img src="{{ asset('assets/statistique.png') }}" alt="Compte"></a>
+                    <a style="margin-left: auto;" class="account_creation" href="/localisation_des_ventes"><img src="{{ asset('assets/map.png') }}" alt="Compte"></a>
+                </div>
+                @endif
             @endauth
+
             @auth
                 @if (!Auth::user()->professionnel && Auth::user()->id_user_connecte !== 11 && Auth::user()->id_user_connecte !== 13)
                 <a href="{{ route('commande.liste') }}" class="btn btn-primary">
@@ -491,7 +239,6 @@
                                         <div id="reply-form-{{ $reply->id_commentaire }}" style="display:none; margin-top:10px;">
                                             <form action="{{ route('blog.comment.store', $blog->idblog) }}" method="POST">
                                                 @csrf
-                                                {{-- L'astuce est là : le parent_id est l'ID de la réponse actuelle --}}
                                                 <input type="hidden" name="parent_id" value="{{ $reply->id_commentaire }}">
                                                 <textarea name="contenu" rows="2" style="font-size:0.9rem;" placeholder="Répondre à {{ $reply->user->prenom_user_connecte ?? '...' }}"></textarea>
                                                 <button type="submit" class="btn-fifa" style="font-size: 0.7rem; padding: 5px 15px; margin-top:5px;">Valider</button>
@@ -499,7 +246,7 @@
                                         </div>
                                     @endauth
 
-                                    {{-- === NIVEAU 2 : RÉPONSES AUX RÉPONSES (Nouveau !) === --}}
+                                    {{-- === NIVEAU 2 : RÉPONSES AUX RÉPONSES === --}}
                                     @foreach($reply->replies as $subReply)
                                         <div style="margin-left: 20px; border-left: 2px solid #ccc; padding-left: 15px; margin-top: 10px; background: rgba(0,0,0,0.02); padding: 10px; border-radius: 5px;">
                                             <div style="display:flex; justify-content:space-between;">
@@ -530,7 +277,6 @@
         @include('botman')
     </main>
 
-    {{-- LA MODALE (Cachée par défaut) --}}
     <div id="deleteModal" class="modal-overlay">
         <div class="modal-box">
             <i class="fa-solid fa-circle-exclamation" style="font-size: 3rem; color: #ff4d4d; margin-bottom: 15px;"></i>
@@ -544,43 +290,7 @@
         </div>
     </div>
 
-    <script>
-        // Gestion ouverture/fermeture réponse
-        function toggleReply(id) {
-            var element = document.getElementById(id);
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
-            }
-        }
-
-        // --- GESTION DE LA MODALE ---
-        let formIdToDelete = null;
-
-        function openDeleteModal(formId) {
-            formIdToDelete = formId;
-            document.getElementById('deleteModal').style.display = 'flex';
-        }
-
-        function closeDeleteModal() {
-            formIdToDelete = null;
-            document.getElementById('deleteModal').style.display = 'none';
-        }
-
-        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-            if (formIdToDelete) {
-                document.getElementById(formIdToDelete).submit();
-            }
-        });
-
-        // Fermer si clic en dehors
-        window.onclick = function(event) {
-            let modal = document.getElementById('deleteModal');
-            if (event.target == modal) {
-                closeDeleteModal();
-            }
-        }
-    </script>
+   
+    <script src="js/blog_show.js"></script>
 </body>
 </html>

@@ -12,7 +12,7 @@
             <a href="/produits">Fifa Store</a>
 
 
-            <!-- CORRECTION : lien Vote propre -->
+            
             <a href="{{ route('vote.page') }}">Vote</a>
 
             <a href="/players">Les joueurs</a>
