@@ -17,7 +17,6 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-<<<<<<< HEAD
         // --- 1. CHARGEMENT DES DONNÉES AVEC CACHE (60 minutes) ---
 
         // NATIONS (avec cache)
@@ -46,51 +45,19 @@ class ProductController extends Controller
             return Colori::orderBy('id_colori')->get();
         });
 
-=======
-        // --- 1. CHARGEMENT DES DONNÉES POUR LES LISTES DÉROULANTES ---
-
-        // NATIONS
-        $nations = Nation::whereIn('id_nation', function ($query) {
-            $query->select('id_nation')->from('produit')->whereNotNull('id_nation');
-        })->orderBy('nom_nation')->get();
-
-        // CATEGORIES
-        $categories = Categorie_Produit::whereNull('sous_categorie')
-            ->orderBy('label_categorie')
-            ->get();
-
-        // TAILLES
-        $tailles = Taille::whereIn('id_taille', function ($query) {
-            $query->select('id_taille')->from('variante_produit')->whereNotNull('id_taille');
-        })->orderBy('label_taille')->get();
-
-        // COULEURS
-        $couleurs = Colori::orderBy('id_colori')->get();
-        
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
         $idProduit = $request->id_produit;
         $idTaille  = $request->id_taille;
         $idColori  = $request->id_colori;
         
-<<<<<<< HEAD
         // Sous-catégories (uniquement si parent sélectionné)
         $sous_categories = collect();
-=======
-        // Sous-catégories
-        $sous_categories = collect(); 
-
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
         if ($request->filled('id_categorie')) {
             $sous_categories = Categorie_Produit::where('sous_categorie', $request->id_categorie)
                 ->orderBy('label_categorie')
                 ->get();
         }
 
-<<<<<<< HEAD
         // --- 2. REQUÊTE PRODUITS OPTIMISÉE ---
-=======
-        // --- 2. REQUÊTE PRODUITS ---
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
         
         $query = Produit::query()
             ->with(['photo', 'couleurs', 'tailles']) // EAGER LOADING
@@ -152,12 +119,11 @@ class ProductController extends Controller
             }
         }
 
-<<<<<<< HEAD
         // PAGINATION (24 produits par page)
+        $query->whereNotNull('prix_base')
+              ->where('prix_base', '>', 0);
+        
         $products = $query->paginate(24)->withQueryString();
-=======
-        $products = Produit::whereNotNull('prix_base')->get();
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
 
         // Produits récemment consultés
         $historyIds = session()->get('recent_products', []);
@@ -176,11 +142,7 @@ class ProductController extends Controller
                 ->get();
         }
 
-<<<<<<< HEAD
         return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories', 'recentProducts'));
-=======
-        return view('products', compact('products', 'nations', 'tailles', 'couleurs', 'categories', 'sous_categories','recentProducts'));
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
     }
 
     public function detail(Request $request, $id)
@@ -189,13 +151,6 @@ class ProductController extends Controller
         if (($key = array_search($id, $history)) !== false) unset($history[$key]);
         array_unshift($history, $id);
         session()->put('recent_products', array_slice($history, 0, 10));
-<<<<<<< HEAD
-=======
-        
-        $product = Produit::with(['couleurs', 'tailles'])->findOrFail($id);
-        
-        $stock = null;
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
 
         // EAGER LOADING pour éviter N+1
         $product = Produit::with(['couleurs', 'tailles', 'photo'])->findOrFail($id);
@@ -211,15 +166,9 @@ class ProductController extends Controller
                 ->value('quantitee_stock');
         }       
 
-<<<<<<< HEAD
         // Produits similaires avec eager loading et limite
         $similarProducts = Produit::with('photo')
             ->where('id_categorie', $product->id_categorie)
-=======
-        $similarProducts = Produit::where(function ($q) use ($product) {
-                $q->where('id_categorie', $product->id_categorie);
-            })
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
             ->where('id_produit', '!=', $product->id_produit)
             ->whereNotNull('prix_base')
             ->limit(10)
@@ -258,11 +207,7 @@ class ProductController extends Controller
         return view('products_create', compact('categories', 'nations', 'tailles', 'coloris'));
     }
 
-<<<<<<< HEAD
     // Traite le formulaire
-=======
-    // --- C'EST ICI QUE J'AI FAIT LES GROSSES MODIFICATIONS ---
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
     public function store(Request $request)
     {
         // 1. Validation Mise à jour pour les Tableaux (Arrays)
@@ -329,20 +274,33 @@ class ProductController extends Controller
 
     public function incomplet()
     {
-        $products = Produit::whereNull('prix_base')->get();
-
+        // Get the products with null price (same as your original code)
+        $products = Produit::where(function ($query) {
+            $query->whereNull('prix_base')
+                  ->orWhere('prix_base', 0);
+        })->get();
+        // Get nations
         $nations = Nation::whereIn('id_nation', function ($query) {
             $query->select('id_nation')->from('produit')->whereNotNull('id_nation');
         })->orderBy('nom_nation')->get();
-
-    return view('productsImcomplete', compact(
-        'products',
-        'nations',
-        'tailles',
-        'couleurs',
-        'categories'
-    ));
-}
+    
+        // Get tailles (sizes) 
+        $tailles = Taille::all();  // Add this line to get all sizes
+    
+        // Get couleurs (colors)
+        $couleurs = Colori::all();  // You can also use where or other filters if needed
+    
+        // Get categories
+        $categories = Categorie_Produit::all();
+    
+        return view('productsImcomplete', compact(
+            'products',
+            'nations',
+            'tailles',  // Pass tailles to the view
+            'couleurs',
+            'categories'
+        ));
+    }
 public function modify($id)
 {
     $product = Produit::with(['tailles', 'couleurs', 'photo'])->findOrFail($id);
