@@ -19,7 +19,14 @@
                 <x-chartjs-component :chart="$chart" />
             </div>
         </div>
-        
+        <div class="year-selector">
+    <label for="categoryYear"><strong>Year:</strong></label>
+    <select id="categoryYear">
+        @foreach($categoryYears as $year)
+            <option value="{{ $year }}">{{ $year }}</option>
+        @endforeach
+    </select>
+</div>
         <div id="by-category" class="tab-content">
             <div class="chart-container">
                 <x-chartjs-component :chart="$chartByCategory" class="chart-category" />
@@ -134,5 +141,22 @@
         setTimeout(buildCategoryLegend, 500);
     }
     </script>
+    <script>
+    const categoryDataByYear = @json($categoryDataByYear);
+
+    function updateCategoryChart(year) {
+        if (!chartInstance) return;
+
+        chartInstance.data.datasets = categoryDataByYear[year];
+        chartInstance.update();
+
+        // rebuild legend because datasets changed
+        setTimeout(buildCategoryLegend, 100);
+    }
+
+    document.getElementById('categoryYear')?.addEventListener('change', function () {
+        updateCategoryChart(this.value);
+    });
+</script>
 </body>
 </html>
