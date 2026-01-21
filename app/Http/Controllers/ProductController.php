@@ -120,11 +120,10 @@ class ProductController extends Controller
         }
 
         // PAGINATION (24 produits par page)
+        $query->whereNotNull('prix_base')
+              ->where('prix_base', '>', 0);
+        
         $products = $query->paginate(24)->withQueryString();
-        $products = Produit::whereNotNull('prix_base')
-                   ->where('prix_base', '!=', 0)
-                   ->get();
-
 
         // Produits récemment consultés
         $historyIds = session()->get('recent_products', []);

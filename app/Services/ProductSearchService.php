@@ -92,12 +92,10 @@ class ProductSearchService
     {
         return Produit::with(['photo', 'variantes'])
             ->whereHas('variantes', function($query) {
-<<<<<<< HEAD
-                $query->where('quantitee_stock', '>', 0);
-=======
+
+
                 $query->where('quantitee_stock', '>', 0)
                       ->orWhere('quantitee_stock', '>', 0);
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
             })
             ->limit($limit)
             ->get();
@@ -110,12 +108,9 @@ class ProductSearchService
     {
         return Produit::with(['photo'])
             ->whereDoesntHave('variantes', function($query) {
-<<<<<<< HEAD
-                $query->where('quantitee_stock', '>', 0);
-=======
                 $query->where('variante_produit.quantitee_stock', '>', 0)
                       ->orWhere('variante_produit.quantitee_stock', '>', 0);
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
+
             })
             ->limit($limit)
             ->get();
@@ -138,11 +133,7 @@ class ProductSearchService
             
             // Vérifier le stock
             $stockTotal = $produit->variantes->sum(function($v) {
-<<<<<<< HEAD
-                return $v->quantitee_stock ?? 0;
-=======
                 return $v->quantitee_stock ?? $v->quantitee_stock ?? 0;
->>>>>>> 1932291f010cf00cf456435aa9f4393d0ce17cff
             });
             
             $stockStatus = $stockTotal > 0 ? "✅ En stock ({$stockTotal})" : "❌ Rupture de stock";
