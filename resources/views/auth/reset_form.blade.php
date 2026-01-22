@@ -4,55 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nouveau mot de passe</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh; /* min-height pour éviter de couper sur petits écrans */
-            margin: 0;
-        }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 { text-align: center; color: #333; margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 5px; color: #4b5563; font-size: 0.9em; font-weight: 600; }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-        input:focus { outline: 2px solid #2563eb; border-color: transparent; }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #16a34a; /* Vert pour valider */
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        button:hover { background-color: #15803d; }
-        
-        /* Les Alertes */
-        .alert { padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9rem; text-align: center;}
-        .alert-error { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-        
-        .hint { font-size: 0.75rem; color: #6b7280; margin-top: -10px; margin-bottom: 15px; display: block; }
-    </style>
+    <link rel="stylesheet" href="css/reset.css">
 </head>
 <body>
 
