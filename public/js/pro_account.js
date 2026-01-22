@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function setCountry(value) {
         if (!value) return;
 
-        // Normalize names to match your <select> values
+       
         const map = {
             "France": "France",
             "Belgium": "Belgique",
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 300);
     });
 
-    // Hide dropdown when clicking outside
+   
     document.addEventListener("click", (e) => {
         if (!adresseInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
             suggestionsBox.innerHTML = "";

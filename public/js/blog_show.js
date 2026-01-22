@@ -1,6 +1,4 @@
-// Fichier: public/js/blog_show.js
 
-// Gestion ouverture/fermeture réponse
 function toggleReply(id) {
     var element = document.getElementById(id);
     if (element.style.display === "none") {
@@ -10,7 +8,7 @@ function toggleReply(id) {
     }
 }
 
-// --- GESTION DE LA MODALE ---
+
 let formIdToDelete = null;
 
 function openDeleteModal(formId) {
@@ -29,7 +27,7 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function()
     }
 });
 
-// Fermer si clic en dehors
+
 window.onclick = function(event) {
     let modal = document.getElementById('deleteModal');
     if (event.target == modal) {

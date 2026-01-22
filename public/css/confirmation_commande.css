@@ -40,7 +40,7 @@ nav a:hover{
     background-color: #02456f;
 }
 
-/* Alignement droite */
+
 .account_creation{
     margin-left: auto;
     display: flex;
@@ -53,7 +53,7 @@ nav a:hover{
     border-radius: 50%;
 }
 
-/* User info */
+
 .user-info,
 header div[style*="display: inline-flex"] {
     display: flex !important;
@@ -207,7 +207,7 @@ ul li {
     align-items: start;
 }
 
-/* Keep non-field elements aligned in the grid */
+
 .row > input[type="hidden"],
 .row > .btn-pay {
     grid-column: 1 / -1;
@@ -250,7 +250,7 @@ ul li {
     transform: scale(1.9);        
 }
 
-/* Ensure the button container remains a perfect circle */
+
 .desktop-closed-message-avatar {
     display: flex !important;
     align-items: center !important;

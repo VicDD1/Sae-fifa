@@ -17,7 +17,7 @@ body {
 }
 
 
-/* ---------------- HEADER ---------------- */
+
 
 header{
     background-color: #045694;
@@ -62,7 +62,7 @@ nav a:hover{
 .btn-primary:hover{
     background: #0088cc;
 }
-/* Alignement droite */
+
 .account_creation{
     margin-left: auto;
     display: flex;
@@ -75,7 +75,7 @@ nav a:hover{
     border-radius: 50%;
 }
 
-/* ---------------- GLOBAL CONTAINER ---------------- */
+
 
 .container {
     max-width: 1100px;
@@ -89,7 +89,7 @@ h1 {
     text-transform: uppercase;
 }
 
-/* ---------------- GRID PRODUITS ---------------- */
+
 
 .product-grid {
     display: grid;
@@ -98,7 +98,7 @@ h1 {
     margin-top: 20px;
 }
 
-/* ---------------- CARDS ---------------- */
+
 
 .card {
     background: #424242;
@@ -130,7 +130,7 @@ h1 {
     filter: brightness(1.05);
 }
 
-/* ---------------- CARD BODY ---------------- */
+
 
 .card-body {
     padding: 18px;
@@ -145,15 +145,15 @@ h1 {
     font-weight: 600;
 }
 
-/* DESCRIPTION ALIGNEE ENTRE TOUTES LES CARTES */
+
 .card-desc {
-    flex-grow: 1;    /* Pousse le prix vers le bas */
+    flex-grow: 1;   
     margin-bottom: 15px;
     font-size: 0.95rem;
     line-height: 1.3rem;
 }
 
-/* BLOC INFO PRIX (ALIGNE PARTOUT) */
+
 .card-info {
     display: flex;
     justify-content: flex-start;
@@ -166,7 +166,7 @@ h1 {
     font-weight: bold;
 }
 
-/* BOUTON TJRS EN BAS DE LA CARD */
+
 .btn {
     margin-top: auto;
     background-color:eef2fb;
@@ -183,7 +183,7 @@ h1 {
     transform: scale(1.02);
 }
 
-/* ---------------- ALERT ---------------- */
+
 
 .alert {
     grid-column: 1 / -1;
@@ -193,7 +193,7 @@ h1 {
     border-radius: 8px;
 }
 
-/* ---------------- FILTRES ---------------- */
+
 
 .filter-bar {
     background: #f8f9fa;
@@ -244,7 +244,7 @@ h1 {
     margin-bottom: 8px;
 }
 
-/* ---------------- ACCOUNT ---------------- */
+
 
 .account_creation img {
     height: 58px;
@@ -268,14 +268,14 @@ h1 {
     transition: background 0.2s;
 }
 
-/*-----------------------Historique------------------------------*/
+
 
 .history-body{
     padding: 10px;
     background-color: #424242;
     border-radius:5px;
 }
-/* Conteneur principal de l'historique */
+
 .history-sidebar {
     width: 200px;
     margin-bottom: 30px;
@@ -292,7 +292,7 @@ h1 {
     font-weight: bold;
 }
 
-/* Liste avec défilement vertical */
+
 .history-list {
     
     display: flex;
@@ -303,7 +303,7 @@ h1 {
     padding-right: 10px;
 }
 
-/* Carte produit individuelle */
+
 .history-item {
     margin-top: 10px;
     width: 100%;
@@ -324,7 +324,7 @@ h1 {
     display: block;
 }
 
-/* Image du produit */
+
 .history-img {
     width: 100%;
     height: 150px;
@@ -332,7 +332,7 @@ h1 {
     border-radius: 6px;
 }
 
-/* Label/Titre du produit */
+
 .history-label {
     margin: 10px 0;
     font-size: 14px;
@@ -341,14 +341,14 @@ h1 {
     line-height: 1.2;
 }
 
-/* Prix */
+
 .history-price {
     font-weight: bold;
     color: #eef2fb;;
     font-size: 15px;
 }
 
-/* Message si vide */
+
 .history-empty {
     font-size: 14px;
     color: #666;
@@ -362,20 +362,20 @@ h1 {
 .btn-create {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #6c757d; /* Le gris foncé pour les deux boutons */
-    color: white !important;   /* Texte blanc forcé */
+    background-color: #6c757d;
+    color: white !important;   
     text-decoration: none;
-    border-radius: 25px;       /* Bords arrondis */
+    border-radius: 25px;       
     font-weight: bold;
     font-size: 14px;
     border: none;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Légère ombre */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
     transition: all 0.3s ease;
-    margin-left: 10px;         /* Espace entre les boutons */
+    margin-left: 10px;         
 }
 
-/* Effet au survol de la souris (devient plus foncé) */
+
 .btn-create:hover {
     background-color: #5a6268; 
     transform: translateY(-2px);
@@ -390,7 +390,7 @@ h1 {
     transform: scale(1.9);        
 }
 
-/* Ensure the button container remains a perfect circle */
+
 .desktop-closed-message-avatar {
     display: flex !important;
     align-items: center !important;

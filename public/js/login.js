@@ -1,6 +1,4 @@
-// Fichier: public/js/login.js
 
-// Gestion de l'affichage du mot de passe (L'œil)
 document.querySelectorAll('.password-icon').forEach((icon) => {
     icon.addEventListener('click', () => {
         const input = icon.previousElementSibling; 

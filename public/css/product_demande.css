@@ -1,4 +1,4 @@
-/* ---------------- BASES ---------------- */
+
 body {
     background-color: #eef2fb;
     margin: 0;
@@ -10,7 +10,7 @@ body {
     flex-direction: column;
 }
 
-/* ---------------- HEADER & NAV ---------------- */
+
 header{
     background-color: #045694;
     height: 85px;
@@ -46,7 +46,7 @@ nav a:hover{
 .btn-primary:hover{
     background: #0088cc;
 }
-/* Alignement droite */
+
 .account_creation{
     margin-left: auto;
     display: flex;
@@ -59,9 +59,9 @@ nav a:hover{
     border-radius: 50%;
 }
 
-/* ---------------- SECTION CENTRALE (IMPORTANT) ---------------- */
+
 .middle {
-    flex: 1; /* Prend tout l'espace entre le header et le footer */
+    flex: 1; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -79,16 +79,16 @@ nav a:hover{
 }
 
 .login-title {
-    margin: 0 0 30px 0; /* Correction : au lieu de 60% */
+    margin: 0 0 30px 0; 
     color: #1a1a1a;
     font-size: 24px;
     text-transform: uppercase;
     font-weight: bold;
 }
 
-/* ---------------- FORMULAIRE ---------------- */
+
 .group {
-    margin-top: 25px; /* Correction : au lieu de 30% */
+    margin-top: 25px; 
     text-align: left;
 }
 
@@ -115,7 +115,7 @@ nav a:hover{
     border-bottom: 2px solid #045694;
 }
 
-/* ---------------- BOUTONS ---------------- */
+
 .btn-login {
     background-color: #1967b2;
     color: white;
@@ -145,7 +145,7 @@ nav a:hover{
     font-size: 14px;
 }
 
-/* ---------------- FOOTER ---------------- */
+
 footer {
     padding: 20px;
     text-align: center;
@@ -163,7 +163,7 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* ---------------- AJUSTEMENTS COMPTES ---------------- */
+
 .account_creation {
     margin-left: auto;
     display: flex;
@@ -195,7 +195,7 @@ footer a:hover {
     transform: scale(1.9);        
 }
 
-/* Ensure the button container remains a perfect circle */
+
 .desktop-closed-message-avatar {
     display: flex !important;
     align-items: center !important;

@@ -32,7 +32,7 @@ nav a:hover{
     background-color: #02456f;
 }
 
-/* Alignement droite */
+
 .account_creation{
     margin-left: auto;
     display: flex;
@@ -45,7 +45,7 @@ nav a:hover{
     border-radius: 50%;
 }
 
-/* User info */
+
 .user-info,
 header div[style*="display: inline-flex"] {
     display: flex !important;
@@ -101,7 +101,7 @@ nav a[style*="font-weight: bold;"] {
             flex: 1;
             background-image: 
                 linear-gradient(to bottom, rgba(4, 29, 74, 0.7) 0%, rgba(4, 29, 74, 0.2) 100%),
-                url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2070&auto=format&fit=crop'); /* Mettre votre image de stade ici */
+                url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2070&auto=format&fit=crop'); 
             background-size: auto;
 
             background-position: center;
@@ -379,7 +379,7 @@ nav a[style*="font-weight: bold;"] {
     transform: scale(1.9);        
 }
 
-/* Ensure the button container remains a perfect circle */
+
 .desktop-closed-message-avatar {
     display: flex !important;
     align-items: center !important;

@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RegisterProfessionalController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BotManController;
-use App\Http\Controllers\Categorie_ProduitControler; // Note : "Controler" prend généralement deux 'l' (Controller)
+use App\Http\Controllers\Categorie_ProduitControler;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\ExpeditionController;
 use App\Http\Controllers\GestionCommandeController;

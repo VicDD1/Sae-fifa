@@ -66,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Initialisation
     updatePlayerOptions();
     updateRankOptions();
 });

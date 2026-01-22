@@ -1,4 +1,4 @@
-/* public/css/panier.css */
+
 
 :root {
     --fifa-blue: #045694;
@@ -23,7 +23,7 @@ footer{
     align-content: center;
     text-align: center;
 }
-/* Header simple */
+
 header{
     background-color: #045694;
     height: 85px;
@@ -53,7 +53,7 @@ nav a:hover{
     background-color: #02456f;
 }
 
-/* Alignement droite */
+
 .account_creation{
     margin-left: auto;
     display: flex;
@@ -66,7 +66,7 @@ nav a:hover{
     border-radius: 50%;
 }
 
-/* User info */
+
 .user-info,
 header div[style*="display: inline-flex"] {
     display: flex !important;
@@ -111,7 +111,7 @@ nav a[style*="font-weight: bold;"] {
     background: #0088cc;
 }
 
-/* Conteneur principal */
+
 .cart-container {
     max-width: 1100px;
     margin: 40px auto;
@@ -121,9 +121,9 @@ nav a[style*="font-weight: bold;"] {
     align-items: flex-start;
 }
 
-/* Colonne de Gauche : Les articles */
+
 .cart-items {
-    flex: 3; /* Prend 75% de la largeur */
+    flex: 3; 
     background: var(--white);
     padding: 25px;
     border-radius: 8px;
@@ -132,7 +132,7 @@ nav a[style*="font-weight: bold;"] {
 
 .cart-items h1 { margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
 
-/* Un article individuel */
+
 .cart-item {
     display: flex;
     border-bottom: 1px solid var(--border-color);
@@ -169,9 +169,9 @@ nav a[style*="font-weight: bold;"] {
 }
 .btn-delete:hover { text-decoration: underline; }
 
-/* Colonne de Droite : Résumé */
+
 .cart-summary {
-    flex: 1; /* Prend 25% de la largeur */
+    flex: 1; 
     background: var(--white);
     padding: 25px;
     border-radius: 8px;
@@ -190,7 +190,7 @@ nav a[style*="font-weight: bold;"] {
 .btn-checkout {
     display: block;
     width: 100%;
-    background-color: #ffd814; /* Jaune style Amazon/Achat */
+    background-color: #ffd814; 
     color: #111;
     text-align: center;
     padding: 12px;
@@ -203,7 +203,7 @@ nav a[style*="font-weight: bold;"] {
 }
 .btn-checkout:hover { background-color: #f7ca00; }
 
-/* Messages */
+
 .alert-success {
     background-color: #d4edda;
     color: #155724;
@@ -215,7 +215,7 @@ nav a[style*="font-weight: bold;"] {
 .empty-cart { text-align: center; padding: 60px 0; }
 .empty-cart a { color: var(--fifa-blue); text-decoration: underline; }
 
-/* Responsive Mobile */
+
 @media (max-width: 768px) {
     .cart-container { flex-direction: column; }
     .cart-summary { width: 100%; position: static; }
@@ -230,7 +230,7 @@ nav a[style*="font-weight: bold;"] {
     transform: scale(1.9);        
 }
 
-/* Ensure the button container remains a perfect circle */
+
 .desktop-closed-message-avatar {
     display: flex !important;
     align-items: center !important;

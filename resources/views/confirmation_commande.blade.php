@@ -40,7 +40,6 @@
                 </div>
             @endif
 
-            <!-- INFORMATIONS CLIENT -->
             <div class="section-title">Informations de livraison</div>
             <div class="info-box">
                 <p><strong>Nom :</strong> {{ $data['nom'] }}</p>
@@ -49,14 +48,12 @@
                 <p><strong>Téléphone :</strong> {{ $data['telephone'] }}</p>
             </div>
 
-            <!-- MODE DE LIVRAISON -->
             <div class="section-title">Mode de livraison</div>
             <div class="info-box">
                 <p><strong>Type :</strong> {{ $mode->type_livraison }}</p>
                 <p><strong>Coût :</strong> {{ number_format($mode->prix_mode_livraison, 2, ',', ' ') }} €</p>
             </div>
 
-            <!-- RÉCAPITULATIF TOTAL -->
             <div class="section-title">Montant total</div>
             <div class="total-block">
                 <div class="total-row">
@@ -72,7 +69,6 @@
                 </div>
             </div>
 
-            <!-- CONTENU PANIER -->
             <div class="section-title">Votre panier</div>
             <ul>
                 @foreach($lignes as $ligne)
@@ -84,10 +80,10 @@
                 @endforeach
             </ul>
 
-            <!-- PAIEMENT STRIPE -->
+     
             <div class="section-title">Paiement sécurisé par Stripe</div>
             
-            <!-- Cartes sauvegardées -->
+
             <div id="saved-cards-container" class="saved-cards" style="display: none;">
                 <p><strong>Vos cartes enregistrées :</strong></p>
                 <div id="saved-cards-list"></div>
@@ -97,7 +93,7 @@
                 </label>
             </div>
 
-            <!-- Formulaire Stripe -->
+    
             <div id="new-card-form" class="stripe-form">
                 <label>Informations de carte bancaire</label>
                 <div id="card-element"></div>
@@ -133,7 +129,6 @@
         const stripe = Stripe('{{ config('stripe.key') }}');
         const elements = stripe.elements();
         
-        // Style pour Stripe Elements
         const style = {
             base: {
                 color: '#32325d',
@@ -163,7 +158,6 @@
             }
         });
 
-        // Données de la commande
         const orderData = {
             nom: '{{ $data['nom'] }}',
             adresse: '{{ $data['adresse'] }}',

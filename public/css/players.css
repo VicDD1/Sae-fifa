@@ -42,7 +42,7 @@ nav a:hover{
     background-color: #02456f;
 }
 
-/* Alignement droite */
+
 .account_creation{
     margin-left: auto;
     display: flex;
@@ -55,7 +55,7 @@ nav a:hover{
     border-radius: 50%;
 }
 
-/* User info */
+
 .user-info,
 header div[style*="display: inline-flex"] {
     display: flex !important;

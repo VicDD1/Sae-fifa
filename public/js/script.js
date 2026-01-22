@@ -1,9 +1,8 @@
 const STORAGE_KEY = "cookieConsent";
-let isDecoEnabled = false; // Variable globale pour suivre l'état du bouton
-
+let isDecoEnabled = false; 
 /**
- * Analyse les cookies réels du navigateur (Audit)
- */
+ Analyse les cookies réels du navigateur (Audit)
+**/
 function updateDynamicCookieList() {
     const tbody = document.getElementById('dynamic-cookie-list');
     if (!tbody) return;
@@ -38,7 +37,7 @@ function updateDynamicCookieList() {
 
 /**
  * Crée ou supprime réellement le cookie sur le navigateur
- */
+ **/
 function toggleFakeCookie(shouldExist) {
     if (shouldExist) {
         document.cookie = "site_decoration_preference=biscuits_au_chocolat; path=/; max-age=3600; SameSite=Lax";
@@ -51,9 +50,7 @@ function toggleFakeCookie(shouldExist) {
  * Enregistre le choix de l'utilisateur
  */
 function confirmConsent(isAccepted) {
-    // CORRECTION : On utilise 'isAccepted' (le paramètre de la fonction)
-    // Si isAccepted est true (bouton Tout Accepter), on force true.
-    // Sinon, on prend la valeur de l'interrupteur (isDecoEnabled).
+
     const finalDecoChoice = (isAccepted === true) ? true : isDecoEnabled;
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -62,29 +59,28 @@ function confirmConsent(isAccepted) {
         date: new Date().toISOString()
     }));
 
-    // Action sur le cookie réel
+
     toggleFakeCookie(finalDecoChoice);
 
-    // Fermeture visuelle
+
     const banner = document.getElementById("cookieBanner");
     if (banner) banner.style.display = "none";
     
     const overlay = document.getElementById("overlay");
     if (overlay) overlay.classList.remove("open");
 
-    // Rafraîchir l'affichage du tableau
     updateDynamicCookieList();
 }
 
 /**
- * Initialisation
- */
+ Initialisation
+ **/
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Gestion du Toggle (Modal ou Page dédiée)
+
     const fakeToggle = document.getElementById("fakeCookieToggle") || document.getElementById("pageCookieToggle");
     
     if (fakeToggle) {
-        // État initial selon le cookie existant
+
         isDecoEnabled = document.cookie.includes('site_decoration_preference');
         fakeToggle.classList.toggle("on", isDecoEnabled);
 
@@ -94,16 +90,15 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // 2. Affichage automatique du bandeau
+
     const banner = document.getElementById("cookieBanner");
-    // On vérifie si l'utilisateur N'A PAS encore choisi
+
     if (!localStorage.getItem(STORAGE_KEY) && banner) {
-        // S'il n'a pas choisi, on force l'affichage
-        // Note : Utilise "flex" si ton CSS utilise flexbox pour aligner le contenu, sinon "block"
+       
         banner.style.display = "flex"; 
     }
 
-    // 3. Liaison des boutons (avec sécurité si les IDs n'existent pas sur la page)
+
     const bindBtn = (id, action) => {
         const btn = document.getElementById(id);
         if (btn) btn.onclick = action;
@@ -111,9 +106,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     bindBtn("acceptAllBtn", () => confirmConsent(true));
     bindBtn("rejectAllBtn", () => confirmConsent(false));
-    bindBtn("savePrefsBtn", () => confirmConsent(false)); // Utilise le toggle
-    
-    // Pour le bouton de la page de gestion spécifique
+    bindBtn("savePrefsBtn", () => confirmConsent(false));
+
     bindBtn("savePagePrefsBtn", () => confirmConsent(false));
 
     bindBtn("openPrefsLink", (e) => {
@@ -128,6 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (overlay) overlay.classList.remove("open");
     });
 
-    // Premier audit au chargement
+  
     updateDynamicCookieList();
 });

@@ -16,7 +16,6 @@
 
 <main class="checkout-container">
 
-    <!-- INFORMATIONS DE LIVRAISON -->
     <section class="checkout-box">
         <h1 class="title">Informations de livraison</h1>
 
@@ -85,7 +84,7 @@
                 </select>
             </div>
 
-            <!-- Section Point Relais -->
+
             <div id="point-relais-section" style="display: none;">
                 <h2 class="subtitle">Choisir un point relais</h2>
                 <p style="color: #888; font-size: 0.9em; margin-bottom: 10px;">
@@ -95,7 +94,6 @@
                     <i class="fa-solid fa-rotate"></i> Charger les points relais
                 </button>
                 <div id="points-relais-list" class="points-relais-container">
-                    <!-- Les points relais seront générés ici -->
                 </div>
                 <input type="hidden" name="point_relais_nom" id="point_relais_nom">
                 <input type="hidden" name="point_relais_adresse" id="point_relais_adresse">
@@ -112,7 +110,6 @@
         </form>
     </section>
 
-    <!-- RÉCAPITULATIF -->
     <aside class="summary-box">
         <h2 class="summary-title">Récapitulatif</h2>
 

@@ -2,24 +2,24 @@
    STYLE GLOBAL
    ========================================= */
 body {
-    background-color: #f4f6f9; /* Un gris très clair, reposant pour les yeux */
+    background-color: #f4f6f9; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
-    padding-bottom: 50px; /* Espace en bas de page */
+    padding-bottom: 50px; 
 }
 
 /* =========================================
    LA CARTE (CONTENEUR PRINCIPAL)
    ========================================= */
 .card {
-    border: none; /* On enlève la bordure grise par défaut */
-    border-radius: 15px; /* Coins bien arrondis */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Ombre douce portée */
-    overflow: hidden; /* Pour que le header ne dépasse pas des coins arrondis */
+    border: none; 
+    border-radius: 15px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+    overflow: hidden; 
 }
 
 .card-header {
-    background: linear-gradient(135deg, #0d6efd 0%, #0043a8 100%); /* Dégradé bleu moderne */
+    background: linear-gradient(135deg, #0d6efd 0%, #0043a8 100%);
     padding: 1.5rem;
     border-bottom: none;
 }
@@ -32,7 +32,7 @@ body {
 /* =========================================
    FORMULAIRE & CHAMPS
    ========================================= */
-/* Titres des sections (Infos générales / Stock) */
+
 h5.text-primary {
     color: #0d6efd !important;
     font-weight: 700;
@@ -44,7 +44,7 @@ h5.text-primary {
     margin-bottom: 20px;
 }
 
-/* Labels au dessus des champs */
+
 .form-label {
     font-weight: 500;
     color: #555;
@@ -52,31 +52,31 @@ h5.text-primary {
     margin-bottom: 0.4rem;
 }
 
-/* Les champs de saisie (Inputs, Selects, Textarea) */
+
 .form-control, 
 .form-select {
     border-radius: 8px;
     border: 1px solid #dee2e6;
-    padding: 10px 15px; /* Plus d'espace à l'intérieur pour le confort */
+    padding: 10px 15px; 
     background-color: #fff;
     transition: all 0.3s ease;
 }
 
-/* Effet quand on clique dans un champ */
+
 .form-control:focus, 
 .form-select:focus {
     border-color: #86b7fe;
-    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1); /* Halo bleu léger */
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
     background-color: #fff;
 }
 
-/* Zone de texte description */
+
 textarea.form-control {
-    resize: vertical; /* L'utilisateur peut agrandir en hauteur seulement */
+    resize: vertical; 
     min-height: 100px;
 }
 
-/* Petit texte d'aide sous les champs */
+
 .text-muted {
     font-size: 0.8rem;
     color: #888 !important;
@@ -114,12 +114,12 @@ textarea[readonly] {
 /* =========================================
    RESPONSIVE (MOBILE)
    ========================================= */
-/* Sur les petits écrans (tablettes et mobiles) */
+
 @media (max-width: 768px) {
-    /* On enlève la bordure droite qui sépare les colonnes */
+    
     .border-end {
         border-right: none !important;
-        border-bottom: 1px solid #dee2e6; /* On la remplace par une bordure en bas */
+        border-bottom: 1px solid #dee2e6;
         margin-bottom: 2rem;
         padding-bottom: 2rem;
     }
@@ -129,7 +129,7 @@ textarea[readonly] {
         padding-right: 15px;
     }
     
-    /* Les boutons prennent toute la largeur sur mobile */
+    
     .d-flex.justify-content-between {
         flex-direction: column-reverse;
         gap: 15px;

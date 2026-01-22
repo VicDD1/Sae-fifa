@@ -187,7 +187,6 @@ $(document).ready(function() {
         });
     }
 
-    // Mettre à jour le stock quand on change la taille ou la couleur
     $('input[name="id_taille"], input[name="id_colori"]').on('change', updateStock);
 });
 </script>

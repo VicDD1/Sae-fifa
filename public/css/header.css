@@ -33,7 +33,7 @@ header nav a:hover {
     background-color: #02456f;
 }
 
-/* RIGHT SIDE GROUP */
+
 header .nav-right-group {
     margin-left: auto;
     display: flex;
@@ -41,7 +41,7 @@ header .nav-right-group {
     gap: 20px;
 }
 
-/* ACCOUNT ICON */
+
 header .account_creation {
     display: flex;
     align-items: center;
@@ -53,7 +53,7 @@ header .account_creation img {
     border-radius: 50%;
 }
 
-/* USER INFO */
+
 header .user-info,
 header div[style*="inline-flex"] {
     display: flex;
@@ -67,7 +67,7 @@ header span {
     border-bottom: 2px solid #00ff87;
 }
 
-/* BUTTONS */
+
 header .btn-primary {
     background: #00aaff;
     color: white;

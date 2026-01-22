@@ -44,7 +44,7 @@ nav a:hover{
     background-color: #02456f;
 }
 
-/* Alignement droite */
+
 .account_creation{
     margin-left: auto;
     display: flex;
@@ -57,7 +57,7 @@ nav a:hover{
     border-radius: 50%;
 }
 
-/* User info */
+
 .user-info,
 header div[style*="display: inline-flex"] {
     display: flex !important;
@@ -101,7 +101,7 @@ nav a[style*="font-weight: bold;"] {
 .btn-primary:hover{
     background: #0088cc;
 }
-/* CARD PRINCIPALE */
+
 .card {
     background: #fff;
     width: 85%;
@@ -112,21 +112,21 @@ nav a[style*="font-weight: bold;"] {
     animation: fadeIn 0.4s ease-out;
 }
 
-/* TITRE */
+
 .card h1 {
     font-size: 38px;
     color: #0a2a66;
     margin-bottom: 8px;
 }
 
-/* TEXTE DESCRIPTION */
+
 .card .description {
     font-size: 18px;
     margin-bottom: 25px;
     color: #333;
 }
 
-/* MESSAGE D'ERREUR (STYLE PRO & ANIMÉ) */
+
 .error-message {
     font-weight: bold;
     color: #c81919;
@@ -139,7 +139,7 @@ nav a[style*="font-weight: bold;"] {
     animation: slideDown 0.4s ease-out;
 }
 
-/* Champs & labels */
+
 label {
     font-weight: 600;
     color: #0a2a66;
@@ -163,7 +163,7 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(11, 95, 211, 0.2);
 }
 
-/* GRID POUR LES 4 BLOCS */
+
 .row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -171,7 +171,7 @@ select:focus {
     margin-top: 20px;
 }
 
-/* BOUTONS */
+
 .actions {
     margin-top: 35px;
     display: flex;
@@ -211,7 +211,7 @@ select:focus {
     box-shadow: 0px 4px 12px rgba(11, 95, 211, 0.4);
 }
 
-/* Animations propres */
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -231,7 +231,7 @@ select:focus {
     transform: scale(1.9);        
 }
 
-/* Ensure the button container remains a perfect circle */
+
 .desktop-closed-message-avatar {
     display: flex !important;
     align-items: center !important;

@@ -1,14 +1,14 @@
-/* Fichier: public/css/blog_index.css */
+
 
 /* === FIFA MODERN STYLE === */
 body {
-    background-color: #f4f7f6; /* Gris très clair pour le fond de page */
+    background-color: #f4f7f6; 
     font-family: 'Figtree', sans-serif;
-    color: #1a1a1a; /* Noir doux pour le texte (très lisible) */
+    color: #1a1a1a; 
 }
 
 .blog-header {
-    background: #001431; /* Bleu Nuit FIFA */
+    background: #001431;
     color: white;
     padding: 60px 0;
     text-align: center;
@@ -25,13 +25,13 @@ body {
 }
 
 .blog-header p {
-    color: #00ff87; /* Vert FIFA */
+    color: #00ff87; 
     font-weight: 600;
     margin-top: 10px;
     font-size: 1.2rem;
 }
 
-/* GRID SYSTEM */
+
 .news-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -39,7 +39,7 @@ body {
     padding-bottom: 50px;
 }
 
-/* CARTE ARTICLE */
+
 .news-card {
     background: white;
     border-radius: 16px;

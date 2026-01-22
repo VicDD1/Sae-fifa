@@ -60,8 +60,6 @@
             </div>
         </div>
     </section>
-
-    <!-- PRODUCTS SECTION -->
     <section class="products-section">
         <h2 class="section-title"><span>⚽</span> Nos Produits Vedettes</h2>
         

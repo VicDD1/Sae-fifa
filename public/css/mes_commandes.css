@@ -49,7 +49,7 @@ footer {
     text-align: center;
 }
 
-/* Alignement droite */
+
 .account_creation {
     margin-left: auto;
     display: flex;
@@ -62,7 +62,7 @@ footer {
     border-radius: 50%;
 }
 
-/* User info */
+
 .user-info,
 header div[style*="display: inline-flex"] {
     display: flex !important;

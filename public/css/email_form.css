@@ -24,7 +24,7 @@ body {
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            box-sizing: border-box; /* Important pour que le padding ne casse pas la largeur */
+            box-sizing: border-box;
         }
         button {
             width: 100%;
@@ -39,7 +39,7 @@ body {
         }
         button:hover { background-color: #1d4ed8; }
         
-        /* Les Alertes */
+       
         .alert { padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9rem; }
         .alert-success { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
         .alert-error { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }

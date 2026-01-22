@@ -1,9 +1,9 @@
 
         
-        /* CSS SPÉCIFIQUE À CETTE PAGE */
+        
         .product-detail-container {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 colonnes égales */
+            grid-template-columns: 1fr 1fr; 
             gap: 40px;
             background: rgba(0,0,0,0.05);
             padding: 40px;
@@ -40,7 +40,7 @@ nav a:hover{
     background-color: #02456f;
 }
 
-/* Alignement droite */
+
 .account_creation{
     margin-left: auto;
     display: flex;
@@ -72,7 +72,7 @@ nav a:hover{
 
         .detail-price {
             font-size: 1.5rem;
-            color: #e63946; /* Rouge sympa */
+            color: #e63946; 
             font-weight: bold;
             margin-bottom: 20px;
             display: block;
@@ -114,37 +114,37 @@ nav a:hover{
         }
         .btn-add:hover { background-color: #555; }
 
-        /* Mobile */
+        
         @media (max-width: 768px) {
             .product-detail-container { grid-template-columns: 1fr; }
         }
 
-        /* Style du bouton retour */
+        
         .btn-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             text-decoration: none;
-            color: #333 ; /* Texte noir doux */
+            color: #333 ;
             font-weight: 500;
             margin-bottom: 10px;
             padding: 8px 15px;
-            border-radius: 30px; /* Bords bien arrondis */
-            background-color: #ffffff; /* Fond BLANC */
-            border: 1px solid #e5e5e5; /* Bordure gris très clair */
+            border-radius: 30px; 
+            background-color: #ffffff; 
+            border: 1px solid #e5e5e5; 
             transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Ombre très légère */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
         }
 
         .btn-back:hover {
-            background-color: #f9f9f9; /* Reste clair au survol */
+            background-color: #f9f9f9; 
             border-color: #ccc;
             transform: translateX(-3px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .btn-back svg {
-            width: 18px; /* Icône un peu plus fine */
+            width: 18px; 
             height: 18px;
         }
         body{
@@ -162,7 +162,7 @@ nav a:hover{
     transform: scale(1.9);        
 }
 
-/* Ensure the button container remains a perfect circle */
+
 .desktop-closed-message-avatar {
     display: flex !important;
     align-items: center !important;

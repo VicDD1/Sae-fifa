@@ -1,4 +1,4 @@
- /* Pour que le dropdown ressemble à un input form-control */
+
  .dropdown-toggle::after {
     float: right;
     margin-top: 8px;

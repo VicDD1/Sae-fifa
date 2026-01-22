@@ -6,13 +6,13 @@ function updateDropdownLabel(checkboxClass, buttonId, defaultText) {
         let selected = [];
         checkboxes.forEach(cb => {
             if (cb.checked) {
-                // On récupère le texte du label associé
+                
                 selected.push(cb.nextElementSibling.innerText.trim());
             }
         });
         
         if (selected.length > 0) {
-            // Affiche les 3 premiers éléments, puis "..." si plus
+            
             if(selected.length > 3) {
                 button.innerText = selected.slice(0, 3).join(', ') + ' et ' + (selected.length - 3) + ' autres';
             } else {
@@ -23,9 +23,9 @@ function updateDropdownLabel(checkboxClass, buttonId, defaultText) {
         }
     }
 
-    // Écouter les changements
+    
     checkboxes.forEach(cb => cb.addEventListener('change', update));
-    // Lancer une fois au chargement (pour les "old" inputs)
+    
     update();
 }
 

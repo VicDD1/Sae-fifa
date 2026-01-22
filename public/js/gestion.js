@@ -1,6 +1,6 @@
 document.querySelectorAll('select[name="statut_livraison"]').forEach(select => {
     select.addEventListener('change', function() {
-        // On trouve le champ texte qui est juste à côté (le voisin)
+
         const inputMotif = this.nextElementSibling; 
         
         if (this.value === 'Refusé' || this.value === 'Réserve') {

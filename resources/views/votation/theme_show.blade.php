@@ -137,7 +137,7 @@
                 </div>
 
                 <div class="row">
-                    <!-- Joueurs associés -->
+
                     <div class="col-md-7">
                         <div class="card mb-4">
                             <div class="card-header">

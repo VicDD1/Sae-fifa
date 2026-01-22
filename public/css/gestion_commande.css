@@ -1,4 +1,4 @@
-/* --- Tes styles existants --- */
+
 body {
     background-color: #eef2fb;
     margin: 0;
@@ -39,7 +39,7 @@ nav a:hover {
     align-items: center;
 }
 
-/* --- Styles spécifiques à la gestion (Story 1, 2, 4) --- */
+
 .container-admin {
     padding: 40px;
 }
@@ -51,7 +51,7 @@ nav a:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* On garde les couleurs des badges pour les User Stories */
+
 .badge-accepte { background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px; }
 .badge-refus { background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; }
 .badge-reserve { background-color: #ffc107; color: black; padding: 5px 10px; border-radius: 4px; }
